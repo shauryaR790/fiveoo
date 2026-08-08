@@ -24,51 +24,130 @@ export const HERO_SLIDES = [
   },
 ] as const;
 
+/**
+ * `span` drives the asymmetric grid: "sm" takes a quarter of the row, "lg"
+ * takes half, so rows read 3 + 3 + 6 and 6 + 3 + 3.
+ */
 export const WORKS = [
   {
     id: "w1",
-    title: "Smarter Spending Starts Here",
-    client: "Nova Finance",
-    src: "/images/work-1.svg",
-    span: "large",
+    title: "Crafted for your perfect cup",
+    client: "Kopvie",
+    year: "2026",
+    src: "/images/kopvie.png",
+    span: "sm",
   },
   {
     id: "w2",
-    title: "Identity for Scale",
-    client: "Orbit Labs",
-    src: "/images/work-2.svg",
-    span: "tall",
+    title: "Everyday deals, boldly packaged",
+    client: "Krosan",
+    year: "2026",
+    src: "/images/krosan.jpg",
+    span: "sm",
   },
   {
     id: "w3",
-    title: "Calm Product Language",
-    client: "Pulse Health",
-    src: "/images/work-3.svg",
-    span: "wide",
+    title: "Smarter spending starts here",
+    client: "Tustee",
+    year: "2025",
+    src: "/images/tustee.png",
+    span: "lg",
   },
   {
     id: "w4",
-    title: "Launch-Ready Brand System",
-    client: "Fieldnote",
-    src: "/images/work-4.svg",
-    span: "large",
+    title: "A club identity built for play",
+    client: "Padelhub",
+    year: "2025",
+    src: "/images/padelhub.png",
+    span: "lg",
   },
   {
     id: "w5",
-    title: "Motion that Converts",
-    client: "Relay Co",
-    src: "/images/work-5.svg",
-    span: "tall",
+    title: "Sunlight in a can",
+    client: "Osuika",
+    year: "2024",
+    src: "/images/osuika.png",
+    span: "sm",
+  },
+  {
+    id: "w6",
+    title: "Editorial systems for beauty",
+    client: "Arvela",
+    year: "2024",
+    src: "/images/arvela.png",
+    span: "sm",
   },
 ] as const;
 
-export const SERVICES = [
-  "Brand Identity",
-  "UI / UX Design",
-  "Design Systems",
-  "Motion Graphics",
-  "Product Launch",
-  "Creative Direction",
+export const BRANDING_FEATURES = [
+  {
+    id: "01",
+    title: "Fast-track your MVP with seamless branding",
+    body: "We help you launch with a strong visual identity from day one. Logo, UI/UX, and brand elements are crafted to reflect your product's essence. Quick execution without sacrificing quality.",
+  },
+  {
+    id: "02",
+    title: "Designed for startups, built to scale",
+    body: "Our branding approach grows with you — from MVP to full-scale launch. With flexible plans and scalable design systems, your brand is never boxed in by early limitations.",
+  },
+  {
+    id: "03",
+    title: "All-in-one creative partner for your MVP",
+    body: "Logo, UI/UX, motion, and illustration — all done by one unified team. No need to manage multiple freelancers or vendors. You focus on the product, we handle the visuals.",
+  },
+  {
+    id: "04",
+    title: "Fast turnaround, on your timeline",
+    body: "We understand startup timelines — our Business Plan guarantees execution within a month. Get investor-ready designs and presentation-friendly assets to confidently pitch your MVP.",
+  },
+] as const;
+
+export const SERVICE_GROUPS = [
+  {
+    id: "graphic",
+    title: "Graphic &\nBranding Design",
+    items: [
+      "Logo Design",
+      "Brand Guidelines",
+      "Brand Implementation",
+      "Stationary Design",
+      "Pitch Deck Design",
+      "Icon Design",
+      "Infographic Design",
+      "Social Media Design",
+      "Print Design",
+    ],
+  },
+  {
+    id: "motion",
+    title: "Illustration &\nMotion Graphic",
+    items: [
+      "2D Illustration",
+      "Character Design",
+      "Mascot Design",
+      "Isometric Illustration",
+      "Digital Painting",
+      "Logo Animation",
+      "2D Animation",
+      "Digital Media Animation",
+      "Pitch Deck Animation",
+    ],
+  },
+  {
+    id: "uiux",
+    title: "UIUX\nDesign",
+    items: [
+      "Mobile App Design",
+      "Website Design",
+      "Dashboard Design",
+      "Responsive Design",
+      "Design System",
+      "UX Design",
+      "Information Architecture",
+      "Prototyping",
+      "Website Development",
+    ],
+  },
 ] as const;
 
 export const PRICING_PLANS = [

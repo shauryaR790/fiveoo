@@ -1,0 +1,154 @@
+"use client";
+
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { NAV_LINKS } from "@/lib/constants";
+import { scrollToTarget } from "@/lib/lenis";
+import { prefersReducedMotion } from "@/lib/animations";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function Navbar() {
+  const navRef = useRef<HTMLElement>(null);
+  const menuOpenRef = useRef(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const ctx = gsap.context(() => {
+      if (prefersReducedMotion()) return;
+
+      /* The oversized headlines need the top of the viewport, so the bar gets
+         out of the way going down and comes back the moment you scroll up. */
+      let hidden = false;
+      ScrollTrigger.create({
+        start: 0,
+        end: "max",
+        onUpdate: (self) => {
+          const shouldHide =
+            self.direction === 1 && self.scroll() > 140 && !menuOpenRef.current;
+          if (shouldHide === hidden) return;
+          hidden = shouldHide;
+          gsap.to(nav, {
+            yPercent: shouldHide ? -110 : 0,
+            duration: 0.45,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        },
+      });
+
+      const darkSections = gsap.utils.toArray<HTMLElement>(
+        "[data-nav-theme='dark']",
+      );
+
+      darkSections.forEach((section) => {
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top 60px",
+          end: "bottom 60px",
+          onEnter: () => nav.classList.add("nav-invert"),
+          onEnterBack: () => nav.classList.add("nav-invert"),
+          onLeave: () => nav.classList.remove("nav-invert"),
+          onLeaveBack: () => nav.classList.remove("nav-invert"),
+        });
+      });
+    }, nav);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    menuOpenRef.current = menuOpen;
+    if (menuOpen && navRef.current) {
+      gsap.to(navRef.current, { yPercent: 0, duration: 0.3, overwrite: true });
+    }
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    scrollToTarget(href, { offset: -20 });
+  };
+
+  return (
+    <header
+      ref={navRef}
+      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300"
+    >
+      <nav
+        className="mx-auto flex h-[var(--nav-height)] items-center justify-between px-6 md:px-10 lg:px-12"
+        aria-label="Primary"
+      >
+        <a
+          href="#top"
+          onClick={(e) => handleNav(e, "#top")}
+          className="text-[26px] font-bold leading-none tracking-[-0.02em] md:text-[30px]"
+        >
+          FIVEO
+        </a>
+
+        <ul className="hidden items-center md:flex md:w-[46%] md:justify-between lg:w-[41.5%]">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                onClick={(e) => handleNav(e, link.href)}
+                className="text-[17px] font-semibold tracking-[-0.01em] transition-opacity hover:opacity-60"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <button
+          type="button"
+          className="relative z-50 flex h-10 w-10 items-center justify-center md:hidden"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span className="sr-only">Menu</span>
+          <span className="flex w-6 flex-col gap-1.5">
+            <span
+              className={`block h-0.5 w-full bg-current transition-transform ${menuOpen ? "translate-y-[4px] rotate-45" : ""}`}
+            />
+            <span
+              className={`block h-0.5 w-full bg-current transition-transform ${menuOpen ? "-translate-y-[4px] -rotate-45" : ""}`}
+            />
+          </span>
+        </button>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        className={`fixed inset-0 z-40 bg-[var(--color-bg)] text-[var(--color-fg)] transition-transform duration-500 md:hidden ${
+          menuOpen ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <ul className="flex h-full flex-col justify-center gap-8 px-8 pt-16">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                onClick={(e) => handleNav(e, link.href)}
+                className="font-display text-4xl uppercase tracking-tight"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </header>
+  );
+}

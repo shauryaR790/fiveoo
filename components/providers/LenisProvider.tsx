@@ -16,7 +16,7 @@ export default function LenisProvider({
       return;
     }
 
-    const lenis = createLenis();
+    createLenis();
     document.documentElement.classList.add("lenis", "lenis-smooth");
 
     let resizeTimer: ReturnType<typeof setTimeout> | undefined;

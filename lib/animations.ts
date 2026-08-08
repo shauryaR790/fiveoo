@@ -173,18 +173,19 @@ export function infiniteMarquee(
   if (prefersReducedMotion()) return null;
 
   const duration = options?.duration ?? 28;
-  const direction = options?.reversed ? 1 : -1;
 
-  gsap.set(track, { xPercent: 0 });
-
-  const tween = gsap.to(track, {
-    xPercent: direction * 50,
-    duration,
-    ease: "none",
-    repeat: -1,
-  });
-
-  return tween;
+  // The track holds two identical halves; travelling exactly 50% keeps the
+  // loop seamless in either direction.
+  return gsap.fromTo(
+    track,
+    { xPercent: options?.reversed ? -50 : 0 },
+    {
+      xPercent: options?.reversed ? 0 : -50,
+      duration,
+      ease: "none",
+      repeat: -1,
+    },
+  );
 }
 
 export function imageReveal(
@@ -215,6 +216,14 @@ export function imageReveal(
       toggleActions: "play none none none",
     },
   });
+}
+
+/**
+ * Nav colour is normally derived from `[data-nav-theme]` sections, but pinned
+ * sequences change their own background mid-pin and need to drive it directly.
+ */
+export function setNavInvert(inverted: boolean) {
+  document.querySelector("header")?.classList.toggle("nav-invert", inverted);
 }
 
 export function refreshScrollTrigger() {
