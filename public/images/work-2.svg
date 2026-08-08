@@ -1,0 +1,11 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <defs>
+    <linearGradient id="g" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#3b3b3b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1200" fill="url(#g)"/>
+  <circle cx="1180" cy="360" r="220" fill="#ccff00" opacity="0.2"/>
+  <text x="140" y="980" fill="#f7f7f5" font-family="Arial,sans-serif" font-size="64" font-weight="700">ORBIT LABS</text>
+</svg>

@@ -1,0 +1,5 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <rect width="1600" height="1200" fill="#0d3b2e"/>
+  <rect x="200" y="200" width="1200" height="700" fill="#f7f7f5" opacity="0.08"/>
+  <text x="140" y="980" fill="#ccff00" font-family="Arial,sans-serif" font-size="64" font-weight="700">PULSE HEALTH</text>
+</svg>

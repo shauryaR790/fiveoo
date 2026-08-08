@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="50%" stop-color="#2d4a3e"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1200" fill="url(#g)"/>
+  <rect x="120" y="140" width="720" height="480" fill="#ccff00" opacity="0.15"/>
+  <text x="140" y="980" fill="#f7f7f5" font-family="Arial,sans-serif" font-size="64" font-weight="700">NOVA FINANCE</text>
+</svg>

@@ -1,0 +1,5 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <rect width="1600" height="1200" fill="#1c1c1c"/>
+  <path d="M0 800 L1600 200 L1600 1200 L0 1200 Z" fill="#004d40"/>
+  <text x="140" y="980" fill="#f7f7f5" font-family="Arial,sans-serif" font-size="64" font-weight="700">FIELDNOTE</text>
+</svg>
