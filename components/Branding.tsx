@@ -59,6 +59,16 @@ export default function Branding() {
         },
       });
 
+      const headingEl = heading as HTMLElement | null;
+      const centerHeadingY = () => {
+        if (!headingEl) return 0;
+        const top = headingEl.offsetTop;
+        const h = headingEl.offsetHeight;
+        return window.innerHeight / 2 - top - h / 2;
+      };
+
+      gsap.set(heading, { transformOrigin: "center center" });
+
       // Four explicit sides on both ends: mismatched value counts cannot be
       // interpolated, which is what made the panel snap between sizes.
       tl.fromTo(
@@ -71,10 +81,11 @@ export default function Branding() {
         },
         0,
       )
+        /* Keep the statement optically centred in the white panel while it opens. */
         .fromTo(
           heading,
-          { scale: 0.82 },
-          { scale: 1, ease: "power1.inOut", duration: 0.45 },
+          { scale: 0.82, y: centerHeadingY },
+          { scale: 1, y: centerHeadingY, ease: "power1.inOut", duration: 0.45 },
           0,
         )
         // Width rather than scale: the words either side have to be pushed
@@ -85,13 +96,8 @@ export default function Branding() {
           { width: "1.6em", ease: "power2.out", duration: 0.32 },
           0.12,
         )
-        // Centred while it is the only thing on screen, then it makes room.
-        .fromTo(
-          heading,
-          { y: () => window.innerHeight * 0.2 },
-          { y: 0, ease: "power2.inOut", duration: 0.2 },
-          0.48,
-        )
+        // Then it lifts to the top to make room for the feature notes.
+        .to(heading, { y: 0, ease: "power2.inOut", duration: 0.2 }, 0.48)
         .fromTo(
           items,
           { opacity: 0, y: 34 },
@@ -156,22 +162,22 @@ export default function Branding() {
               your MVP
             </h2>
 
-            <div className="mt-auto grid grid-cols-1 gap-x-12 gap-y-8 pb-8 md:grid-cols-2 md:gap-x-16 md:gap-y-10 md:pb-12">
+            <div className="mt-auto grid grid-cols-1 gap-x-14 gap-y-10 pb-8 md:grid-cols-2 md:gap-x-20 md:gap-y-12 md:pb-12">
               {BRANDING_FEATURES.map((feature) => (
                 <div
                   key={feature.id}
                   data-branding-item
-                  className="border-b border-[var(--color-border)]/12 pb-6 will-change-transform"
+                  className="border-b border-[var(--color-border)]/12 pb-7 will-change-transform md:pb-8"
                 >
-                  <div className="mb-4 grid grid-cols-[3rem_1fr] gap-x-4 md:grid-cols-[5rem_1fr]">
-                    <span className="text-[15px] tabular-nums leading-[1.35] text-[var(--color-fg-muted)]">
+                  <div className="mb-5 grid grid-cols-[3.5rem_1fr] gap-x-4 md:mb-6 md:grid-cols-[5.5rem_1fr]">
+                    <span className="text-[17px] tabular-nums leading-[1.3] text-[var(--color-fg-muted)] md:text-[19px]">
                       ({feature.id})
                     </span>
-                    <h3 className="text-[15px] font-bold uppercase leading-[1.35] tracking-[0.01em]">
+                    <h3 className="text-[17px] font-bold uppercase leading-[1.3] tracking-[0.01em] md:text-[20px]">
                       {feature.title}
                     </h3>
                   </div>
-                  <p className="text-[15px] leading-[1.6] text-[var(--color-fg-muted)]">
+                  <p className="w-full text-[17px] leading-[1.55] text-[var(--color-fg-muted)] md:text-[19px]">
                     {feature.body}
                   </p>
                 </div>

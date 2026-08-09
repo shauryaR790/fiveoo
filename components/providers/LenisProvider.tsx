@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { createLenis, destroyLenis } from "@/lib/lenis";
 import { prefersReducedMotion, refreshScrollTrigger } from "@/lib/animations";
 
@@ -34,7 +33,7 @@ export default function LenisProvider({
       window.removeEventListener("resize", onResize);
       clearTimeout(resizeTimer);
       document.documentElement.classList.remove("lenis", "lenis-smooth");
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      /* Do not kill all ScrollTriggers here — section effects own their own. */
       destroyLenis();
     };
   }, []);

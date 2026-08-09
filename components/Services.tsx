@@ -110,8 +110,12 @@ export default function Services() {
       className="relative bg-[var(--color-bg)] text-[var(--color-fg)]"
       data-nav-theme="light"
     >
-      <div ref={stageRef} className="relative overflow-hidden md:h-[100svh]">
-        <div className="relative z-0 overflow-hidden pt-[calc(var(--nav-height)+2rem)] md:absolute md:inset-x-0 md:top-[28%] md:pt-0">
+      <div
+        ref={stageRef}
+        className="relative min-h-[100svh] overflow-hidden bg-[var(--color-bg)] md:h-[100svh]"
+      >
+        {/* Type — lifted so it clears the dense fog bank */}
+        <div className="relative z-[1] overflow-hidden pt-[calc(var(--nav-height)+2rem)] md:absolute md:inset-x-0 md:top-[18%] md:pt-0 lg:top-[16%]">
           <div
             ref={trackRef}
             style={{ fontSize: "clamp(4.5rem, 21vw, 28rem)" }}
@@ -168,7 +172,22 @@ export default function Services() {
           <h2 className="sr-only">Our Services</h2>
         </div>
 
-        <div className="relative z-[2] px-5 pb-10 pt-16 md:absolute md:inset-0 md:flex md:items-center md:px-[60px] md:pb-0 md:pt-0">
+        {/* Dense neon fog ON TOP of type — hides where glyphs emerge */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[72%] md:h-[78%]"
+          aria-hidden
+        >
+          <div className="absolute inset-x-0 bottom-0 h-[38%] bg-[#CBEB3A]" />
+          <div className="absolute inset-x-0 bottom-[28%] h-[42%] bg-gradient-to-t from-[#CBEB3A] via-[#CBEB3A]/95 to-transparent" />
+          <div className="absolute inset-x-[-30%] bottom-[-10%] h-[70%] rounded-[100%] bg-[#CBEB3A] blur-[60px] md:blur-[80px]" />
+          <div className="absolute inset-x-[-20%] bottom-[8%] h-[55%] rounded-[100%] bg-[#CBEB3A] blur-[90px] md:blur-[120px]" />
+          <div className="absolute inset-x-[-15%] bottom-[18%] h-[45%] rounded-[100%] bg-[#d4ff3d] blur-[110px] md:blur-[150px]" />
+          <div className="absolute bottom-[5%] left-[-20%] h-[65%] w-[80%] rounded-full bg-[#CBEB3A] blur-[100px] md:blur-[140px]" />
+          <div className="absolute bottom-[0%] right-[-25%] h-[70%] w-[75%] rounded-full bg-[#CBEB3A] blur-[110px] md:blur-[160px]" />
+          <div className="absolute inset-x-[-10%] bottom-[22%] h-[40%] rounded-[100%] bg-[#e8ff6a]/90 blur-[80px] md:blur-[110px]" />
+        </div>
+
+        <div className="relative z-[4] px-5 pb-10 pt-16 md:absolute md:inset-0 md:flex md:items-center md:px-[60px] md:pb-0 md:pt-0">
           <div className="grid w-full grid-cols-1 gap-[18px] md:grid-cols-3">
             {SERVICE_GROUPS.map((group) => (
               <div

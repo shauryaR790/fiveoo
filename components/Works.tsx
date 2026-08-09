@@ -61,9 +61,18 @@ export default function Works() {
       // Scaling from the top edge keeps the settle position free of the scale.
       gsap.set(title, { transformOrigin: "top center" });
 
+      const introScale = 2.2;
       tl.fromTo(
         title,
-        { scale: 2.2, y: () => window.innerHeight * 0.12 },
+        {
+          scale: introScale,
+          /* Center the oversized title in the viewport on the lime intro. */
+          y: () => {
+            const layoutTop = title.offsetTop;
+            const scaledH = title.offsetHeight * introScale;
+            return window.innerHeight / 2 - layoutTop - scaledH / 2;
+          },
+        },
         { scale: 1, y: 0, ease: "power1.inOut", duration: 0.68 },
         0,
       )
@@ -141,7 +150,7 @@ export default function Works() {
       {/* The lime state the section arrives in, burned off during the pin */}
       <div
         data-works-lime
-        className="pointer-events-none absolute inset-0 bg-[var(--color-lime)]"
+        className="pointer-events-none absolute inset-0 bg-[#CBEB3A]"
         aria-hidden
       />
 
