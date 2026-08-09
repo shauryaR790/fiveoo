@@ -10,7 +10,6 @@ import {
   isMobileViewport,
   setNavInvert,
 } from "@/lib/animations";
-
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Works() {
@@ -22,7 +21,6 @@ export default function Works() {
 
     const ctx = gsap.context(() => {
       const title = root.querySelector<HTMLElement>("[data-works-title]");
-      const lime = root.querySelector("[data-works-lime]");
       const cards = gsap.utils.toArray<HTMLElement>("[data-work-card]", root);
       const risers = cards.flatMap((card) => [
         card.querySelector("[data-work-meta]"),
@@ -30,15 +28,10 @@ export default function Works() {
       ]);
 
       if (prefersReducedMotion() || !title) {
-        gsap.set(lime, { opacity: 0 });
-        gsap.set(title, { color: "#f7f7f5" });
+        gsap.set(title, { color: "#ffffff" });
         return;
       }
 
-      /* ---- One pinned sequence: the oversized lime title shrinks into its
-         final position at the top while the canvas goes dark and the grid
-         rises into place underneath it. Every value lands on its natural
-         layout state, so the release is invisible. ---- */
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
@@ -48,17 +41,13 @@ export default function Works() {
           scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          // Pinned sections must refresh in document order; this one is first.
           refreshPriority: 1,
-          // Lime intro = black nav; once the canvas goes dark, flip to white.
-          onUpdate: (self) => setNavInvert(self.progress > 0.49),
-          onLeave: () => setNavInvert(true),
-          onEnterBack: () => setNavInvert(true),
+          onEnter: () => setNavInvert(false),
+          onEnterBack: () => setNavInvert(false),
           onLeaveBack: () => setNavInvert(false),
         },
       });
 
-      // Scaling from the top edge keeps the settle position free of the scale.
       gsap.set(title, { transformOrigin: "top center" });
 
       const introScale = 2.2;
@@ -66,7 +55,6 @@ export default function Works() {
         title,
         {
           scale: introScale,
-          /* Center the oversized title in the viewport on the lime intro. */
           y: () => {
             const layoutTop = title.offsetTop;
             const scaledH = title.offsetHeight * introScale;
@@ -75,28 +63,18 @@ export default function Works() {
         },
         { scale: 1, y: 0, ease: "power1.inOut", duration: 0.68 },
         0,
-      )
-        .fromTo(
-          lime,
-          { opacity: 1 },
-          { opacity: 0, ease: "none", duration: 0.14 },
-          0.42,
-        )
-        // A hard flip mid-fade; interpolating the colour would leave the type
-        // mid-grey exactly while the canvas sits mid-dark.
-        .to(title, { color: "#f7f7f5", duration: 0.001 }, 0.49)
-        .fromTo(
-          risers,
-          { y: 120, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            ease: "power2.out",
-            duration: 0.45,
-            stagger: 0.05,
-          },
-          0.5,
-        );
+      ).fromTo(
+        risers,
+        { y: 120, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          ease: "power2.out",
+          duration: 0.45,
+          stagger: 0.05,
+        },
+        0.42,
+      );
 
       if (isMobileViewport()) return;
 
@@ -145,19 +123,13 @@ export default function Works() {
     <section
       id="works"
       ref={rootRef}
-      className="relative overflow-hidden bg-[var(--color-bg-inverse)] text-[var(--color-fg-inverse)]"
+      className="relative overflow-hidden bg-black text-white"
+      data-nav-theme="dark"
     >
-      {/* The lime state the section arrives in, burned off during the pin */}
-      <div
-        data-works-lime
-        className="pointer-events-none absolute inset-0 bg-[#CBEB3A]"
-        aria-hidden
-      />
-
       <div className="relative px-5 pb-16 md:px-10 md:pb-24 lg:px-12">
         <h2
           data-works-title
-          className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-[var(--color-fg)] will-change-transform"
+          className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-white will-change-transform"
         >
           Selected
           <br />
@@ -206,7 +178,7 @@ export default function Works() {
                 </div>
                 <div
                   data-work-overlay
-                  className="absolute inset-0 bg-[var(--color-bg-inverse)]/25 opacity-0"
+                  className="absolute inset-0 bg-black/40 opacity-0"
                   aria-hidden
                 />
                 <p className="absolute inset-x-0 bottom-0 p-5 font-display text-xl uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:text-2xl">

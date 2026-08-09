@@ -1,15 +1,18 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Marquee from "@/components/Marquee";
-import { fadeUp } from "@/lib/animations";
+import { fadeUp, bindCursorSlideTrack } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
   const rootRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const slideRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -25,15 +28,23 @@ export default function About() {
     return () => ctx.revert();
   }, []);
 
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    const slide = slideRef.current;
+    if (!track || !slide) return;
+
+    return bindCursorSlideTrack(track, slide);
+  }, []);
+
   return (
     <section
       id="about"
       ref={rootRef}
-      className="relative overflow-hidden bg-[var(--color-forest)] pb-14 text-[var(--color-fg-inverse)] md:pb-20"
+      className="relative bg-transparent pb-14 text-white md:pb-20"
       data-nav-theme="dark"
     >
-      {/* Oversized wordmark loop travelling left to right */}
-      <Marquee
+      <div className="relative z-[1]">
+        <Marquee
         label="FiveoStudio"
         reversed
         duration={75}
@@ -44,7 +55,26 @@ export default function About() {
 
       <div className="mt-24 px-5 md:mt-32 md:px-8 lg:px-12">
         <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-8">
-          <div className="hidden md:block" aria-hidden />
+          <div data-about-reveal className="hidden md:block lg:pt-2">
+            <div ref={trackRef} className="relative w-full">
+              <div
+                ref={slideRef}
+                data-cursor-grow
+                className="w-full max-w-[420px] will-change-transform lg:w-[420px] lg:max-w-none"
+              >
+                <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-surface-muted)]">
+                  <Image
+                    src="/images/reels.avif"
+                    alt="FIVEO showreels"
+                    fill
+                    sizes="420px"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div className="flex flex-col gap-10">
             <div data-about-reveal>
@@ -74,6 +104,7 @@ export default function About() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

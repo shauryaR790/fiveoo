@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
-import { prefersReducedMotion } from "@/lib/animations";
+import { prefersReducedMotion, bindCursorSlideTrack } from "@/lib/animations";
 import { scrollToTarget } from "@/lib/lenis";
 
 export default function Hero() {
@@ -57,69 +57,17 @@ export default function Hero() {
     const slide = slideRef.current;
     if (!track || !slide) return;
 
-    const canFollow = () =>
-      !prefersReducedMotion() &&
-      window.matchMedia("(pointer: fine)").matches &&
-      window.matchMedia("(min-width: 1024px)").matches;
-
-    const PROXIMITY = 90;
-    let maxOffset = 0;
-    let restX = 0;
-
-    const measure = () => {
-      maxOffset = Math.max(0, track.clientWidth - slide.offsetWidth);
-      restX = maxOffset * 0.4;
-    };
-
-    const xTo = gsap.quickTo(slide, "x", { duration: 2.2, ease: "power1.out" });
-
-    measure();
-    if (canFollow()) gsap.set(slide, { x: restX });
-
-    const onMove = (e: PointerEvent) => {
-      if (!canFollow()) return;
-
-      const box = slide.getBoundingClientRect();
-      const isNear =
-        e.clientX >= box.left - PROXIMITY &&
-        e.clientX <= box.right + PROXIMITY &&
-        e.clientY >= box.top - PROXIMITY &&
-        e.clientY <= box.bottom + PROXIMITY;
-
-      if (!isNear) return;
-
-      const rect = track.getBoundingClientRect();
-      const target = e.clientX - rect.left - slide.offsetWidth / 2;
-      xTo(gsap.utils.clamp(0, maxOffset, target));
-    };
-
-    const onResize = () => {
-      const previous = (gsap.getProperty(slide, "x") as number) || 0;
-      measure();
-      gsap.set(slide, {
-        x: canFollow() ? gsap.utils.clamp(0, maxOffset, previous) : 0,
-      });
-    };
-
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("resize", onResize);
-      gsap.killTweensOf(slide);
-      gsap.set(slide, { x: 0 });
-    };
+    return bindCursorSlideTrack(track, slide);
   }, []);
 
   return (
     <section
       id="top"
       ref={rootRef}
-      className="relative flex min-h-[100svh] flex-col bg-[var(--color-bg)] px-6 pb-10 pt-[calc(var(--nav-height)+1.5rem)] md:px-10 lg:px-12"
-      data-nav-theme="light"
+      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-transparent px-6 pb-10 pt-[calc(var(--nav-height)+1.5rem)] text-[var(--color-fg)] md:px-10 lg:px-12"
+      data-nav-theme="dark"
     >
-      <div className="flex flex-1 flex-col gap-12 lg:flex-row lg:gap-0">
+      <div className="relative z-[1] flex flex-1 flex-col gap-12 lg:flex-row lg:gap-0">
         {/* Showreel track — the bounded area the box slides within */}
         <div ref={trackRef} className="relative lg:w-[40%] lg:pt-2">
           <div
@@ -129,7 +77,7 @@ export default function Hero() {
           >
             <div
               ref={mediaRef}
-              className="relative aspect-video w-full overflow-hidden bg-[var(--color-bg-inverse)] will-change-transform"
+              className="relative aspect-video w-full overflow-hidden bg-[var(--color-surface-muted)] will-change-transform"
             >
               <video
                 src="/videos/frontfiveo.mp4"
@@ -165,8 +113,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bottom row: copy left, CTAs locked to same column as WE BUILD / nav About */}
-      <div className="mt-16 flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
+      <div className="relative z-[1] mt-16 flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
         <p
           data-hero-sub
           className="max-w-[12.5em] font-[family-name:var(--font-card)] text-[clamp(2rem,4.1vw,3.75rem)] font-light leading-[1.15] tracking-[-0.03em] lg:w-[52%]"

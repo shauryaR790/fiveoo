@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full bg-[var(--color-bg)] text-[var(--color-fg)]">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--color-accent)] focus:px-4 focus:py-2 focus:text-[var(--color-fg)]"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--color-bg-inverse)] focus:px-4 focus:py-2 focus:text-[var(--color-fg-inverse)]"
         >
           Skip to content
         </a>

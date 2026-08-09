@@ -5,7 +5,6 @@ import Image from "next/image";
 import gsap from "gsap";
 import { TESTIMONIALS } from "@/lib/constants";
 import { fadeUp } from "@/lib/animations";
-
 export default function Testimonials() {
   const rootRef = useRef<HTMLElement>(null);
   const [openId, setOpenId] = useState<string>("02");
@@ -29,8 +28,8 @@ export default function Testimonials() {
     <section
       id="partners"
       ref={rootRef}
-      className="bg-[#F7F7F5] px-5 pb-10 pt-20 text-black md:px-10 md:pb-12 md:pt-28 lg:px-16"
-      data-nav-theme="light"
+      className="relative overflow-hidden bg-black px-5 pb-10 pt-20 text-white md:px-10 md:pb-12 md:pt-28 lg:px-16"
+      data-nav-theme="dark"
       aria-label="Our partners"
       style={{ fontFamily: "var(--font-card)" }}
     >
@@ -49,7 +48,7 @@ export default function Testimonials() {
             <div
               key={item.id}
               data-partner-reveal
-              className={index === 0 ? "" : "border-t border-black/12"}
+              className={index === 0 ? "" : "border-t border-white/12"}
             >
               <button
                 type="button"
@@ -108,7 +107,7 @@ export default function Testimonials() {
                 </span>
 
                 <span
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-black/80 md:h-10 md:w-10"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/80 md:h-10 md:w-10"
                   aria-hidden
                 >
                   <svg
@@ -140,23 +139,23 @@ export default function Testimonials() {
                   <div className="grid grid-cols-1 gap-10 pb-10 md:grid-cols-[5rem_minmax(0,1fr)_minmax(0,1fr)_6rem_2.75rem] md:gap-6 md:pb-14">
                     <div className="hidden md:block" aria-hidden />
                     <div>
-                      <p className="mb-4 text-[13px] font-medium tracking-[-0.01em] text-black/45 md:text-[14px]">
+                      <p className="mb-4 text-[13px] font-medium tracking-[-0.01em] text-white/45 md:text-[14px]">
                         Feedback
                       </p>
-                      <p className="max-w-[34rem] text-[22px] font-normal leading-[1.3] tracking-[-0.02em] text-black md:text-[28px]">
+                      <p className="max-w-[34rem] text-[22px] font-normal leading-[1.3] tracking-[-0.02em] text-white md:text-[28px]">
                         {item.feedback}
                       </p>
                     </div>
 
                     <div className="md:col-span-3">
-                      <p className="mb-4 text-[13px] font-medium tracking-[-0.01em] text-black/45 md:text-[14px]">
+                      <p className="mb-4 text-[13px] font-medium tracking-[-0.01em] text-white/45 md:text-[14px]">
                         Services
                       </p>
                       <div className="flex flex-wrap gap-2.5">
                         {item.services.map((service) => (
                           <span
                             key={service}
-                            className="rounded-full border border-black/80 px-4 py-2 text-[13px] font-normal tracking-[-0.015em] md:px-5 md:py-2.5 md:text-[14px]"
+                            className="rounded-full border border-white/80 px-4 py-2 text-[13px] font-normal tracking-[-0.015em] md:px-5 md:py-2.5 md:text-[14px]"
                           >
                             {service}
                           </span>

@@ -10,8 +10,8 @@ import {
   isMobileViewport,
   prefersReducedMotion,
   setNavInvert,
+  setNavPinDrive,
 } from "@/lib/animations";
-
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Branding() {
@@ -52,10 +52,18 @@ export default function Branding() {
           scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          // White while the black canvas shows; black once the light panel owns the screen.
-          onUpdate: (self) => setNavInvert(self.progress < 0.55),
-          onLeave: () => setNavInvert(false),
-          onLeaveBack: () => setNavInvert(true),
+          onEnter: () => setNavPinDrive(true),
+          onEnterBack: () => setNavPinDrive(true),
+          // Black nav only while the white panel owns the screen.
+          onUpdate: (self) => setNavInvert(self.progress >= 0.55),
+          onLeave: () => {
+            setNavPinDrive(false);
+            setNavInvert(false);
+          },
+          onLeaveBack: () => {
+            setNavPinDrive(false);
+            setNavInvert(false);
+          },
         },
       });
 
@@ -120,7 +128,7 @@ export default function Branding() {
       id="careers"
       ref={rootRef}
       data-nav-theme="dark"
-      className="relative -mt-px bg-[var(--color-bg-inverse)]"
+      className="relative -mt-px bg-black"
       aria-label="Branding statement"
     >
       <div
@@ -129,7 +137,7 @@ export default function Branding() {
       >
         <div
           data-branding-card
-          className="relative bg-[var(--color-bg)] text-[var(--color-fg)] md:absolute md:inset-0 md:[clip-path:inset(21%_20%_21%_20%)]"
+          className="relative bg-white text-black md:absolute md:inset-0 md:[clip-path:inset(21%_20%_21%_20%)]"
         >
           <div className="flex min-h-[100svh] flex-col px-5 pb-16 pt-[calc(var(--nav-height)+1rem)] md:h-full md:min-h-0 md:px-10 md:pb-0 lg:px-12">
             {/* Fixed line breaks so the image always lands mid-statement */}
@@ -167,17 +175,17 @@ export default function Branding() {
                 <div
                   key={feature.id}
                   data-branding-item
-                  className="border-b border-[var(--color-border)]/12 pb-7 will-change-transform md:pb-8"
+                  className="border-b border-black/12 pb-7 will-change-transform md:pb-8"
                 >
                   <div className="mb-5 grid grid-cols-[3.5rem_1fr] gap-x-4 md:mb-6 md:grid-cols-[5.5rem_1fr]">
-                    <span className="text-[17px] tabular-nums leading-[1.3] text-[var(--color-fg-muted)] md:text-[19px]">
+                    <span className="text-[17px] tabular-nums leading-[1.3] text-black/45 md:text-[19px]">
                       ({feature.id})
                     </span>
                     <h3 className="text-[17px] font-bold uppercase leading-[1.3] tracking-[0.01em] md:text-[20px]">
                       {feature.title}
                     </h3>
                   </div>
-                  <p className="w-full text-[17px] leading-[1.55] text-[var(--color-fg-muted)] md:text-[19px]">
+                  <p className="w-full text-[17px] leading-[1.55] text-black/55 md:text-[19px]">
                     {feature.body}
                   </p>
                 </div>

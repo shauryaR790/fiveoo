@@ -4,7 +4,6 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { PROCESS_STEPS } from "@/lib/constants";
 import { fadeUp } from "@/lib/animations";
-
 export default function Process() {
   const rootRef = useRef<HTMLElement>(null);
 
@@ -27,21 +26,23 @@ export default function Process() {
     <section
       id="process"
       ref={rootRef}
-      className="bg-white px-5 pb-28 pt-20 text-black md:px-10 md:pb-36 md:pt-28 lg:px-16"
-      data-nav-theme="light"
+      className="relative overflow-hidden border-b border-white/12 bg-black px-5 pb-12 pt-20 text-white md:px-10 md:pb-16 md:pt-28 lg:px-16"
+      data-nav-theme="dark"
       aria-label="Process"
       style={{ fontFamily: "var(--font-card)" }}
     >
       <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-14 lg:gap-24">
-        <h2
-          data-process-reveal
-          className="font-display max-w-[8ch] text-[clamp(4rem,9vw,8.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.055em] md:sticky md:top-24 md:self-start"
-        >
-          <span className="block">Seamless</span>
-          <span className="block">Process,</span>
-          <span className="block">Optimal</span>
-          <span className="block">Results.</span>
-        </h2>
+        <div className="mt-[7px] md:-mt-[3px] lg:-mt-px">
+          <h2
+            data-process-reveal
+            className="font-display m-0 max-w-[8ch] text-[clamp(4rem,9vw,8.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.055em] md:sticky md:top-24"
+          >
+            <span className="block">Seamless</span>
+            <span className="block">Process,</span>
+            <span className="block">Optimal</span>
+            <span className="block">Results.</span>
+          </h2>
+        </div>
 
         <div className="w-full">
           {PROCESS_STEPS.map((step) => (
@@ -49,18 +50,20 @@ export default function Process() {
               key={step.number}
               data-process-reveal
               data-process-step
-              className={`grid grid-cols-[4.5rem_1fr] gap-x-6 py-9 md:grid-cols-[5.5rem_1fr] md:gap-x-10 md:py-12 ${
-                step.number === "01" ? "" : "border-t border-black/12"
+              className={`grid grid-cols-[4.5rem_1fr] gap-x-6 md:grid-cols-[5.5rem_1fr] md:gap-x-10 ${
+                step.number === "01"
+                  ? "pb-9 md:pb-12"
+                  : "border-t border-white/12 py-9 md:py-12"
               }`}
             >
-              <span className="pt-0.5 text-[18px] font-medium tracking-[-0.02em] text-black md:text-[20px]">
+              <span className="pt-0.5 text-[18px] font-medium tracking-[-0.02em] text-[var(--color-neon-orange)] md:text-[20px]">
                 ({step.number})
               </span>
               <div>
-                <h3 className="mb-4 text-[20px] font-semibold leading-[1.25] tracking-[-0.03em] text-black md:mb-5 md:text-[24px]">
+                <h3 className="mb-4 text-[20px] font-semibold leading-[1.25] tracking-[-0.03em] text-white md:mb-5 md:text-[24px]">
                   {step.title}
                 </h3>
-                <p className="max-w-[36rem] text-[16px] font-normal leading-[1.55] tracking-[-0.015em] text-black/55 md:text-[18px]">
+                <p className="max-w-[36rem] text-[16px] font-normal leading-[1.55] tracking-[-0.015em] text-white/55 md:text-[18px]">
                   {step.description}
                 </p>
               </div>

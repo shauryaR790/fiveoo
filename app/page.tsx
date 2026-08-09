@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import About from "@/components/About";
+import HeroAboutBand from "@/components/HeroAboutBand";
 import Works from "@/components/Works";
 import Branding from "@/components/Branding";
 import Services from "@/components/Services";
@@ -14,15 +13,14 @@ export default function Home() {
   return (
     <main id="main" className="relative">
       <Navbar />
-      <Hero />
-      <About />
+      <HeroAboutBand />
       <Works />
       <Branding />
       <Services />
       <Pricing />
       <Process />
-      <Testimonials />
       <Partners />
+      <Testimonials />
       <Footer />
     </main>
   );

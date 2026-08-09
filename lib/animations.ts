@@ -13,6 +13,70 @@ export function isMobileViewport(): boolean {
   return window.matchMedia("(max-width: 768px)").matches;
 }
 
+/** Horizontal drift within a bounded track — matches hero showreel behaviour. */
+export function bindCursorSlideTrack(
+  track: HTMLElement,
+  slide: HTMLElement,
+  options?: { proximity?: number; restRatio?: number; minWidth?: number },
+) {
+  const proximity = options?.proximity ?? 90;
+  const restRatio = options?.restRatio ?? 0.4;
+  const minWidth = options?.minWidth ?? 1024;
+
+  const canFollow = () =>
+    !prefersReducedMotion() &&
+    window.matchMedia("(pointer: fine)").matches &&
+    window.matchMedia(`(min-width: ${minWidth}px)`).matches;
+
+  let maxOffset = 0;
+  let restX = 0;
+
+  const measure = () => {
+    maxOffset = Math.max(0, track.clientWidth - slide.offsetWidth);
+    restX = maxOffset * restRatio;
+  };
+
+  const xTo = gsap.quickTo(slide, "x", { duration: 2.2, ease: "power1.out" });
+
+  measure();
+  if (canFollow()) gsap.set(slide, { x: restX });
+
+  const onMove = (e: PointerEvent) => {
+    if (!canFollow()) return;
+
+    const box = slide.getBoundingClientRect();
+    const isNear =
+      e.clientX >= box.left - proximity &&
+      e.clientX <= box.right + proximity &&
+      e.clientY >= box.top - proximity &&
+      e.clientY <= box.bottom + proximity;
+
+    if (!isNear) return;
+
+    const rect = track.getBoundingClientRect();
+    const target = e.clientX - rect.left - slide.offsetWidth / 2;
+    xTo(gsap.utils.clamp(0, maxOffset, target));
+  };
+
+  const onResize = () => {
+    const previous = (gsap.getProperty(slide, "x") as number) || 0;
+    measure();
+    gsap.set(slide, {
+      x: canFollow() ? gsap.utils.clamp(0, maxOffset, previous) : 0,
+    });
+  };
+
+  window.addEventListener("pointermove", onMove);
+  window.addEventListener("resize", onResize);
+
+  return () => {
+    window.removeEventListener("pointermove", onMove);
+    window.removeEventListener("resize", onResize);
+    gsap.killTweensOf(slide);
+    gsap.set(slide, { x: 0 });
+  };
+}
+
 /** Overflow-hidden text rise */
 export function revealText(
   elements: gsap.TweenTarget,
@@ -173,14 +237,17 @@ export function infiniteMarquee(
   if (prefersReducedMotion()) return null;
 
   const duration = options?.duration ?? 28;
+  const reversed = options?.reversed ?? false;
+  const halfWidth = track.scrollWidth / 2;
 
-  // The track holds two identical halves; travelling exactly 50% keeps the
-  // loop seamless in either direction.
+  if (halfWidth <= 0) return null;
+
+  // Pixel loop is more reliable than xPercent once fonts/images settle.
   return gsap.fromTo(
     track,
-    { xPercent: options?.reversed ? -50 : 0 },
+    { x: reversed ? -halfWidth : 0 },
     {
-      xPercent: options?.reversed ? 0 : -50,
+      x: reversed ? 0 : -halfWidth,
       duration,
       ease: "none",
       repeat: -1,
@@ -222,6 +289,16 @@ export function imageReveal(
  * Nav colour is normally derived from `[data-nav-theme]` sections, but pinned
  * sequences change their own background mid-pin and need to drive it directly.
  */
+let navPinDrive = false;
+
+export function setNavPinDrive(active: boolean) {
+  navPinDrive = active;
+}
+
+export function isNavPinDrive() {
+  return navPinDrive;
+}
+
 export function setNavInvert(inverted: boolean) {
   document.querySelector("header")?.classList.toggle("nav-invert", inverted);
 }

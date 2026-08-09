@@ -1,19 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #f7f7f5;
-  --color-bg-inverse: #0a0a0a;
-  --color-fg: #111111;
-  --color-fg-muted: #656564;
-  --color-fg-inverse: #f7f7f5;
-  --color-surface: #ffffff;
-  --color-surface-muted: #ebebe8;
-  --color-border: #111111;
-  --color-accent: #ccff00;
-  --color-accent-deep: #004d40;
-  --color-cursor: #39ff14;
-  --color-forest: #01565b;
-  --color-lime: #ccff00;
+  /* Neon-noir: black canvas, white type, violet → orange bloom */
+  --color-bg: #000000;
+  --color-bg-inverse: #ffffff;
+  --color-fg: #ffffff;
+  --color-fg-muted: #9a9a9a;
+  --color-fg-inverse: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface-muted: #141414;
+  --color-border: #ffffff;
+  --color-accent: #ff6a1a;
+  --color-accent-deep: #6b2cff;
+  --color-cursor: #ff6a1a;
+  --color-forest: #000000;
+  --color-lime: #ff6a1a;
+  --color-neon-purple: #7b2fff;
+  --color-neon-violet: #a855ff;
+  --color-neon-orange: #ff6a1a;
+  --color-neon-amber: #ffb347;
   --font-display: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
   --font-card: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -35,6 +40,10 @@
   --color-cursor: var(--color-cursor);
   --color-forest: var(--color-forest);
   --color-lime: var(--color-lime);
+  --color-neon-purple: var(--color-neon-purple);
+  --color-neon-violet: var(--color-neon-violet);
+  --color-neon-orange: var(--color-neon-orange);
+  --color-neon-amber: var(--color-neon-amber);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
   --font-card: var(--font-card);
@@ -46,6 +55,14 @@
 
 html {
   scroll-behavior: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 html.lenis,
@@ -66,6 +83,7 @@ html.lenis body {
 }
 
 body {
+  position: relative;
   margin: 0;
   background: var(--color-bg);
   color: var(--color-fg);
@@ -75,6 +93,47 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Hide scrollbars everywhere — scrolling still works */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/*
+  Grain is document-locked (absolute), not viewport-fixed.
+  Fixed grain + Lenis made the texture swim while content scrolled.
+*/
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+
+#main {
+  position: relative;
+  z-index: 1;
 }
 
 h1,
@@ -88,7 +147,6 @@ h4,
   line-height: 0.9;
 }
 
-/* Open Inter for editorial headings (pricing, service cards, hero CTA) */
 .font-editorial {
   font-family: var(--font-card);
   font-weight: 500;
@@ -112,8 +170,8 @@ video {
 }
 
 ::selection {
-  background: var(--color-accent);
-  color: var(--color-fg);
+  background: var(--color-neon-purple);
+  color: #ffffff;
 }
 
 :focus-visible {
@@ -144,6 +202,7 @@ video {
   white-space: normal;
 }
 
+/* Dark-first: default nav is white; invert = black for rare light panels */
 .nav-invert {
   color: var(--color-fg-inverse);
 }
@@ -152,6 +211,103 @@ video {
   outline-color: var(--color-fg-inverse);
 }
 
+.price-choose-btn {
+  background-color: #ffffff;
+  color: #000000;
+  border: 0;
+  box-shadow: none;
+  font-weight: 700;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.price-choose-btn:hover {
+  background-color: var(--color-neon-orange);
+  color: #000000;
+}
+
+/* Reusable neon bank — purple → orange bloom */
+.neon-fog {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.neon-fog__bank {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 42%;
+  background: linear-gradient(
+    to top,
+    var(--color-neon-purple) 0%,
+    color-mix(in srgb, var(--color-neon-orange) 85%, var(--color-neon-purple)) 45%,
+    transparent 100%
+  );
+}
+
+.neon-fog__core {
+  position: absolute;
+  inset-inline: -20%;
+  bottom: -18%;
+  height: 78%;
+  border-radius: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    var(--color-neon-orange) 0%,
+    var(--color-neon-purple) 42%,
+    transparent 72%
+  );
+  filter: blur(48px);
+  opacity: 0.95;
+}
+
+.neon-fog__left {
+  position: absolute;
+  left: -18%;
+  bottom: -8%;
+  width: 70%;
+  height: 70%;
+  border-radius: 100%;
+  background: var(--color-neon-purple);
+  filter: blur(90px);
+  opacity: 0.85;
+}
+
+.neon-fog__right {
+  position: absolute;
+  right: -22%;
+  bottom: -12%;
+  width: 72%;
+  height: 75%;
+  border-radius: 100%;
+  background: var(--color-neon-orange);
+  filter: blur(100px);
+  opacity: 0.8;
+}
+
+.neon-fog__hot {
+  position: absolute;
+  inset-inline: 10%;
+  bottom: 8%;
+  height: 38%;
+  border-radius: 100%;
+  background: var(--color-neon-amber);
+  filter: blur(70px);
+  opacity: 0.55;
+}
+
+.neon-wash {
+  background: linear-gradient(
+    135deg,
+    var(--color-neon-purple) 0%,
+    #5a1fd6 38%,
+    var(--color-neon-orange) 72%,
+    var(--color-neon-amber) 100%
+  );
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

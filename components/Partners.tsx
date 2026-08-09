@@ -6,7 +6,6 @@ import gsap from "gsap";
 import { PARTNER_LOGOS_BOTTOM, PARTNER_LOGOS_TOP } from "@/lib/constants";
 import { infiniteMarquee, prefersReducedMotion } from "@/lib/animations";
 import { getLenis } from "@/lib/lenis";
-
 type Logo = { name: string; src: string };
 
 function LogoTile({ logo }: { logo: Logo }) {
@@ -99,8 +98,8 @@ export default function Partners() {
   return (
     <section
       id="clients"
-      className="bg-[#F7F7F5] px-3 pb-16 pt-2 text-black md:px-4 md:pb-24 md:pt-3"
-      data-nav-theme="light"
+      className="bg-black px-3 pb-16 pt-2 text-white md:px-4 md:pb-24 md:pt-3"
+      data-nav-theme="dark"
       aria-label="Partner logos"
     >
       <div className="flex flex-col gap-3 md:gap-4">

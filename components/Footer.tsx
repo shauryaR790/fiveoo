@@ -9,7 +9,8 @@ import {
   infiniteMarquee,
   prefersReducedMotion,
 } from "@/lib/animations";
-import { scrollToTarget } from "@/lib/lenis";
+import { scrollToTarget, getLenis } from "@/lib/lenis";
+import NeonFog from "@/components/NeonFog";
 
 function BrandUnit() {
   return (
@@ -21,7 +22,7 @@ function BrandUnit() {
           alt=""
           fill
           sizes="320px"
-          className="object-contain"
+          className="object-contain brightness-0 invert"
         />
       </span>
       <span>Fiveo Studio</span>
@@ -36,7 +37,11 @@ export default function Footer() {
   useLayoutEffect(() => {
     const root = rootRef.current;
     const track = trackRef.current;
-    if (!root) return;
+    if (!root || !track) return;
+
+    let onScroll: (() => void) | undefined;
+    let marqueeTween: gsap.core.Tween | null = null;
+    let rafId = 0;
 
     const ctx = gsap.context(() => {
       fadeUp(root.querySelectorAll("[data-footer-reveal]"), {
@@ -45,34 +50,80 @@ export default function Footer() {
         y: 28,
       });
 
-      if (track && !prefersReducedMotion()) {
-        infiniteMarquee(track, { duration: 32, reversed: false });
+      const startMarquee = () => {
+        if (prefersReducedMotion()) return;
+
+        marqueeTween?.kill();
+        marqueeTween = infiniteMarquee(track, { duration: 32, reversed: false });
+        if (!marqueeTween) return;
+
+        onScroll = () => {
+          const velocity = Math.abs(getLenis()?.velocity ?? 0);
+          marqueeTween?.timeScale(
+            gsap.utils.clamp(1, 1.5, 1 + velocity / 40),
+          );
+        };
+
+        getLenis()?.on("scroll", onScroll);
+      };
+
+      const tryStart = () => {
+        if (track.scrollWidth > 0) {
+          startMarquee();
+          return;
+        }
+        rafId = requestAnimationFrame(tryStart);
+      };
+
+      const boot = () => requestAnimationFrame(tryStart);
+
+      if (document.fonts?.ready) {
+        void document.fonts.ready.then(boot);
+      } else {
+        boot();
       }
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      cancelAnimationFrame(rafId);
+      if (onScroll) getLenis()?.off("scroll", onScroll);
+      marqueeTween?.kill();
+      ctx.revert();
+    };
   }, []);
 
   return (
     <footer
       id="footer"
       ref={rootRef}
-      className="flex min-h-dvh flex-col bg-white text-black"
-      data-nav-theme="light"
+      className="relative flex min-h-dvh flex-col overflow-x-clip bg-black text-white"
+      data-nav-theme="dark"
       style={{ fontFamily: "var(--font-card)" }}
     >
-      <div className="shrink-0 overflow-hidden pt-8 md:pt-12" aria-hidden>
+      <NeonFog variant="footer" />
+      {/* Soft dissolve at page edge — overlay, not clip, so no hard fog border */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[48%] bg-gradient-to-b from-transparent via-black/55 to-black"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-20 bg-black"
+        aria-hidden
+      />
+
+      <div className="relative z-[2] flex flex-1 flex-col">
+      <div className="relative shrink-0 overflow-hidden pt-8 md:pt-12" aria-hidden>
         <div ref={trackRef} className="flex w-max will-change-transform">
           <BrandUnit />
           <BrandUnit />
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col justify-center px-5 py-16 md:px-10 md:py-20 lg:px-16">
+      <div className="relative flex flex-1 flex-col justify-center px-5 py-16 md:px-10 md:py-20 lg:px-16">
         <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-16 lg:gap-24">
           {/* Left — slim Habito CTA */}
           <div data-footer-reveal>
-            <p className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.7rem,3vw,2.65rem)] font-light leading-[1.25] tracking-[-0.03em] text-black">
+            <p className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.7rem,3vw,2.65rem)] font-light leading-[1.25] tracking-[-0.03em] text-white">
               Choose a plan, send in your request, and your design journey
               starts tomorrow.
             </p>
@@ -82,7 +133,7 @@ export default function Footer() {
                 e.preventDefault();
                 scrollToTarget("#pricing");
               }}
-              className="mt-8 inline-flex items-center gap-2 border-b border-black/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
+              className="mt-8 inline-flex items-center gap-2 border-b border-white/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
             >
               Explore Plans
               <span aria-hidden>→</span>
@@ -104,7 +155,7 @@ export default function Footer() {
                             scrollToTarget(link.href);
                           }
                         }}
-                        className="whitespace-nowrap font-[family-name:var(--font-card)] text-[20px] font-light tracking-[-0.02em] text-black transition-opacity hover:opacity-50 md:text-[24px] lg:text-[28px]"
+                        className="whitespace-nowrap font-[family-name:var(--font-card)] text-[20px] font-light tracking-[-0.02em] text-white transition-opacity hover:opacity-50 md:text-[24px] lg:text-[28px]"
                       >
                         {link.label}
                       </a>
@@ -117,7 +168,7 @@ export default function Footer() {
             <button
               type="button"
               onClick={() => scrollToTarget("#top")}
-              className="mt-14 inline-flex items-center gap-2 border-b border-black/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
+              className="mt-14 inline-flex items-center gap-2 border-b border-white/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
             >
               Back to Top
               <span aria-hidden>↑</span>
@@ -128,21 +179,21 @@ export default function Footer() {
 
       <div
         data-footer-reveal
-        className="mt-auto flex shrink-0 flex-col items-start justify-between gap-4 border-t border-black/10 px-5 py-5 text-[13px] font-light tracking-[-0.015em] md:flex-row md:items-center md:px-10 md:py-6 lg:px-16"
+        className="relative mt-auto flex shrink-0 flex-col items-start justify-between gap-4 border-t border-white/10 px-5 py-5 text-[13px] font-light tracking-[-0.015em] md:flex-row md:items-center md:px-10 md:py-6 lg:px-16"
       >
         <a
           href="#"
-          className="inline-flex items-center gap-2.5 text-black transition-opacity hover:opacity-60"
+          className="inline-flex items-center gap-2.5 text-white transition-opacity hover:opacity-60"
         >
           Company Deck
           <span
-            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#CBEB3A]"
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-neon-orange)]"
             aria-hidden
           >
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
               <path
                 d="M6 2.2v5.2M3.6 5.8 6 8.3l2.4-2.5M2.4 9.8h7.2"
-                stroke="#111"
+                stroke="#000"
                 strokeWidth="1.3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -151,11 +202,12 @@ export default function Footer() {
           </span>
         </a>
 
-        <p className="text-black/55">
+        <p className="text-white/55">
           All right reserved by FIVEO Studio, {new Date().getFullYear()}
         </p>
 
-        <p className="text-black/55 md:text-right">Powered by FIVEO Studio</p>
+        <p className="text-white/55 md:text-right">Powered by FIVEO Studio</p>
+      </div>
       </div>
     </footer>
   );

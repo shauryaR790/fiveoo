@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { NAV_LINKS } from "@/lib/constants";
 import { scrollToTarget } from "@/lib/lenis";
-import { prefersReducedMotion } from "@/lib/animations";
+import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,20 +20,54 @@ export default function Navbar() {
     const ctx = gsap.context(() => {
       if (prefersReducedMotion()) return;
 
-      // Hero / light sections stay black. Dark sections flip the bar to white.
-      gsap.utils
-        .toArray<HTMLElement>("[data-nav-theme='dark']")
-        .forEach((section) => {
-          ScrollTrigger.create({
-            trigger: section,
-            start: "top 56px",
-            end: "bottom 56px",
-            onEnter: () => nav.classList.add("nav-invert"),
-            onEnterBack: () => nav.classList.add("nav-invert"),
-            onLeave: () => nav.classList.remove("nav-invert"),
-            onLeaveBack: () => nav.classList.remove("nav-invert"),
-          });
+      const navHeight =
+        parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue(
+            "--nav-height",
+          ),
+        ) || 88;
+
+      const applyTheme = (theme: string | undefined) => {
+        nav.classList.toggle("nav-invert", theme === "light");
+      };
+
+      const syncNavToScroll = () => {
+        if (isNavPinDrive()) return;
+
+        const probe = navHeight * 0.45;
+        const sections = gsap.utils.toArray<HTMLElement>("[data-nav-theme]");
+
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const section = sections[i];
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= probe && rect.bottom > probe) {
+            applyTheme(section.dataset.navTheme);
+            return;
+          }
+        }
+
+        applyTheme("dark");
+      };
+
+      gsap.utils.toArray<HTMLElement>("[data-nav-theme]").forEach((section) => {
+        ScrollTrigger.create({
+          trigger: section,
+          start: `top ${navHeight}px`,
+          end: `bottom ${navHeight}px`,
+          onEnter: syncNavToScroll,
+          onEnterBack: syncNavToScroll,
+          onLeave: syncNavToScroll,
+          onLeaveBack: syncNavToScroll,
         });
+      });
+
+      ScrollTrigger.create({
+        start: 0,
+        end: "max",
+        onRefresh: syncNavToScroll,
+      });
+
+      syncNavToScroll();
     }, nav);
 
     return () => ctx.revert();
