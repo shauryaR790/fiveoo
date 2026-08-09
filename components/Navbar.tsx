@@ -11,7 +11,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
-  const menuOpenRef = useRef(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useLayoutEffect(() => {
@@ -21,51 +20,26 @@ export default function Navbar() {
     const ctx = gsap.context(() => {
       if (prefersReducedMotion()) return;
 
-      /* The oversized headlines need the top of the viewport, so the bar gets
-         out of the way going down and comes back the moment you scroll up. */
-      let hidden = false;
-      ScrollTrigger.create({
-        start: 0,
-        end: "max",
-        onUpdate: (self) => {
-          const shouldHide =
-            self.direction === 1 && self.scroll() > 140 && !menuOpenRef.current;
-          if (shouldHide === hidden) return;
-          hidden = shouldHide;
-          gsap.to(nav, {
-            yPercent: shouldHide ? -110 : 0,
-            duration: 0.45,
-            ease: "power2.out",
-            overwrite: true,
+      // Hero / light sections stay black. Dark sections flip the bar to white.
+      gsap.utils
+        .toArray<HTMLElement>("[data-nav-theme='dark']")
+        .forEach((section) => {
+          ScrollTrigger.create({
+            trigger: section,
+            start: "top 56px",
+            end: "bottom 56px",
+            onEnter: () => nav.classList.add("nav-invert"),
+            onEnterBack: () => nav.classList.add("nav-invert"),
+            onLeave: () => nav.classList.remove("nav-invert"),
+            onLeaveBack: () => nav.classList.remove("nav-invert"),
           });
-        },
-      });
-
-      const darkSections = gsap.utils.toArray<HTMLElement>(
-        "[data-nav-theme='dark']",
-      );
-
-      darkSections.forEach((section) => {
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top 60px",
-          end: "bottom 60px",
-          onEnter: () => nav.classList.add("nav-invert"),
-          onEnterBack: () => nav.classList.add("nav-invert"),
-          onLeave: () => nav.classList.remove("nav-invert"),
-          onLeaveBack: () => nav.classList.remove("nav-invert"),
         });
-      });
     }, nav);
 
     return () => ctx.revert();
   }, []);
 
   useEffect(() => {
-    menuOpenRef.current = menuOpen;
-    if (menuOpen && navRef.current) {
-      gsap.to(navRef.current, { yPercent: 0, duration: 0.3, overwrite: true });
-    }
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";

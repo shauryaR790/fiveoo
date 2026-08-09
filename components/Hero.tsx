@@ -165,11 +165,11 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bottom row: big paragraph left, arrow links right */}
-      <div className="mt-16 flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:gap-0">
+      {/* Bottom row: copy left, CTAs locked to same column as WE BUILD / nav About */}
+      <div className="mt-16 flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
         <p
           data-hero-sub
-          className="max-w-[12.5em] text-[clamp(2rem,4.1vw,3.75rem)] font-normal leading-[1.16] tracking-[-0.02em] lg:w-[58.5%]"
+          className="max-w-[12.5em] font-[family-name:var(--font-card)] text-[clamp(2rem,4.1vw,3.75rem)] font-light leading-[1.15] tracking-[-0.03em] lg:w-[52%]"
         >
           Pick a plan, send in your request, and your design journey starts
           tomorrow.
@@ -177,12 +177,12 @@ export default function Hero() {
 
         <div
           data-hero-sub
-          className="flex w-full items-center gap-10 lg:w-[41.5%] lg:justify-between"
+          className="flex w-full items-end justify-between gap-8 lg:ml-auto lg:w-[41.5%]"
         >
           <button
             type="button"
             onClick={() => scrollToTarget("#about")}
-            className="group inline-flex items-center gap-2 border-b border-[var(--color-fg)] pb-1 text-[17px] font-semibold tracking-[-0.01em] transition-opacity hover:opacity-60"
+            className="group inline-flex items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60"
           >
             About us
             <span
@@ -195,7 +195,7 @@ export default function Hero() {
           <button
             type="button"
             onClick={() => scrollToTarget("#pricing")}
-            className="group inline-flex items-center gap-2 border-b border-[var(--color-fg)] pb-1 text-[17px] font-semibold tracking-[-0.01em] transition-opacity hover:opacity-60"
+            className="group inline-flex items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60"
           >
             Explore Plans
             <span

@@ -1,36 +1,53 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
-import Marquee from "@/components/Marquee";
-import { FOOTER_COLUMNS } from "@/lib/constants";
-import { fadeUp } from "@/lib/animations";
+import { FOOTER_LINK_COLUMNS } from "@/lib/constants";
+import {
+  fadeUp,
+  infiniteMarquee,
+  prefersReducedMotion,
+} from "@/lib/animations";
 import { scrollToTarget } from "@/lib/lenis";
+
+function BrandUnit() {
+  return (
+    <div className="flex shrink-0 items-center gap-[0.1em] whitespace-nowrap px-[0.2em] font-display text-[clamp(5rem,18vw,15rem)] font-extrabold uppercase leading-[0.85] tracking-[-0.06em]">
+      <span>Wemakeitreal</span>
+      <span className="relative mx-[0.06em] inline-block h-[0.95em] w-[0.95em] shrink-0 translate-y-[-0.02em]">
+        <Image
+          src="/images/leaf.avif"
+          alt=""
+          fill
+          sizes="320px"
+          className="object-contain"
+        />
+      </span>
+      <span>Fiveo Studio</span>
+    </div>
+  );
+}
 
 export default function Footer() {
   const rootRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
+    const track = trackRef.current;
     if (!root) return;
 
     const ctx = gsap.context(() => {
-      fadeUp(root.querySelectorAll("[data-footer-col]"), {
+      fadeUp(root.querySelectorAll("[data-footer-reveal]"), {
         trigger: root,
         stagger: 0.08,
         y: 28,
       });
 
-      gsap.from("[data-footer-seal]", {
-        scale: 0.85,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: root,
-          start: "top 80%",
-        },
-      });
+      if (track && !prefersReducedMotion()) {
+        infiniteMarquee(track, { duration: 32, reversed: false });
+      }
     }, root);
 
     return () => ctx.revert();
@@ -40,97 +57,105 @@ export default function Footer() {
     <footer
       id="footer"
       ref={rootRef}
-      className="bg-[var(--color-bg-inverse)] text-[var(--color-fg-inverse)]"
-      data-nav-theme="dark"
+      className="flex min-h-dvh flex-col bg-white text-black"
+      data-nav-theme="light"
+      style={{ fontFamily: "var(--font-card)" }}
     >
-      <Marquee className="border-y border-white/10 py-6 md:py-10" />
-
-      <div className="relative px-5 py-16 md:px-8 md:py-20 lg:px-12">
-        <div
-          data-footer-seal
-          className="pointer-events-none absolute left-1/2 top-1/2 hidden h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 md:flex"
-          aria-hidden
-        >
-          <span className="font-display text-center text-xs uppercase leading-tight tracking-[0.2em]">
-            Fiveo
-            <br />
-            Studio
-          </span>
+      <div className="shrink-0 overflow-hidden pt-8 md:pt-12" aria-hidden>
+        <div ref={trackRef} className="flex w-max will-change-transform">
+          <BrandUnit />
+          <BrandUnit />
         </div>
+      </div>
 
-        <div className="grid gap-12 md:grid-cols-4 md:gap-8">
-          <div data-footer-col>
-            <p className="mb-5 text-xs uppercase tracking-[0.18em] text-white/45">
-              Navigation
+      <div className="flex flex-1 flex-col justify-center px-5 py-16 md:px-10 md:py-20 lg:px-16">
+        <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-16 lg:gap-24">
+          {/* Left — slim Habito CTA */}
+          <div data-footer-reveal>
+            <p className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.7rem,3vw,2.65rem)] font-light leading-[1.25] tracking-[-0.03em] text-black">
+              Choose a plan, send in your request, and your design journey
+              starts tomorrow.
             </p>
-            <ul className="flex flex-col gap-3">
-              {FOOTER_COLUMNS.navigation.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToTarget(link.href);
-                    }}
-                    className="text-sm uppercase tracking-[0.1em] transition-opacity hover:opacity-60"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <a
+              href="#pricing"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToTarget("#pricing");
+              }}
+              className="mt-8 inline-flex items-center gap-2 border-b border-black/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
+            >
+              Explore Plans
+              <span aria-hidden>→</span>
+            </a>
           </div>
 
-          <div data-footer-col>
-            <p className="mb-5 text-xs uppercase tracking-[0.18em] text-white/45">
-              Socials
-            </p>
-            <ul className="flex flex-col gap-3">
-              {FOOTER_COLUMNS.socials.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm uppercase tracking-[0.1em] transition-opacity hover:opacity-60"
-                  >
-                    {link.label}
-                  </a>
-                </li>
+          {/* Right — Habito link columns */}
+          <div data-footer-reveal>
+            <div className="grid grid-cols-3 gap-x-6 md:gap-x-10 lg:gap-x-14">
+              {FOOTER_LINK_COLUMNS.map((column, colIndex) => (
+                <ul key={colIndex} className="flex flex-col gap-5 md:gap-6">
+                  {column.map((link) => (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        onClick={(e) => {
+                          if (link.href.startsWith("#") && link.href !== "#") {
+                            e.preventDefault();
+                            scrollToTarget(link.href);
+                          }
+                        }}
+                        className="whitespace-nowrap font-[family-name:var(--font-card)] text-[20px] font-light tracking-[-0.02em] text-black transition-opacity hover:opacity-50 md:text-[24px] lg:text-[28px]"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               ))}
-            </ul>
-          </div>
+            </div>
 
-          <div data-footer-col>
-            <p className="mb-5 text-xs uppercase tracking-[0.18em] text-white/45">
-              Legal
-            </p>
-            <ul className="flex flex-col gap-3">
-              {FOOTER_COLUMNS.legal.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm uppercase tracking-[0.1em] transition-opacity hover:opacity-60"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div data-footer-col className="md:text-right">
             <button
               type="button"
-              onClick={() => scrollToTarget("#top", { immediate: false })}
-              className="border border-white/30 px-5 py-3 text-sm uppercase tracking-[0.14em] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              onClick={() => scrollToTarget("#top")}
+              className="mt-14 inline-flex items-center gap-2 border-b border-black/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
             >
               Back to Top
+              <span aria-hidden>↑</span>
             </button>
-            <p className="mt-8 font-display text-2xl tracking-tight">FIVEO</p>
-            <p className="mt-2 text-xs text-white/40">
-              © {new Date().getFullYear()} FIVEO Studio
-            </p>
           </div>
         </div>
+      </div>
+
+      <div
+        data-footer-reveal
+        className="mt-auto flex shrink-0 flex-col items-start justify-between gap-4 border-t border-black/10 px-5 py-5 text-[13px] font-light tracking-[-0.015em] md:flex-row md:items-center md:px-10 md:py-6 lg:px-16"
+      >
+        <a
+          href="#"
+          className="inline-flex items-center gap-2.5 text-black transition-opacity hover:opacity-60"
+        >
+          Company Deck
+          <span
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#CBEB3A]"
+            aria-hidden
+          >
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M6 2.2v5.2M3.6 5.8 6 8.3l2.4-2.5M2.4 9.8h7.2"
+                stroke="#111"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </a>
+
+        <p className="text-black/55">
+          All right reserved by FIVEO Studio, {new Date().getFullYear()}
+        </p>
+
+        <p className="text-black/55 md:text-right">Powered by FIVEO Studio</p>
       </div>
     </footer>
   );

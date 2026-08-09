@@ -50,8 +50,10 @@ export default function Works() {
           invalidateOnRefresh: true,
           // Pinned sections must refresh in document order; this one is first.
           refreshPriority: 1,
+          // Lime intro = black nav; once the canvas goes dark, flip to white.
           onUpdate: (self) => setNavInvert(self.progress > 0.49),
           onLeave: () => setNavInvert(true),
+          onEnterBack: () => setNavInvert(true),
           onLeaveBack: () => setNavInvert(false),
         },
       });
@@ -139,7 +141,7 @@ export default function Works() {
       {/* The lime state the section arrives in, burned off during the pin */}
       <div
         data-works-lime
-        className="absolute inset-0 bg-[var(--color-lime)]"
+        className="pointer-events-none absolute inset-0 bg-[var(--color-lime)]"
         aria-hidden
       />
 
@@ -155,10 +157,7 @@ export default function Works() {
           (2023–2026)
         </h2>
 
-        <div
-          data-nav-theme="dark"
-          className="grid grid-cols-1 items-start gap-x-2.5 gap-y-14 pt-16 md:grid-cols-12 md:gap-y-24 md:pt-24"
-        >
+        <div className="grid grid-cols-1 items-start gap-x-2.5 gap-y-14 pt-16 md:grid-cols-12 md:gap-y-24 md:pt-24">
           {WORKS.map((work) => (
             <article
               key={work.id}

@@ -9,12 +9,10 @@ import Process from "@/components/Process";
 import Testimonials from "@/components/Testimonials";
 import Partners from "@/components/Partners";
 import Footer from "@/components/Footer";
-import Cursor from "@/components/Cursor";
 
 export default function Home() {
   return (
     <main id="main" className="relative">
-      <Cursor />
       <Navbar />
       <Hero />
       <About />

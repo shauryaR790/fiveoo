@@ -1,52 +1,113 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
-import { PARTNERS } from "@/lib/constants";
-import { fadeUp } from "@/lib/animations";
+import { PARTNER_LOGOS_BOTTOM, PARTNER_LOGOS_TOP } from "@/lib/constants";
+import { infiniteMarquee, prefersReducedMotion } from "@/lib/animations";
+import { getLenis } from "@/lib/lenis";
 
-export default function Partners() {
-  const rootRef = useRef<HTMLElement>(null);
+type Logo = { name: string; src: string };
+
+function LogoTile({ logo }: { logo: Logo }) {
+  return (
+    <div className="mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center bg-white px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
+      <div className="relative h-[96%] w-[96%]">
+        <Image
+          src={logo.src}
+          alt={logo.name}
+          fill
+          sizes="320px"
+          className="object-contain"
+        />
+      </div>
+    </div>
+  );
+}
+
+function LogoRow({
+  logos,
+  reversed,
+  duration,
+}: {
+  logos: readonly Logo[];
+  reversed: boolean;
+  duration: number;
+}) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
+    const track = trackRef.current;
+    if (!root || !track) return;
+
+    let onScroll: (() => void) | undefined;
+    let resetTween: gsap.core.Tween | undefined;
 
     const ctx = gsap.context(() => {
-      fadeUp(root.querySelectorAll("[data-partner]"), {
-        trigger: root,
-        stagger: 0.06,
-        y: 24,
-        duration: 0.7,
-      });
+      if (prefersReducedMotion()) return;
+
+      const tween = infiniteMarquee(track, { duration, reversed });
+      if (!tween) return;
+
+      onScroll = () => {
+        const velocity = getLenis()?.velocity ?? 0;
+        resetTween?.kill();
+
+        /* Scroll velocity speeds the strip; opposite scroll can reverse it. */
+        const scale = gsap.utils.clamp(-2.6, 2.6, 1 + velocity / 28);
+        tween.timeScale(scale);
+
+        resetTween = gsap.to(tween, {
+          timeScale: 1,
+          duration: 1.15,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      };
+
+      getLenis()?.on("scroll", onScroll);
     }, root);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      if (onScroll) getLenis()?.off("scroll", onScroll);
+      resetTween?.kill();
+      ctx.revert();
+    };
+  }, [duration, reversed]);
+
+  const half = (
+    <div className="flex shrink-0">
+      {logos.map((logo, i) => (
+        <LogoTile key={`${logo.name}-${i}`} logo={logo} />
+      ))}
+    </div>
+  );
 
   return (
-    <section
-      ref={rootRef}
-      className="bg-[var(--color-bg)] px-5 py-20 text-[var(--color-fg)] md:px-8 md:py-28 lg:px-12"
-      data-nav-theme="light"
-      aria-label="Partners"
-    >
-      <p className="mb-10 text-sm uppercase tracking-[0.2em] text-[var(--color-fg-muted)]">
-        Partners
-      </p>
+    <div ref={rootRef} className="overflow-hidden" aria-hidden>
+      <div ref={trackRef} className="flex w-max will-change-transform">
+        {half}
+        {half}
+      </div>
+    </div>
+  );
+}
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4">
-        {PARTNERS.map((name) => (
-          <div
-            key={name}
-            data-partner
-            className="flex aspect-[3/2] items-center justify-center bg-[var(--color-surface-muted)] transition-colors duration-300 hover:bg-[var(--color-accent)]"
-          >
-            <span className="font-display text-lg uppercase tracking-[0.18em] md:text-xl">
-              {name}
-            </span>
-          </div>
-        ))}
+export default function Partners() {
+  return (
+    <section
+      id="clients"
+      className="bg-[#F7F7F5] px-3 pb-16 pt-2 text-black md:px-4 md:pb-24 md:pt-3"
+      data-nav-theme="light"
+      aria-label="Partner logos"
+    >
+      <div className="flex flex-col gap-3 md:gap-4">
+        {/* Top row: left → right */}
+        <LogoRow logos={PARTNER_LOGOS_TOP} reversed duration={36} />
+        {/* Bottom row: right → left */}
+        <LogoRow logos={PARTNER_LOGOS_BOTTOM} reversed={false} duration={40} />
       </div>
     </section>
   );

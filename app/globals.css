@@ -77,14 +77,6 @@ body {
   overflow-x: hidden;
 }
 
-@media (pointer: fine) {
-  body.has-custom-cursor,
-  body.has-custom-cursor a,
-  body.has-custom-cursor button {
-    cursor: none;
-  }
-}
-
 h1,
 h2,
 h3,
@@ -94,6 +86,13 @@ h4,
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 0.9;
+}
+
+/* Open Inter for editorial headings (pricing, service cards, hero CTA) */
+.font-editorial {
+  font-family: var(--font-card);
+  font-weight: 500;
+  letter-spacing: -0.025em;
 }
 
 a {
@@ -145,15 +144,6 @@ video {
   white-space: normal;
 }
 
-/* Blend so text stays legible through the cursor dot */
-.cursor-dot {
-  mix-blend-mode: multiply;
-}
-
-body.on-dark .cursor-dot {
-  mix-blend-mode: screen;
-}
-
 .nav-invert {
   color: var(--color-fg-inverse);
 }
@@ -161,6 +151,7 @@ body.on-dark .cursor-dot {
 .nav-invert:focus-visible {
   outline-color: var(--color-fg-inverse);
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   *,

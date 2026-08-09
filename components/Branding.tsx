@@ -52,7 +52,8 @@ export default function Branding() {
           scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          onUpdate: (self) => setNavInvert(self.progress < 0.3),
+          // White while the black canvas shows; black once the light panel owns the screen.
+          onUpdate: (self) => setNavInvert(self.progress < 0.55),
           onLeave: () => setNavInvert(false),
           onLeaveBack: () => setNavInvert(true),
         },
@@ -112,6 +113,7 @@ export default function Branding() {
     <section
       id="careers"
       ref={rootRef}
+      data-nav-theme="dark"
       className="relative -mt-px bg-[var(--color-bg-inverse)]"
       aria-label="Branding statement"
     >

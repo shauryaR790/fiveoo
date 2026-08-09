@@ -150,41 +150,108 @@ export const SERVICE_GROUPS = [
   },
 ] as const;
 
+const SUBSCRIPTION_FEATURES = [
+  "Execute All Works",
+  "Branding, UIUX, Illustration, and Motion",
+  "Unlimited Request",
+  "Unlimited Revisions",
+  "Pause & Cancel Anytime",
+  "2 Designer & 1 Project Manager",
+  "Daily & Weekly Reporting",
+  "1 Month Timelines",
+] as const;
+
+const SUBSCRIPTION_FEATURES_EXTRA = [
+  "2 Active Task in a day",
+  "1-2 day Turnaround",
+  "1 Art Director",
+] as const;
+
 export const PRICING_PLANS = [
   {
+    id: "starter",
     name: "Starter Plan",
-    price: "$2,999",
-    period: "/mo",
-    description: "Foundational branding for early-stage products.",
-    features: [
-      "Logo & visual identity",
-      "Brand guidelines",
-      "2 revision rounds",
-      "48h average turnaround",
-    ],
+    badge: "Best for New Business",
+    project: {
+      price: "$1.599",
+      unit: "/brand",
+      features: [
+        "Logo Design",
+        "Visual Guidelines",
+        "Stationary/Print Design",
+        "Social Media Design",
+        "Premium Mockups",
+        "Unlimited Revisions",
+        "1 Designer & 1 Project Manager",
+        "Daily & Weekly Reporting",
+      ],
+    },
+    subscription: {
+      price: "$2.899",
+      unit: "/month",
+      features: [...SUBSCRIPTION_FEATURES],
+      featuresExtra: [...SUBSCRIPTION_FEATURES_EXTRA],
+    },
   },
   {
+    id: "business",
     name: "Business Plan",
-    price: "$4,999",
-    period: "/mo",
-    description: "Full creative support for growing teams.",
-    features: [
-      "Everything in Starter",
-      "UI/UX & product design",
-      "Unlimited requests*",
-      "Dedicated creative lead",
-    ],
+    badge: "Most Popular 🔥",
+    project: {
+      price: "$3.899",
+      unit: "/package",
+      features: [
+        "All Basic Plan included",
+        "Brand Guidelines",
+        "Motion Design",
+        "Illustration",
+        "Landing Page & Development",
+        "1–2 Month Timelines",
+        "Unlimited Request",
+        "Unlimited Revisions",
+        "1 Art Director",
+      ],
+    },
+    subscription: {
+      price: "$2.699",
+      unit: "/month",
+      features: [...SUBSCRIPTION_FEATURES],
+      featuresExtra: [...SUBSCRIPTION_FEATURES_EXTRA],
+    },
   },
   {
+    id: "custom",
     name: "Custom Plan",
-    price: "Custom",
-    period: "",
-    description: "Tailored partnership for scale-ups.",
-    features: [
-      "Multi-brand systems",
-      "Motion & illustration",
-      "Priority queue",
-      "On-site workshops",
+    badge: "More Flexible",
+    project: {
+      price: "Custom Plan",
+      unit: "",
+      features: [
+        "Branding Design",
+        "Graphic Design",
+        "UIUX Design",
+        "Illustration",
+        "Motion Graphic",
+        "Webflow Development",
+        "Framer Development",
+      ],
+    },
+    subscription: {
+      price: "Custom Plan",
+      unit: "",
+      features: [
+        "Branding Design",
+        "Graphic Design",
+        "UIUX Design",
+        "Illustration",
+        "Motion Graphic",
+        "Webflow Development",
+        "Framer Development",
+      ],
+    },
+    footnoteLines: [
+      "Still have any questions?",
+      "Get a free consultation for your project here!",
     ],
   },
 ] as const;
@@ -192,66 +259,135 @@ export const PRICING_PLANS = [
 export const PROCESS_STEPS = [
   {
     number: "01",
-    title: "Discover & Align",
+    title: "Subscribe Plan",
     description:
-      "We map your product goals, audience, and constraints so every visual decision moves the business forward.",
+      "Choose a plan that fits your business—whether you need foundational branding or full creative support. Our flexible monthly options are built to help startups grow and scale. Subscribe, and we'll get started within 24 hours.",
   },
   {
     number: "02",
-    title: "Design & Iterate",
+    title: "Submit Unlimited Design Requests",
     description:
-      "Rapid exploration, clear feedback loops, and production-ready assets delivered on a predictable cadence.",
+      "Send in as many design tasks as you need—logo, social media, UI/UX, or brand assets. We'll help prioritize based on your goals and timelines. No limits, just clear creative flow.",
   },
   {
     number: "03",
-    title: "Launch & Scale",
+    title: "We Craft, You Review",
     description:
-      "Systems, motion, and templates that stay coherent as your product and team grow.",
+      "Our team starts working right away, updating you with daily and weekly progress. Each design is shaped with your vision in mind. We revise until it's perfect—no extra cost, no stress.",
+  },
+  {
+    number: "04",
+    title: "Approve & Receive Final Files",
+    description:
+      "Once approved, we deliver all assets in ready-to-use formats. Your brand visuals are now complete, seamless, and impactful. Just download and launch.",
   },
 ] as const;
 
 export const TESTIMONIALS = [
   {
-    quote:
-      "Working with FIVEO elevated our brand to a whole new level. Their branding and UX expertise made every collaboration effortless.",
-    author: "Maya Chen",
-    role: "Founder, Nova Finance",
+    id: "01",
+    name: "Hugo Cortez",
+    company: "Blomer",
+    year: "2023",
+    avatar: "/images/partners/hugo-cortez.avif",
+    logo: "/images/partners/blomer.avif",
+    feedback:
+      "FIVEO's clarity and craft made every review feel effortless. They moved fast without ever losing the brand's voice.",
+    services: ["Branding", "Pitch Deck", "Motion Design", "Web Design"],
   },
   {
-    quote:
+    id: "02",
+    name: "Antonio R.",
+    company: "Solventlife",
+    year: "2024",
+    avatar: "/images/partners/antonio-r.avif",
+    logo: "/images/partners/solventlife.avif",
+    feedback:
+      "FIVEO truly captured our vision and turned it into a stunning brand. Their team was creative, responsive, and a pleasure to work with. We're thrilled with the results!",
+    services: ["Dashboard", "Pitch Deck", "Motion Graphic", "Graphic Design"],
+  },
+  {
+    id: "03",
+    name: "Fazil",
+    company: "Uneek Clothing",
+    year: "2024",
+    avatar: "/images/partners/fazil.avif",
+    logo: "/images/partners/uneek.avif",
+    feedback:
+      "FIVEO's fast responses and unique style, which perfectly aligned with our brand vision, impressed me the most!",
+    services: ["Branding", "Pitch Deck", "Motion Design", "Web Design"],
+  },
+  {
+    id: "04",
+    name: "Jonathan",
+    company: "Melanin Doctor",
+    year: "2024",
+    avatar: "/images/partners/jonathan.avif",
+    logo: "/images/partners/melanin-doctor.avif",
+    feedback:
+      "Working with FIVEO felt like adding a senior design team overnight — sharp systems, clear communication, and beautiful delivery.",
+    services: ["Brand Guidelines", "UIUX Design", "Social Media", "Webflow"],
+  },
+  {
+    id: "05",
+    name: "Rico",
+    company: "Blomer",
+    year: "2023",
+    avatar: "/images/partners/rico.avif",
+    logo: "/images/partners/blomer.avif",
+    feedback:
       "They feel like an extension of our team — fast, precise, and obsessively consistent across every touchpoint.",
-    author: "Jordan Blake",
-    role: "Head of Product, Orbit Labs",
+    services: ["Product Design", "Motion Design", "Illustration", "Landing Page"],
+  },
+  {
+    id: "06",
+    name: "Wael Amor",
+    company: "Al Furqon",
+    year: "2025",
+    avatar: "/images/partners/wael-amor.avif",
+    logo: "/images/partners/al-furqon.avif",
+    feedback:
+      "From first concept to final files, FIVEO kept everything seamless. The work landed strong and stayed on brand.",
+    services: ["Branding", "Packaging", "Motion Graphic", "Framer"],
   },
 ] as const;
 
-export const PARTNERS = [
-  "NOVA",
-  "ORBIT",
-  "PULSE",
-  "FIELD",
-  "RELAY",
-  "NORTH",
-  "PIXEL",
-  "STACK",
+export const PARTNER_LOGOS_TOP = [
+  { name: "Hyllo", src: "/images/logos/hyllo.avif" },
+  { name: "Uneek", src: "/images/logos/uneek.avif" },
+  { name: "Bridge", src: "/images/logos/bridge.avif" },
+  { name: "Sahlah", src: "/images/logos/sahlah.avif" },
+  { name: "Blomer", src: "/images/logos/blomer.avif" },
+  { name: "Hamlet", src: "/images/logos/hamlet.avif" },
 ] as const;
 
-export const FOOTER_COLUMNS = {
-  navigation: [
+export const PARTNER_LOGOS_BOTTOM = [
+  { name: "Melanin Doctor", src: "/images/logos/melanin-doctor.avif" },
+  { name: "HDS", src: "/images/logos/hds.avif" },
+  { name: "Axcel Partners", src: "/images/logos/axcel-partners.avif" },
+  { name: "Solvent Life", src: "/images/logos/solvent-life.avif" },
+  { name: "Omoc", src: "/images/logos/omoc.avif" },
+  { name: "Bridge", src: "/images/logos/bridge.avif" },
+] as const;
+
+/** Habito footer link grid — three columns, exact labels */
+export const FOOTER_LINK_COLUMNS = [
+  [
+    { label: "Home", href: "#top" },
     { label: "About", href: "#about" },
-    { label: "Works", href: "#works" },
+    { label: "Our Works", href: "#works" },
     { label: "Services", href: "#services" },
+  ],
+  [
+    { label: "How it works", href: "#process" },
     { label: "Pricing", href: "#pricing" },
+    { label: "Privacy Policy", href: "#" },
+    { label: "Terms & Condition", href: "#" },
   ],
-  socials: [
-    { label: "Instagram", href: "#" },
-    { label: "LinkedIn", href: "#" },
-    { label: "X / Twitter", href: "#" },
+  [
+    { label: "Social Media", href: "#partners" },
+    { label: "Dribbble", href: "#" },
     { label: "Behance", href: "#" },
+    { label: "Instagram", href: "#" },
   ],
-  legal: [
-    { label: "Privacy", href: "#" },
-    { label: "Terms", href: "#" },
-    { label: "Cookies", href: "#" },
-  ],
-} as const;
+] as const;

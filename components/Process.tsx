@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { PROCESS_STEPS } from "@/lib/constants";
-import { fadeUp, revealText } from "@/lib/animations";
+import { fadeUp } from "@/lib/animations";
 
 export default function Process() {
   const rootRef = useRef<HTMLElement>(null);
@@ -13,15 +13,10 @@ export default function Process() {
     if (!root) return;
 
     const ctx = gsap.context(() => {
-      const heading = root.querySelector("[data-process-heading] span");
-      if (heading) {
-        revealText(heading, { trigger: root });
-      }
-
-      fadeUp(root.querySelectorAll("[data-process-step]"), {
+      fadeUp(root.querySelectorAll("[data-process-reveal]"), {
         trigger: root,
-        stagger: 0.18,
-        y: 40,
+        stagger: 0.12,
+        y: 36,
       });
     }, root);
 
@@ -30,36 +25,48 @@ export default function Process() {
 
   return (
     <section
+      id="process"
       ref={rootRef}
-      className="bg-[var(--color-bg)] px-5 py-24 text-[var(--color-fg)] md:px-8 md:py-32 lg:px-12"
+      className="bg-white px-5 pb-28 pt-20 text-black md:px-10 md:pb-36 md:pt-28 lg:px-16"
       data-nav-theme="light"
       aria-label="Process"
+      style={{ fontFamily: "var(--font-card)" }}
     >
-      <h2
-        data-process-heading
-        className="mb-16 overflow-hidden font-display text-[clamp(2.5rem,7vw,5.5rem)] uppercase leading-[0.95] md:mb-24"
-      >
-        <span className="block will-change-transform">Optimal Results</span>
-      </h2>
+      <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-14 lg:gap-24">
+        <h2
+          data-process-reveal
+          className="font-display max-w-[8ch] text-[clamp(4rem,9vw,8.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.055em] md:sticky md:top-24 md:self-start"
+        >
+          <span className="block">Seamless</span>
+          <span className="block">Process,</span>
+          <span className="block">Optimal</span>
+          <span className="block">Results.</span>
+        </h2>
 
-      <div className="mx-auto max-w-5xl">
-        {PROCESS_STEPS.map((step) => (
-          <div
-            key={step.number}
-            data-process-step
-            className="grid grid-cols-[auto_1fr] gap-6 border-t border-[var(--color-border)] py-10 md:grid-cols-[6rem_1fr_1.2fr] md:gap-12 md:py-14"
-          >
-            <span className="font-display text-sm tracking-[0.16em] text-[var(--color-fg-muted)] md:text-base">
-              {step.number}
-            </span>
-            <h3 className="font-display text-2xl uppercase leading-tight md:text-3xl">
-              {step.title}
-            </h3>
-            <p className="col-span-2 max-w-xl text-sm leading-relaxed text-[var(--color-fg-muted)] md:col-span-1 md:text-base">
-              {step.description}
-            </p>
-          </div>
-        ))}
+        <div className="w-full">
+          {PROCESS_STEPS.map((step) => (
+            <div
+              key={step.number}
+              data-process-reveal
+              data-process-step
+              className={`grid grid-cols-[4.5rem_1fr] gap-x-6 py-9 md:grid-cols-[5.5rem_1fr] md:gap-x-10 md:py-12 ${
+                step.number === "01" ? "" : "border-t border-black/12"
+              }`}
+            >
+              <span className="pt-0.5 text-[18px] font-medium tracking-[-0.02em] text-black md:text-[20px]">
+                ({step.number})
+              </span>
+              <div>
+                <h3 className="mb-4 text-[20px] font-semibold leading-[1.25] tracking-[-0.03em] text-black md:mb-5 md:text-[24px]">
+                  {step.title}
+                </h3>
+                <p className="max-w-[36rem] text-[16px] font-normal leading-[1.55] tracking-[-0.015em] text-black/55 md:text-[18px]">
+                  {step.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
