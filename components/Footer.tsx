@@ -124,7 +124,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-16 lg:gap-24">
           {/* Left — slim Habito CTA */}
           <div data-footer-reveal>
-            <p className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.7rem,3vw,2.65rem)] font-light leading-[1.25] tracking-[-0.03em] text-white">
+            <p className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.7rem,3vw,2.65rem)] font-light leading-[1.25] tracking-[-0.03em] text-[var(--color-fg)]">
               Choose a plan, send in your request, and your design journey
               starts tomorrow.
             </p>
@@ -134,7 +134,7 @@ export default function Footer() {
                 e.preventDefault();
                 void navigateToSection("#pricing");
               }}
-              className="mt-8 inline-flex items-center gap-2 border-b border-white/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
+              className="mt-8 inline-flex items-center gap-2 border-b border-[var(--color-fg)]/75 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] text-[var(--color-fg)] transition-opacity hover:opacity-55"
             >
               Explore Plans
               <span aria-hidden>→</span>
@@ -156,7 +156,7 @@ export default function Footer() {
                             void navigateToSection(link.href);
                           }
                         }}
-                        className="whitespace-nowrap font-[family-name:var(--font-card)] text-[20px] font-light tracking-[-0.02em] text-white transition-opacity hover:opacity-50 md:text-[24px] lg:text-[28px]"
+                        className="whitespace-nowrap font-[family-name:var(--font-card)] text-[20px] font-light tracking-[-0.02em] text-[var(--color-fg)] transition-opacity hover:opacity-50 md:text-[24px] lg:text-[28px]"
                       >
                         {link.label}
                       </a>
@@ -169,7 +169,7 @@ export default function Footer() {
             <button
               type="button"
               onClick={() => void navigateToSection("#top")}
-              className="mt-14 inline-flex items-center gap-2 border-b border-white/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
+              className="mt-14 inline-flex items-center gap-2 border-b border-[var(--color-fg)]/75 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] text-[var(--color-fg)] transition-opacity hover:opacity-55"
             >
               Back to Top
               <span aria-hidden>↑</span>
@@ -180,11 +180,11 @@ export default function Footer() {
 
       <div
         data-footer-reveal
-        className="relative mt-auto flex shrink-0 flex-col items-start justify-between gap-4 border-t border-white/10 px-5 py-5 text-[13px] font-light tracking-[-0.015em] md:flex-row md:items-center md:px-10 md:py-6 lg:px-16"
+        className="relative mt-auto flex shrink-0 flex-col items-start justify-between gap-4 border-t border-[var(--color-fg)]/10 px-5 py-5 text-[13px] font-light tracking-[-0.015em] text-[var(--color-fg)] md:flex-row md:items-center md:px-10 md:py-6 lg:px-16"
       >
         <a
           href="#"
-          className="inline-flex items-center gap-2.5 text-white transition-opacity hover:opacity-60"
+          className="inline-flex items-center gap-2.5 text-[var(--color-fg)] transition-opacity hover:opacity-60"
         >
           Company Deck
           <span
@@ -203,11 +203,11 @@ export default function Footer() {
           </span>
         </a>
 
-        <p className="text-white/55">
+        <p className="text-[var(--color-fg)]/55">
           All right reserved by FIVEO Studio, {new Date().getFullYear()}
         </p>
 
-        <p className="text-white/55 md:text-right">Powered by FIVEO Studio</p>
+        <p className="text-[var(--color-fg)]/55 md:text-right">Powered by FIVEO Studio</p>
       </div>
       </div>
     </footer>

@@ -28,7 +28,12 @@ export default function Works() {
       ]);
 
       if (prefersReducedMotion() || !title) {
-        gsap.set(title, { color: "#ffffff" });
+        gsap.set(title, {
+          color:
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--color-fg")
+              .trim() || "currentColor",
+        });
         return;
       }
 
@@ -158,7 +163,7 @@ export default function Works() {
               {/* Square frames: a half-width project simply reads twice as tall */}
               <div
                 data-work-frame
-                className="relative aspect-square overflow-hidden will-change-transform"
+                className="theme-card relative aspect-square overflow-hidden rounded-2xl will-change-transform"
               >
                 <div
                   data-work-media

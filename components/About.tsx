@@ -62,7 +62,7 @@ export default function About() {
                 data-cursor-grow
                 className="w-full max-w-[420px] will-change-transform lg:w-[420px] lg:max-w-none"
               >
-                <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-surface-muted)]">
+                <div className="theme-card relative aspect-video w-full overflow-hidden rounded-2xl">
                   <Image
                     src="/images/reels.avif"
                     alt="FIVEO showreels"
@@ -79,7 +79,7 @@ export default function About() {
           <div className="flex flex-col gap-10">
             <div data-about-reveal>
               <p className="mb-5 text-[17px] leading-[1.6]">About Us</p>
-              <p className="text-[17px] leading-[1.6] text-white/85">
+              <p className="text-[17px] leading-[1.6] text-[var(--color-fg)]/85">
                 At FIVEO, we&apos;re not just a design team — we&apos;re your
                 creative partners. We help brands grow with smart, consistent,
                 and purpose-driven design. From startups to scale-ups, our
@@ -90,13 +90,13 @@ export default function About() {
 
             <div data-about-reveal>
               <p className="mb-5 text-[17px] leading-[1.6]">Our idealist</p>
-              <p className="text-[17px] leading-[1.6] text-white/85">
+              <p className="text-[17px] leading-[1.6] text-[var(--color-fg)]/85">
                 We believe great design is not just about how it looks — it&apos;s
                 about how it works. That&apos;s why we take the time to
                 understand your business, your goals, and your audience,
                 delivering visual systems that are as strategic as they are
                 stunning.{" "}
-                <span className="font-semibold text-white">
+                <span className="font-semibold text-[var(--color-fg)]">
                   Built for brands that move fast, think big, and value
                   thoughtful design.
                 </span>

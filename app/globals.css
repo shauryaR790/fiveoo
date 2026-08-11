@@ -400,12 +400,30 @@ html[data-magicui-theme-vt="active"]::view-transition-group(root) {
   animation-duration: var(--magicui-theme-toggle-vt-duration);
 }
 
+html.dark .theme-surface {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
 html:not(.dark) .theme-surface {
   background-color: var(--color-bg);
   color: var(--color-fg);
 }
 
-html.dark .theme-surface {
-  background-color: var(--color-bg);
-  color: var(--color-fg);
+.theme-card {
+  border: 1px solid color-mix(in srgb, var(--color-fg) 14%, transparent);
+  background: var(--color-surface-muted);
+}
+
+html:not(.dark) .theme-card {
+  border-color: color-mix(in srgb, var(--color-fg) 16%, transparent);
+  background: var(--color-surface);
+}
+
+.theme-divide-y > * + * {
+  border-top: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+}
+
+html:not(.dark) .theme-divide-y > * + * {
+  border-top-color: color-mix(in srgb, var(--color-fg) 14%, transparent);
 }

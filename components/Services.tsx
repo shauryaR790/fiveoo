@@ -168,7 +168,7 @@ export default function Services() {
           <div
             ref={trackRef}
             style={{ fontSize: "clamp(4.5rem, 21vw, 28rem)" }}
-            className="font-display flex w-max items-end pl-5 pr-[10vw] uppercase leading-[0.82] text-white will-change-transform md:pl-10 lg:pl-12"
+            className="font-display flex w-max items-end pl-5 pr-[10vw] uppercase leading-[0.82] text-[var(--color-fg)] will-change-transform md:pl-10 lg:pl-12"
           >
             {HEADLINE_PARTS.map((part, index) => {
               if (part.type === "space") {
@@ -227,7 +227,7 @@ export default function Services() {
               <div
                 key={group.id}
                 data-service-card
-                className="flex min-h-[70vh] flex-col bg-white p-10 text-black will-change-transform md:h-[760px] md:min-h-0 md:w-full"
+                className="theme-card flex min-h-[70vh] flex-col rounded-2xl p-10 text-[var(--color-fg)] will-change-transform md:h-[760px] md:min-h-0 md:w-full"
                 style={{ fontFamily: "var(--font-card)" }}
               >
                 <h3 className="font-editorial mb-10 max-w-[360px] whitespace-pre-line text-[2rem] leading-[1.12] md:mb-[56px] md:text-[44px]">

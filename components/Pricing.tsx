@@ -80,14 +80,14 @@ export default function Pricing() {
             className={`relative h-12 w-[5.75rem] shrink-0 rounded-full border transition-[background-color,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:h-[3.25rem] md:w-[6.5rem] ${
               mode === "subscription"
                 ? "border-[var(--color-neon-orange)] bg-[var(--color-neon-orange)]"
-                : "border-white/25 bg-white/10"
+                : "border-[var(--color-fg)]/25 bg-[var(--color-fg)]/10"
             }`}
           >
             <span
               className={`absolute top-1/2 h-9 w-9 -translate-y-1/2 rounded-full transition-[left,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:h-10 md:w-10 ${
                 mode === "project"
-                  ? "left-1.5 bg-white"
-                  : "left-[calc(100%-2.55rem)] bg-black md:left-[calc(100%-2.75rem)]"
+                  ? "left-1.5 bg-[var(--color-bg-inverse)]"
+                  : "left-[calc(100%-2.55rem)] bg-[var(--color-fg)] md:left-[calc(100%-2.75rem)]"
               }`}
             />
           </button>
@@ -131,7 +131,7 @@ export default function Pricing() {
           return (
             <article
               key={plan.id}
-              className="relative isolate flex h-full min-h-[880px] flex-col rounded-none border border-[var(--color-fg)]/10 bg-[var(--color-surface-muted)] px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
+              className="relative isolate flex h-full min-h-[880px] flex-col rounded-2xl border border-[var(--color-fg)]/16 bg-[var(--color-surface-muted)] px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
             >
               <div data-price-reveal className="flex flex-1 flex-col">
               <div className="mb-7 flex items-center justify-between gap-3 md:mb-8">
@@ -148,13 +148,13 @@ export default function Pricing() {
                   {content.price}
                 </span>
                 {content.unit ? (
-                  <span className="text-[1rem] font-normal tracking-[-0.02em] text-white/70 md:text-[1.05rem]">
+                  <span className="text-[1rem] font-normal tracking-[-0.02em] text-[var(--color-fg)]/70 md:text-[1.05rem]">
                     {content.unit}
                   </span>
                 ) : null}
               </p>
 
-              <div className="mb-8 border-t border-white/10 md:mb-9" />
+              <div className="mb-8 border-t border-[var(--color-fg)]/12 md:mb-9" />
 
               <ul className="flex flex-col gap-7 md:gap-8">
                 {content.features.map((feature) => (
@@ -164,7 +164,7 @@ export default function Pricing() {
 
               {featuresExtra?.length ? (
                 <>
-                  <div className="my-8 border-t border-white/10 md:my-9" />
+                  <div className="my-8 border-t border-[var(--color-fg)]/12 md:my-9" />
                   <ul className="flex flex-col gap-7 md:gap-8">
                     {featuresExtra.map((feature) => (
                       <FeatureRow key={feature} feature={feature} />
@@ -190,7 +190,7 @@ export default function Pricing() {
       </div>
 
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[22%] bg-gradient-to-b from-transparent to-black"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[22%] bg-gradient-to-b from-transparent to-[var(--color-bg)]"
         aria-hidden
       />
     </section>
