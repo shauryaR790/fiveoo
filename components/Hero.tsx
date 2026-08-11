@@ -77,7 +77,7 @@ export default function Hero() {
           >
             <div
               ref={mediaRef}
-              className="glass glass-frame relative aspect-video w-full overflow-hidden rounded-2xl will-change-transform"
+              className="relative aspect-video w-full overflow-hidden bg-[var(--color-surface-muted)] will-change-transform"
             >
               <video
                 src="/videos/frontfiveo.mp4"
@@ -129,7 +129,7 @@ export default function Hero() {
           <button
             type="button"
             onClick={() => scrollToTarget("#about")}
-            className="glass glass-chip group inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60"
+            className="group inline-flex items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60"
           >
             About us
             <span
@@ -142,7 +142,7 @@ export default function Hero() {
           <button
             type="button"
             onClick={() => scrollToTarget("#pricing")}
-            className="glass glass-chip group inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60"
+            className="group inline-flex items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60"
           >
             Explore Plans
             <span

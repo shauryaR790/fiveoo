@@ -62,7 +62,7 @@ export default function About() {
                 data-cursor-grow
                 className="w-full max-w-[420px] will-change-transform lg:w-[420px] lg:max-w-none"
               >
-                <div className="glass glass-frame relative aspect-video w-full overflow-hidden rounded-2xl">
+                <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-surface-muted)]">
                   <Image
                     src="/images/reels.avif"
                     alt="FIVEO showreels"
@@ -76,7 +76,7 @@ export default function About() {
             </div>
           </div>
 
-          <div className="glass glass-panel flex flex-col gap-10 rounded-3xl p-6 md:p-8">
+          <div className="flex flex-col gap-10">
             <div data-about-reveal>
               <p className="mb-5 text-[17px] leading-[1.6]">About Us</p>
               <p className="text-[17px] leading-[1.6] text-white/85">

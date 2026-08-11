@@ -90,10 +90,10 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className="fixed inset-x-0 top-0 z-50 px-4 pt-3 text-[var(--color-fg)] transition-colors duration-300 md:px-6 md:pt-4"
+      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:-z-10 before:h-[calc(var(--nav-height)+2rem)] before:bg-gradient-to-b before:from-black/80 before:via-black/35 before:to-transparent"
     >
       <nav
-        className="glass glass-nav mx-auto flex h-[calc(var(--nav-height)-0.75rem)] max-w-[1400px] items-center justify-between px-5 md:px-8 lg:px-10"
+        className="mx-auto flex h-[var(--nav-height)] items-center justify-between px-6 md:px-10 lg:px-12"
         aria-label="Primary"
       >
         <a
@@ -148,7 +148,7 @@ export default function Navbar() {
 
       <div
         id="mobile-menu"
-        className={`fixed inset-0 z-40 glass glass-strong text-[var(--color-fg)] transition-transform duration-500 md:hidden ${
+        className={`fixed inset-0 z-40 bg-[var(--color-bg)] text-[var(--color-fg)] transition-transform duration-500 md:hidden ${
           menuOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >

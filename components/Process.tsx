@@ -50,7 +50,11 @@ export default function Process() {
               key={step.number}
               data-process-reveal
               data-process-step
-              className="glass glass-panel mt-4 grid grid-cols-[4.5rem_1fr] gap-x-6 rounded-2xl p-6 first:mt-0 md:grid-cols-[5.5rem_1fr] md:gap-x-10 md:p-8"
+              className={`grid grid-cols-[4.5rem_1fr] gap-x-6 md:grid-cols-[5.5rem_1fr] md:gap-x-10 ${
+                step.number === "01"
+                  ? "pb-9 md:pb-12"
+                  : "border-t border-white/12 py-9 md:py-12"
+              }`}
             >
               <span className="pt-0.5 text-[18px] font-medium tracking-[-0.02em] text-[var(--color-neon-orange)] md:text-[20px]">
                 ({step.number})

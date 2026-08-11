@@ -10,7 +10,7 @@ function FeatureRow({ feature }: { feature: string }) {
   return (
     <li className="flex items-center gap-3.5">
       <span
-        className="glass glass-btn flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full"
+        className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-white"
         aria-hidden
       >
         <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
@@ -61,7 +61,7 @@ export default function Pricing() {
         data-price-reveal
         className="relative z-[2] mb-20 flex flex-col items-start gap-12 md:mb-28 md:flex-row md:items-center md:justify-between md:gap-10 lg:mb-32"
       >
-        <div className="glass glass-panel glass-pill flex shrink-0 items-center gap-5 px-6 py-3 md:px-7 md:py-3.5">
+        <div className="flex shrink-0 items-center gap-5">
           <span
             className={`text-[18px] font-medium tracking-[-0.02em] transition-opacity duration-300 md:text-[20px] ${
               mode === "project" ? "opacity-100" : "opacity-40"
@@ -77,10 +77,10 @@ export default function Pricing() {
             onClick={() =>
               setMode((m) => (m === "project" ? "subscription" : "project"))
             }
-            className={`glass glass-pill relative h-12 w-[5.75rem] shrink-0 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:h-[3.25rem] md:w-[6.5rem] ${
+            className={`relative h-12 w-[5.75rem] shrink-0 rounded-full border transition-[background-color,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:h-[3.25rem] md:w-[6.5rem] ${
               mode === "subscription"
-                ? "border-[var(--color-neon-orange)]/40 bg-[var(--color-neon-orange)]/25"
-                : ""
+                ? "border-[var(--color-neon-orange)] bg-[var(--color-neon-orange)]"
+                : "border-white/25 bg-white/10"
             }`}
           >
             <span
@@ -131,14 +131,14 @@ export default function Pricing() {
           return (
             <article
               key={plan.id}
-              className="glass glass-panel relative isolate flex h-full min-h-[880px] flex-col px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
+              className="relative isolate flex h-full min-h-[880px] flex-col rounded-none border border-white/10 bg-[#141414] px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
             >
               <div data-price-reveal className="flex flex-1 flex-col">
               <div className="mb-7 flex items-center justify-between gap-3 md:mb-8">
                 <h3 className="font-editorial text-[1.45rem] font-normal tracking-[-0.035em] md:text-[1.65rem] lg:text-[1.8rem]">
                   {plan.name}
                 </h3>
-                <span className="glass glass-btn glass-pill shrink-0 px-5 py-3.5 text-[13px] font-normal leading-none tracking-[-0.015em] text-[#000000] md:px-6 md:py-4 md:text-[15px]">
+                <span className="shrink-0 rounded-full bg-[#ffffff] px-5 py-3.5 text-[13px] font-normal leading-none tracking-[-0.015em] text-[#000000] md:px-6 md:py-4 md:text-[15px]">
                   {plan.badge}
                 </span>
               </div>
