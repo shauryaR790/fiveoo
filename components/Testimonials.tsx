@@ -48,7 +48,7 @@ export default function Testimonials() {
             <div
               key={item.id}
               data-partner-reveal
-              className={index === 0 ? "" : "border-t border-white/12"}
+              className={`glass glass-panel overflow-hidden rounded-2xl ${index === 0 ? "" : "mt-3"}`}
             >
               <button
                 type="button"
@@ -107,7 +107,7 @@ export default function Testimonials() {
                 </span>
 
                 <span
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/80 md:h-10 md:w-10"
+                  className="glass glass-chip flex h-9 w-9 items-center justify-center rounded-full md:h-10 md:w-10"
                   aria-hidden
                 >
                   <svg
@@ -155,7 +155,7 @@ export default function Testimonials() {
                         {item.services.map((service) => (
                           <span
                             key={service}
-                            className="rounded-full border border-white/80 px-4 py-2 text-[13px] font-normal tracking-[-0.015em] md:px-5 md:py-2.5 md:text-[14px]"
+                            className="glass glass-chip glass-pill px-4 py-2 text-[13px] font-normal tracking-[-0.015em] md:px-5 md:py-2.5 md:text-[14px]"
                           >
                             {service}
                           </span>

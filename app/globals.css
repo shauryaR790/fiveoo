@@ -24,6 +24,21 @@
   --font-card: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --nav-height: 5.5rem;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-blur: 18px;
+  --glass-blur-strong: 28px;
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-strong: rgba(255, 255, 255, 0.11);
+  --glass-bg-nav: rgba(8, 8, 8, 0.42);
+  --glass-bg-light: rgba(255, 255, 255, 0.52);
+  --glass-bg-on-light: rgba(0, 0, 0, 0.035);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-strong: rgba(255, 255, 255, 0.22);
+  --glass-border-light: rgba(255, 255, 255, 0.62);
+  --glass-border-dark: rgba(0, 0, 0, 0.1);
+  --glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.38);
+  --glass-shadow-light: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --glass-inset-light: inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 @theme inline {
@@ -254,18 +269,108 @@ html.is-scroll-navigating #main {
   outline-color: var(--color-fg-inverse);
 }
 
+/* Glass morphism */
+.glass,
+.glass-panel,
+.glass-nav,
+.glass-pill,
+.glass-chip,
+.glass-light,
+.glass-on-light,
+.glass-strong,
+.glass-btn {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass,
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+}
+
+.glass-strong {
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+  --glass-blur: var(--glass-blur-strong);
+}
+
+.glass-nav {
+  background: var(--glass-bg-nav);
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+  --glass-blur: 20px;
+}
+
+.nav-invert .glass-nav {
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: var(--glass-shadow-light), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.glass-light {
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--glass-shadow-light), var(--glass-inset-light);
+  --glass-blur: 16px;
+}
+
+.glass-on-light {
+  background: var(--glass-bg-on-light);
+  border: 1px solid var(--glass-border-dark);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  --glass-blur: 14px;
+}
+
+.glass-pill {
+  border-radius: 9999px;
+}
+
+.glass-chip {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --glass-blur: 12px;
+}
+
+.glass-on-light.glass-chip {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.glass-btn {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: var(--glass-shadow-light), var(--glass-inset-light);
+  --glass-blur: 14px;
+}
+
+.glass-frame {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+  --glass-blur: 12px;
+}
+
 .price-choose-btn {
-  background-color: #ffffff;
+  background: rgba(255, 255, 255, 0.92);
   color: #000000;
-  border: 0;
-  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: var(--glass-shadow-light), var(--glass-inset-light);
   font-weight: 700;
   -webkit-appearance: none;
   appearance: none;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 
 .price-choose-btn:hover {
-  background-color: var(--color-neon-orange);
+  background: rgba(255, 106, 26, 0.92);
+  border-color: rgba(255, 180, 120, 0.45);
   color: #000000;
 }
 

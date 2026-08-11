@@ -158,7 +158,7 @@ export default function Works() {
               {/* Square frames: a half-width project simply reads twice as tall */}
               <div
                 data-work-frame
-                className="relative aspect-square overflow-hidden will-change-transform"
+                className="glass glass-frame relative aspect-square overflow-hidden rounded-2xl will-change-transform"
               >
                 <div
                   data-work-media

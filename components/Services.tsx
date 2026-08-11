@@ -227,7 +227,7 @@ export default function Services() {
               <div
                 key={group.id}
                 data-service-card
-                className="flex min-h-[70vh] flex-col bg-white p-10 text-black will-change-transform md:h-[760px] md:min-h-0 md:w-full"
+                className="glass glass-light flex min-h-[70vh] flex-col rounded-2xl p-10 text-black will-change-transform md:h-[760px] md:min-h-0 md:w-full"
                 style={{ fontFamily: "var(--font-card)" }}
               >
                 <h3 className="font-editorial mb-10 max-w-[360px] whitespace-pre-line text-[2rem] leading-[1.12] md:mb-[56px] md:text-[44px]">
@@ -237,7 +237,7 @@ export default function Services() {
                   {group.items.map((item) => (
                     <li key={item} className="flex items-center gap-3.5">
                       <span
-                        className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-black"
+                        className="glass glass-on-light glass-chip flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full"
                         aria-hidden
                       >
                         <svg width="11" height="11" viewBox="0 0 10 10" fill="none">

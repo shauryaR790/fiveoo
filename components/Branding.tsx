@@ -175,7 +175,7 @@ export default function Branding() {
                 <div
                   key={feature.id}
                   data-branding-item
-                  className="border-b border-black/12 pb-7 will-change-transform md:pb-9"
+                  className="glass glass-on-light rounded-2xl border-b-0 p-5 will-change-transform md:p-6"
                 >
                   <div className="mb-5 grid grid-cols-[3.5rem_1fr] gap-x-6 md:mb-6 md:grid-cols-[4.25rem_1fr] md:gap-x-10 lg:grid-cols-[5.5rem_1fr] lg:gap-x-12">
                     <span className="text-[17px] tabular-nums leading-[1.3] text-black/45 md:text-[19px]">

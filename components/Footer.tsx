@@ -123,7 +123,7 @@ export default function Footer() {
       <div className="relative flex flex-1 flex-col justify-center px-5 py-16 md:px-10 md:py-20 lg:px-16">
         <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-16 lg:gap-24">
           {/* Left — slim Habito CTA */}
-          <div data-footer-reveal>
+          <div data-footer-reveal className="glass glass-panel rounded-3xl p-8 md:p-10">
             <p className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.7rem,3vw,2.65rem)] font-light leading-[1.25] tracking-[-0.03em] text-white">
               Choose a plan, send in your request, and your design journey
               starts tomorrow.
@@ -134,7 +134,7 @@ export default function Footer() {
                 e.preventDefault();
                 void navigateToSection("#pricing");
               }}
-              className="mt-8 inline-flex items-center gap-2 border-b border-white/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
+              className="glass glass-chip glass-pill mt-8 inline-flex items-center gap-2 px-5 py-2.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
             >
               Explore Plans
               <span aria-hidden>→</span>
@@ -142,7 +142,7 @@ export default function Footer() {
           </div>
 
           {/* Right — Habito link columns */}
-          <div data-footer-reveal>
+          <div data-footer-reveal className="glass glass-panel rounded-3xl p-8 md:p-10">
             <div className="grid grid-cols-3 gap-x-6 md:gap-x-10 lg:gap-x-14">
               {FOOTER_LINK_COLUMNS.map((column, colIndex) => (
                 <ul key={colIndex} className="flex flex-col gap-5 md:gap-6">
@@ -169,7 +169,7 @@ export default function Footer() {
             <button
               type="button"
               onClick={() => void navigateToSection("#top")}
-              className="mt-14 inline-flex items-center gap-2 border-b border-white/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
+              className="glass glass-chip glass-pill mt-14 inline-flex items-center gap-2 px-5 py-2.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
             >
               Back to Top
               <span aria-hidden>↑</span>
@@ -180,7 +180,7 @@ export default function Footer() {
 
       <div
         data-footer-reveal
-        className="relative mt-auto flex shrink-0 flex-col items-start justify-between gap-4 border-t border-white/10 px-5 py-5 text-[13px] font-light tracking-[-0.015em] md:flex-row md:items-center md:px-10 md:py-6 lg:px-16"
+        className="glass glass-panel relative mt-auto flex shrink-0 flex-col items-start justify-between gap-4 rounded-3xl px-5 py-5 text-[13px] font-light tracking-[-0.015em] md:flex-row md:items-center md:px-10 md:py-6 lg:px-16"
       >
         <a
           href="#"
@@ -188,7 +188,7 @@ export default function Footer() {
         >
           Company Deck
           <span
-            className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-neon-orange)]"
+            className="glass glass-btn flex h-6 w-6 items-center justify-center rounded-full"
             aria-hidden
           >
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
