@@ -306,3 +306,159 @@ export function setNavInvert(inverted: boolean) {
 export function refreshScrollTrigger() {
   ScrollTrigger.refresh();
 }
+
+const SCRUB_SECTION_IDS = new Set(["careers", "works", "services"]);
+
+const REVEAL_BLOCK_SELECTOR = [
+  "[data-about-reveal]",
+  "[data-price-reveal]",
+  "[data-process-reveal]",
+  "[data-partner-reveal]",
+  "[data-footer-reveal]",
+  "[data-branding-heading]",
+  "[data-branding-item]",
+  "[data-hero-sub]",
+  "[data-works-title]",
+  "[data-work-meta]",
+  "[data-service-card]",
+].join(",");
+
+const REVEAL_PRESETS = [
+  { y: 44, x: 0, rotation: 0, scale: 1, filter: "blur(14px)", ease: "power3.out" },
+  { y: 34, x: -20, rotation: -1.4, scale: 1, filter: "blur(9px)", ease: "power2.out" },
+  { y: 38, x: 18, rotation: 1.2, scale: 1, filter: "blur(11px)", ease: "expo.out" },
+  { y: 52, x: 0, rotation: 0, scale: 0.965, filter: "blur(8px)", ease: "power4.out" },
+  { y: 28, x: 0, rotation: 0.7, scale: 1, filter: "blur(12px)", ease: "power3.out" },
+] as const;
+
+function sortByDocumentOrder(elements: HTMLElement[]) {
+  return elements.sort((a, b) => {
+    if (a === b) return 0;
+    const position = a.compareDocumentPosition(b);
+    return position & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+  });
+}
+
+function isNestedRevealBlock(element: HTMLElement, blocks: HTMLElement[]) {
+  return blocks.some(
+    (other) => other !== element && other.contains(element),
+  );
+}
+
+function expandHeadingLines(blocks: HTMLElement[]) {
+  const expanded: HTMLElement[] = [];
+
+  blocks.forEach((block) => {
+    const lines = block.matches("h2[data-process-reveal]")
+      ? block.querySelectorAll<HTMLElement>(":scope > span.block")
+      : block.querySelectorAll<HTMLElement>(":scope > span.block.will-change-transform");
+
+    if (lines.length > 1) {
+      expanded.push(...Array.from(lines));
+      return;
+    }
+
+    expanded.push(block);
+  });
+
+  return expanded;
+}
+
+function collectRevealTargets(section: HTMLElement) {
+  const matched = sortByDocumentOrder(
+    gsap.utils.toArray<HTMLElement>(section.querySelectorAll(REVEAL_BLOCK_SELECTOR)),
+  );
+
+  const blocks = matched.filter(
+    (block) => !isNestedRevealBlock(block, matched),
+  );
+
+  const heroLines = gsap.utils.toArray<HTMLElement>(
+    section.querySelectorAll("h1 span.will-change-transform"),
+  );
+
+  const merged = sortByDocumentOrder([
+    ...new Set([...blocks, ...heroLines]),
+  ]).filter((block) => !isNestedRevealBlock(block, blocks));
+
+  return expandHeadingLines(merged);
+}
+
+function revealScrubSection(section: HTMLElement) {
+  const panel =
+    section.querySelector<HTMLElement>("[data-branding-card]") ??
+    section.querySelector<HTMLElement>("[data-works-title]")?.closest("section") ??
+    section.querySelector<HTMLElement>("[data-service-card]")?.closest("[class*='min-h']") ??
+    section;
+
+  gsap.killTweensOf(panel);
+
+  return gsap.fromTo(
+    panel,
+    {
+      opacity: 0.35,
+      filter: "blur(14px)",
+      scale: 0.985,
+      transformOrigin: "50% 40%",
+    },
+    {
+      opacity: 1,
+      filter: "blur(0px)",
+      scale: 1,
+      duration: 0.95,
+      ease: "power2.out",
+      clearProps: "filter,transform,willChange",
+    },
+  );
+}
+
+export function revealNavigatedSection(section: HTMLElement) {
+  if (prefersReducedMotion()) return null;
+
+  if (SCRUB_SECTION_IDS.has(section.id)) {
+    return revealScrubSection(section);
+  }
+
+  const targets = collectRevealTargets(section);
+  if (!targets.length) {
+    return revealScrubSection(section);
+  }
+
+  gsap.killTweensOf(targets);
+
+  const timeline = gsap.timeline({ defaults: { overwrite: "auto" } });
+
+  targets.forEach((target, index) => {
+    const preset = REVEAL_PRESETS[index % REVEAL_PRESETS.length];
+    const start = index * 0.055 + (index % 3) * 0.018;
+
+    gsap.set(target, {
+      y: preset.y,
+      x: preset.x,
+      rotation: preset.rotation,
+      scale: preset.scale,
+      opacity: 0,
+      filter: preset.filter,
+      transformOrigin: "50% 100%",
+      willChange: "transform, opacity, filter",
+    });
+
+    timeline.to(
+      target,
+      {
+        y: 0,
+        x: 0,
+        rotation: 0,
+        scale: 1,
+        opacity: 1,
+        filter: "blur(0px)",
+        duration: 0.62 + (index % 4) * 0.11,
+        ease: preset.ease,
+        clearProps: "willChange",
+      },
+      start,
+    );
+  });
+
+  return timeline;
+}

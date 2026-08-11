@@ -1,6 +1,6 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getLenis, scrollToTarget } from "@/lib/lenis";
-import { prefersReducedMotion, refreshScrollTrigger } from "@/lib/animations";
+import { prefersReducedMotion, refreshScrollTrigger, revealNavigatedSection } from "@/lib/animations";
 
 const OVERLAY_ID = "scroll-transition-overlay";
 
@@ -92,6 +92,11 @@ export async function navigateToSection(
 
     if (overlay) {
       overlay.classList.remove("is-active");
+    }
+
+    const section = document.querySelector(target) as HTMLElement | null;
+    if (section) {
+      revealNavigatedSection(section);
     }
 
     await wait(560);
