@@ -55,17 +55,50 @@ export function destroyLenis() {
 
 export function scrollToTarget(
   target: string | HTMLElement | number,
-  options?: { offset?: number; immediate?: boolean },
+  options?: { offset?: number; immediate?: boolean; lock?: boolean },
 ) {
   if (!lenisInstance) {
     if (typeof target === "string") {
-      document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
+      const element = document.querySelector(target) as HTMLElement | null;
+      if (!element) return;
+
+      const top =
+        element.getBoundingClientRect().top +
+        window.scrollY +
+        (options?.offset ?? 0);
+
+      window.scrollTo({ top, left: 0, behavior: "auto" });
     }
     return;
+  }
+
+  if (options?.immediate) {
+    let top: number | null = null;
+
+    if (typeof target === "number") {
+      top = target;
+    } else {
+      const element =
+        typeof target === "string"
+          ? (document.querySelector(target) as HTMLElement | null)
+          : target;
+
+      if (element) {
+        top =
+          element.getBoundingClientRect().top +
+          window.scrollY +
+          (options?.offset ?? 0);
+      }
+    }
+
+    if (top !== null) {
+      window.scrollTo({ top, left: 0, behavior: "auto" });
+    }
   }
 
   lenisInstance.scrollTo(target, {
     offset: options?.offset ?? -20,
     immediate: options?.immediate ?? false,
+    lock: options?.lock ?? false,
   });
 }

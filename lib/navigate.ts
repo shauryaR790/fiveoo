@@ -1,3 +1,4 @@
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getLenis, scrollToTarget } from "@/lib/lenis";
 import { prefersReducedMotion, refreshScrollTrigger } from "@/lib/animations";
 
@@ -20,20 +21,24 @@ function wait(ms: number) {
   });
 }
 
-function waitForOverlayTransition(el: HTMLElement) {
+function nextFrame() {
   return new Promise<void>((resolve) => {
-    const finish = () => {
-      el.removeEventListener("transitionend", onEnd);
-      resolve();
-    };
-
-    const onEnd = (event: TransitionEvent) => {
-      if (event.target === el) finish();
-    };
-
-    el.addEventListener("transitionend", onEnd);
-    window.setTimeout(finish, 650);
+    requestAnimationFrame(() => resolve());
   });
+}
+
+function resolveScrollTop(target: string, offset: number) {
+  const element = document.querySelector(target) as HTMLElement | null;
+  if (!element) return null;
+
+  return element.getBoundingClientRect().top + window.scrollY + offset;
+}
+
+function jumpToScrollTop(top: number) {
+  window.scrollTo({ top, left: 0, behavior: "auto" });
+
+  const lenis = getLenis();
+  lenis?.scrollTo(top, { immediate: true, lock: true });
 }
 
 export async function navigateToSection(
@@ -46,42 +51,52 @@ export async function navigateToSection(
   const offset = options?.offset ?? getNavScrollOffset();
 
   if (prefersReducedMotion()) {
-    scrollToTarget(target, { offset });
+    scrollToTarget(target, { offset, immediate: true });
     refreshScrollTrigger();
     return;
   }
 
   if (isNavigating) return;
+
+  const scrollTop = resolveScrollTop(target, offset);
+  if (scrollTop === null) return;
+
   isNavigating = true;
 
   const overlay = document.getElementById(OVERLAY_ID);
   const lenis = getLenis();
+  const root = document.documentElement;
 
   try {
     lenis?.stop();
+    root.classList.add("is-scroll-navigating");
 
     if (overlay) {
       overlay.classList.add("is-active");
-      await waitForOverlayTransition(overlay);
-    } else {
-      await wait(360);
     }
 
-    scrollToTarget(target, { offset, immediate: true });
-    refreshScrollTrigger();
+    await wait(520);
 
-    await new Promise<void>((resolve) => {
-      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-    });
-    await wait(120);
+    ScrollTrigger.disable(false);
+    jumpToScrollTop(scrollTop);
+    refreshScrollTrigger();
+    ScrollTrigger.update();
+
+    await nextFrame();
+    await nextFrame();
+    await wait(180);
+
+    ScrollTrigger.enable();
+    await nextFrame();
+    await wait(220);
 
     if (overlay) {
       overlay.classList.remove("is-active");
-      await waitForOverlayTransition(overlay);
-    } else {
-      await wait(480);
     }
+
+    await wait(560);
   } finally {
+    root.classList.remove("is-scroll-navigating");
     lenis?.start();
     isNavigating = false;
   }

@@ -213,21 +213,25 @@ html.has-custom-cursor *::after {
   z-index: 90;
   pointer-events: none;
   opacity: 0;
-  background: rgba(0, 0, 0, 0.12);
+  background: #000000;
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
   transition:
-    opacity 0.42s cubic-bezier(0.4, 0, 0.2, 1),
-    backdrop-filter 0.42s cubic-bezier(0.4, 0, 0.2, 1),
-    -webkit-backdrop-filter 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    -webkit-backdrop-filter 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .scroll-transition-overlay.is-active,
 #scroll-transition-overlay.is-active {
   opacity: 1;
   pointer-events: auto;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+}
+
+html.is-scroll-navigating #main {
+  visibility: hidden;
 }
 
 .focus\:not-sr-only:focus {
