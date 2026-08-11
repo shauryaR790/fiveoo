@@ -9,7 +9,8 @@ import {
   infiniteMarquee,
   prefersReducedMotion,
 } from "@/lib/animations";
-import { scrollToTarget, getLenis } from "@/lib/lenis";
+import { navigateToSection } from "@/lib/navigate";
+import { getLenis } from "@/lib/lenis";
 import NeonFog from "@/components/NeonFog";
 
 function BrandUnit() {
@@ -131,7 +132,7 @@ export default function Footer() {
               href="#pricing"
               onClick={(e) => {
                 e.preventDefault();
-                scrollToTarget("#pricing");
+                void navigateToSection("#pricing");
               }}
               className="mt-8 inline-flex items-center gap-2 border-b border-white/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
             >
@@ -152,7 +153,7 @@ export default function Footer() {
                         onClick={(e) => {
                           if (link.href.startsWith("#") && link.href !== "#") {
                             e.preventDefault();
-                            scrollToTarget(link.href);
+                            void navigateToSection(link.href);
                           }
                         }}
                         className="whitespace-nowrap font-[family-name:var(--font-card)] text-[20px] font-light tracking-[-0.02em] text-white transition-opacity hover:opacity-50 md:text-[24px] lg:text-[28px]"
@@ -167,7 +168,7 @@ export default function Footer() {
 
             <button
               type="button"
-              onClick={() => scrollToTarget("#top")}
+              onClick={() => void navigateToSection("#top")}
               className="mt-14 inline-flex items-center gap-2 border-b border-white/80 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] transition-opacity hover:opacity-55"
             >
               Back to Top

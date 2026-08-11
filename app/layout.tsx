@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Inter_Tight } from "next/font/google";
 import LenisProvider from "@/components/providers/LenisProvider";
+import ScrollTransitionOverlay from "@/components/ScrollTransitionOverlay";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import "./globals.css";
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <LenisProvider>
+          <ScrollTransitionOverlay />
           <SmoothCursor />
           {children}
         </LenisProvider>

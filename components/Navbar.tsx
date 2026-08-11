@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { NAV_LINKS } from "@/lib/constants";
-import { scrollToTarget } from "@/lib/lenis";
+import { navigateToSection } from "@/lib/navigate";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
 import { Text3DFlip } from "@/components/ui/text-3d-flip";
 
@@ -84,7 +84,7 @@ export default function Navbar() {
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMenuOpen(false);
-    scrollToTarget(href, { offset: -20 });
+    void navigateToSection(href);
   };
 
   return (
