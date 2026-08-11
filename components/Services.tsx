@@ -196,7 +196,7 @@ export default function Services() {
                         alt=""
                         fill
                         sizes="200px"
-                        className="object-contain brightness-0 invert"
+                        className="object-contain theme-leaf"
                       />
                     </span>
                   </span>

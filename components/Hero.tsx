@@ -77,7 +77,7 @@ export default function Hero() {
           >
             <div
               ref={mediaRef}
-              className="relative aspect-video w-full overflow-hidden bg-[var(--color-surface-muted)] will-change-transform"
+              className="relative aspect-video w-full overflow-hidden bg-[var(--color-bg)] will-change-transform"
             >
               <video
                 src="/videos/frontfiveo.mp4"

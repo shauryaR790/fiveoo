@@ -131,7 +131,7 @@ export default function Pricing() {
           return (
             <article
               key={plan.id}
-              className="relative isolate flex h-full min-h-[880px] flex-col rounded-2xl border border-[var(--color-fg)]/16 bg-[var(--color-surface-muted)] px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
+              className="theme-card relative isolate flex h-full min-h-[880px] flex-col rounded-2xl px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
             >
               <div data-price-reveal className="flex flex-1 flex-col">
               <div className="mb-7 flex items-center justify-between gap-3 md:mb-8">

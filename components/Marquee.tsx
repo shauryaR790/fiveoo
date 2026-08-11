@@ -74,7 +74,7 @@ export default function Marquee({
               alt=""
               fill
               sizes="80px"
-              className="object-contain brightness-0 invert"
+              className="object-contain theme-leaf"
             />
           </span>
         </span>

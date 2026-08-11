@@ -40,7 +40,7 @@ export default function NeonFog({
       >
         <NeonFogBlobs />
         {/* Soft handoff into plain black before Selected Works */}
-        <div className="absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent to-black" />
+        <div className="absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-transparent to-[var(--color-bg)]" />
       </div>
     );
   }

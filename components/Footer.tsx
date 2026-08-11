@@ -23,7 +23,7 @@ function BrandUnit() {
           alt=""
           fill
           sizes="320px"
-          className="object-contain brightness-0 invert"
+          className="object-contain theme-leaf"
         />
       </span>
       <span>Fiveo Studio</span>

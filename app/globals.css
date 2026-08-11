@@ -417,7 +417,15 @@ html:not(.dark) .theme-surface {
 
 html:not(.dark) .theme-card {
   border-color: color-mix(in srgb, var(--color-fg) 16%, transparent);
-  background: var(--color-surface);
+  background: var(--color-bg);
+}
+
+.theme-leaf {
+  filter: brightness(0);
+}
+
+html.dark .theme-leaf {
+  filter: brightness(0) invert(1);
 }
 
 .theme-divide-y > * + * {
