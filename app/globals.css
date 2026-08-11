@@ -191,6 +191,14 @@ video {
   border-width: 0;
 }
 
+.transform-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
 .focus\:not-sr-only:focus {
   position: fixed;
   width: auto;

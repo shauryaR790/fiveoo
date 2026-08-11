@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Inter_Tight } from "next/font/google";
 import LenisProvider from "@/components/providers/LenisProvider";
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import "./globals.css";
 
 const interTight = Inter_Tight({
@@ -36,7 +37,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <LenisProvider>{children}</LenisProvider>
+        <LenisProvider>
+          <SmoothCursor />
+          {children}
+        </LenisProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { NAV_LINKS } from "@/lib/constants";
 import { scrollToTarget } from "@/lib/lenis";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
+import { Text3DFlip } from "@/components/ui/text-3d-flip";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -109,9 +110,17 @@ export default function Navbar() {
               <a
                 href={link.href}
                 onClick={(e) => handleNav(e, link.href)}
-                className="text-[17px] font-semibold tracking-[-0.01em] transition-opacity hover:opacity-60"
+                className="block text-[17px] font-semibold tracking-[-0.01em]"
               >
-                {link.label}
+                <Text3DFlip
+                  as="span"
+                  className="perspective-[800px] text-white"
+                  textClassName="text-white"
+                  flipTextClassName="text-white"
+                  rotateDirection="right"
+                >
+                  {link.label}
+                </Text3DFlip>
               </a>
             </li>
           ))}
