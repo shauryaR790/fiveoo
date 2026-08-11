@@ -53,13 +53,13 @@ export default function Pricing() {
     <section
       id="pricing"
       ref={rootRef}
-      className="relative overflow-x-clip bg-black px-5 pb-28 pt-20 text-white md:px-10 md:pb-36 md:pt-28 lg:px-16"
+      className="relative scroll-mt-[var(--nav-height)] overflow-x-clip bg-black px-5 pb-28 pt-[calc(var(--nav-height)+2rem)] text-white md:px-10 md:pb-36 md:pt-[calc(var(--nav-height)+3rem)] lg:px-16"
       data-nav-theme="dark"
       style={{ fontFamily: "var(--font-card)" }}
     >
       <div
         data-price-reveal
-        className="relative z-[2] mb-16 flex flex-col items-start gap-12 md:mb-28 md:flex-row md:items-center md:justify-between md:gap-10"
+        className="relative z-[2] mb-20 flex flex-col items-start gap-12 md:mb-28 md:flex-row md:items-center md:justify-between md:gap-10 lg:mb-32"
       >
         <div className="flex shrink-0 items-center gap-5">
           <span
@@ -175,28 +175,6 @@ export default function Pricing() {
               </div>
 
               <div className="mt-auto pt-12">
-                {"footnoteLines" in plan && plan.footnoteLines ? (
-                  <div data-price-reveal className="mb-5 border-t border-white/10 pt-6">
-                    <p className="text-[17px] font-normal leading-[1.45] tracking-[-0.015em] text-white/55 md:text-[18px]">
-                      {plan.footnoteLines.map((line) => (
-                        <span key={line} className="block">
-                          {line}
-                        </span>
-                      ))}
-                    </p>
-                    <a
-                      href="#top"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        scrollToTarget("#top");
-                      }}
-                      className="mt-3 inline-block text-[17px] font-normal tracking-[-0.015em] text-white underline underline-offset-[3px] md:text-[18px]"
-                    >
-                      Book a Call
-                    </a>
-                  </div>
-                ) : null}
-
                 <button
                   type="button"
                   onClick={() => scrollToTarget("#top")}

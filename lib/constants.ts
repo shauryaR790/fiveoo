@@ -249,10 +249,6 @@ export const PRICING_PLANS = [
         "Framer Development",
       ],
     },
-    footnoteLines: [
-      "Still have any questions?",
-      "Get a free consultation for your project here!",
-    ],
   },
 ] as const;
 

@@ -139,11 +139,11 @@ export default function Branding() {
           data-branding-card
           className="relative bg-white text-black md:absolute md:inset-0 md:[clip-path:inset(21%_20%_21%_20%)]"
         >
-          <div className="flex min-h-[100svh] flex-col px-5 pb-16 pt-[calc(var(--nav-height)+1rem)] md:h-full md:min-h-0 md:px-10 md:pb-0 lg:px-12">
+          <div className="flex min-h-[100svh] flex-col px-6 pb-16 pt-[calc(var(--nav-height)+1.5rem)] md:h-full md:min-h-0 md:px-14 md:pb-0 lg:px-20 xl:px-24">
             {/* Fixed line breaks so the image always lands mid-statement */}
             <h2
               data-branding-heading
-              className="font-display text-center text-[clamp(2rem,7.8vw,7rem)] uppercase leading-[0.86] will-change-transform"
+              className="font-display text-center text-[clamp(2rem,5.8vw,4.75rem)] uppercase leading-[0.9] will-change-transform lg:text-[clamp(2.25rem,6.5vw,5.75rem)] xl:text-[clamp(2rem,7.8vw,7rem)] xl:leading-[0.86]"
             >
               We build
               <br />
@@ -170,14 +170,14 @@ export default function Branding() {
               your MVP
             </h2>
 
-            <div className="mt-auto grid grid-cols-1 gap-x-14 gap-y-10 pb-8 md:grid-cols-2 md:gap-x-20 md:gap-y-12 md:pb-12">
+            <div className="mt-auto grid grid-cols-1 gap-x-14 gap-y-10 pb-8 md:grid-cols-2 md:gap-x-20 md:gap-y-12 lg:gap-x-32 lg:gap-y-14 md:pb-14">
               {BRANDING_FEATURES.map((feature) => (
                 <div
                   key={feature.id}
                   data-branding-item
-                  className="border-b border-black/12 pb-7 will-change-transform md:pb-8"
+                  className="border-b border-black/12 pb-7 will-change-transform md:pb-9"
                 >
-                  <div className="mb-5 grid grid-cols-[3.5rem_1fr] gap-x-4 md:mb-6 md:grid-cols-[5.5rem_1fr]">
+                  <div className="mb-5 grid grid-cols-[3.5rem_1fr] gap-x-6 md:mb-6 md:grid-cols-[4.25rem_1fr] md:gap-x-10 lg:grid-cols-[5.5rem_1fr] lg:gap-x-12">
                     <span className="text-[17px] tabular-nums leading-[1.3] text-black/45 md:text-[19px]">
                       ({feature.id})
                     </span>

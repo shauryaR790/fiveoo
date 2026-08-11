@@ -90,7 +90,7 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300"
+      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:-z-10 before:h-[calc(var(--nav-height)+2rem)] before:bg-gradient-to-b before:from-black/80 before:via-black/35 before:to-transparent"
     >
       <nav
         className="mx-auto flex h-[var(--nav-height)] items-center justify-between px-6 md:px-10 lg:px-12"
