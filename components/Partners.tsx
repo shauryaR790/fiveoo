@@ -6,11 +6,12 @@ import gsap from "gsap";
 import { PARTNER_LOGOS_BOTTOM, PARTNER_LOGOS_TOP } from "@/lib/constants";
 import { infiniteMarquee, prefersReducedMotion } from "@/lib/animations";
 import { getLenis } from "@/lib/lenis";
+
 type Logo = { name: string; src: string };
 
 function LogoTile({ logo }: { logo: Logo }) {
   return (
-    <div className="theme-card mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center rounded-2xl px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
+    <div className="mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center bg-white px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
       <div className="relative h-[96%] w-[96%]">
         <Image
           src={logo.src}
@@ -54,7 +55,6 @@ function LogoRow({
         const velocity = getLenis()?.velocity ?? 0;
         resetTween?.kill();
 
-        /* Scroll velocity speeds the strip; opposite scroll can reverse it. */
         const scale = gsap.utils.clamp(-2.6, 2.6, 1 + velocity / 28);
         tween.timeScale(scale);
 
@@ -103,9 +103,7 @@ export default function Partners() {
       aria-label="Partner logos"
     >
       <div className="flex flex-col gap-3 md:gap-4">
-        {/* Top row: left → right */}
         <LogoRow logos={PARTNER_LOGOS_TOP} reversed duration={36} />
-        {/* Bottom row: right → left */}
         <LogoRow logos={PARTNER_LOGOS_BOTTOM} reversed={false} duration={40} />
       </div>
     </section>

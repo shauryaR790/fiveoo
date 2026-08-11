@@ -27,7 +27,7 @@ export default function Process() {
     <section
       id="process"
       ref={rootRef}
-      className="theme-surface relative overflow-hidden border-b border-[var(--color-fg)]/12 px-5 pb-12 pt-20 md:px-10 md:pb-16 md:pt-28 lg:px-16"
+      className="theme-surface relative overflow-hidden px-5 pb-12 pt-20 md:px-10 md:pb-16 md:pt-28 lg:px-16"
       data-nav-theme="dark"
       aria-label="Process"
       style={{ fontFamily: "var(--font-card)" }}
@@ -45,13 +45,17 @@ export default function Process() {
           </h2>
         </div>
 
-        <div className="theme-card theme-divide-y w-full overflow-hidden rounded-2xl">
+        <div className="w-full">
           {PROCESS_STEPS.map((step) => (
             <div
               key={step.number}
               data-process-reveal
               data-process-step
-              className="grid grid-cols-[4.5rem_1fr] gap-x-6 px-5 py-8 md:grid-cols-[5.5rem_1fr] md:gap-x-10 md:px-6 md:py-10"
+              className={`grid grid-cols-[4.5rem_1fr] gap-x-6 md:grid-cols-[5.5rem_1fr] md:gap-x-10 ${
+                step.number === "01"
+                  ? "pb-9 md:pb-12"
+                  : "border-t border-[var(--color-fg)]/12 py-9 md:py-12"
+              }`}
             >
               <span className="pt-0.5 text-[18px] font-medium tracking-[-0.02em] text-[var(--color-neon-orange)] md:text-[20px]">
                 ({step.number})

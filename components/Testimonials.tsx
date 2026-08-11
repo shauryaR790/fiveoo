@@ -41,17 +41,21 @@ export default function Testimonials() {
         Our Partner Says
       </h2>
 
-      <div className="theme-card theme-divide-y w-full overflow-hidden rounded-2xl">
-        {TESTIMONIALS.map((item) => {
+      <div className="w-full">
+        {TESTIMONIALS.map((item, index) => {
           const isOpen = openId === item.id;
 
           return (
-            <div key={item.id} data-partner-reveal>
+            <div
+              key={item.id}
+              data-partner-reveal
+              className={index === 0 ? "" : "border-t border-[var(--color-fg)]/12"}
+            >
               <button
                 type="button"
                 aria-expanded={isOpen}
                 onClick={() => setOpenId(isOpen ? "" : item.id)}
-                className="grid w-full grid-cols-[3.5rem_minmax(0,1fr)_minmax(0,1fr)_4.5rem_2.5rem] items-center gap-3 px-4 py-6 text-left text-[var(--color-fg)] md:grid-cols-[5rem_minmax(0,1fr)_minmax(0,1fr)_6rem_2.75rem] md:gap-6 md:px-6 md:py-8"
+                className="grid w-full grid-cols-[3.5rem_minmax(0,1fr)_minmax(0,1fr)_4.5rem_2.5rem] items-center gap-3 py-6 text-left text-[var(--color-fg)] md:grid-cols-[5rem_minmax(0,1fr)_minmax(0,1fr)_6rem_2.75rem] md:gap-6 md:py-8"
               >
                 <span className="text-[15px] font-medium tracking-[-0.02em] md:text-[17px]">
                   ({item.id})
@@ -133,7 +137,7 @@ export default function Testimonials() {
                 }`}
               >
                 <div className="overflow-hidden">
-                  <div className="grid grid-cols-1 gap-10 px-4 pb-10 md:grid-cols-[5rem_minmax(0,1fr)_minmax(0,1fr)_6rem_2.75rem] md:gap-6 md:px-6 md:pb-14">
+                  <div className="grid grid-cols-1 gap-10 pb-10 md:grid-cols-[5rem_minmax(0,1fr)_minmax(0,1fr)_6rem_2.75rem] md:gap-6 md:pb-14">
                     <div className="hidden md:block" aria-hidden />
                     <div>
                       <p className="mb-4 text-[13px] font-medium tracking-[-0.01em] text-[var(--color-fg)]/45 md:text-[14px]">
