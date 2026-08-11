@@ -11,7 +11,7 @@ type Logo = { name: string; src: string };
 
 function LogoTile({ logo }: { logo: Logo }) {
   return (
-    <div className="mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center bg-white px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
+    <div className="mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center border border-[var(--color-fg)]/10 bg-white px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
       <div className="relative h-[96%] w-[96%]">
         <Image
           src={logo.src}
@@ -98,7 +98,7 @@ export default function Partners() {
   return (
     <section
       id="clients"
-      className="theme-surface relative bg-[var(--color-bg)] px-3 pb-16 pt-2 md:px-4 md:pb-24 md:pt-3"
+      className="theme-surface relative bg-[var(--color-surface)] px-3 pb-16 pt-2 md:px-4 md:pb-24 md:pt-3"
       data-nav-theme="dark"
       aria-label="Partner logos"
     >
