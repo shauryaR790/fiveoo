@@ -53,6 +53,13 @@ const ROTATION_MAP = {
   left: "rotateY(-90deg)",
 } as const;
 
+const CONTAINER_TRANSFORMS = {
+  top: "translateZ(-0.5lh)",
+  bottom: "translateZ(-0.5lh)",
+  left: "rotateY(90deg) translateX(50%) rotateY(-90deg)",
+  right: "rotateY(90deg) translateX(50%) rotateY(-90deg)",
+} as const;
+
 const DEFAULT_TRANSITION: ValueAnimationTransition = {
   type: "spring",
   damping: 30,
@@ -167,7 +174,7 @@ const Text3DFlip = ({
 
       await animate(
         ".text-3d-flip-char",
-        { transform: "rotateX(0deg) rotateY(0deg)" },
+        { transform: CONTAINER_TRANSFORMS[rotateDirection] },
         { duration: 0 },
       );
     } finally {
@@ -175,7 +182,7 @@ const Text3DFlip = ({
         isAnimatingRef.current = false;
       }
     }
-  }, [characters, transition, getStaggerDelay, rotationTransform, animate]);
+  }, [characters, transition, getStaggerDelay, rotationTransform, rotateDirection, animate]);
 
   return (
     <ElementTag
@@ -224,13 +231,6 @@ const FRONT_FACE_TRANSFORMS = {
   bottom: "translateZ(0.5lh)",
   left: "rotateY(90deg) translateX(50%) rotateY(-90deg)",
   right: "rotateY(-90deg) translateX(50%) rotateY(90deg)",
-} as const;
-
-const CONTAINER_TRANSFORMS = {
-  top: "translateZ(-0.5lh)",
-  bottom: "translateZ(-0.5lh)",
-  left: "rotateY(90deg) translateX(50%) rotateY(-90deg)",
-  right: "rotateY(90deg) translateX(50%) rotateY(-90deg)",
 } as const;
 
 const CharBox = memo(

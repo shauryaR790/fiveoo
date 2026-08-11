@@ -213,14 +213,14 @@ export function SmoothCursor({
       });
     };
 
-    document.body.style.cursor = "none";
+    document.documentElement.classList.add("has-custom-cursor");
     window.addEventListener("pointermove", throttledPointerMove, {
       passive: true,
     });
 
     return () => {
       window.removeEventListener("pointermove", throttledPointerMove);
-      document.body.style.cursor = "auto";
+      document.documentElement.classList.remove("has-custom-cursor");
       if (rafId) cancelAnimationFrame(rafId);
       if (timeout !== null) {
         clearTimeout(timeout);

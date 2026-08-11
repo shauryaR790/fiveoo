@@ -117,7 +117,7 @@ export default function Navbar() {
                   className="perspective-[800px] text-white"
                   textClassName="text-white"
                   flipTextClassName="text-white"
-                  rotateDirection="right"
+                  rotateDirection="top"
                 >
                   {link.label}
                 </Text3DFlip>

@@ -199,6 +199,13 @@ video {
   backface-visibility: hidden;
 }
 
+html.has-custom-cursor,
+html.has-custom-cursor *,
+html.has-custom-cursor *::before,
+html.has-custom-cursor *::after {
+  cursor: none !important;
+}
+
 .focus\:not-sr-only:focus {
   position: fixed;
   width: auto;
