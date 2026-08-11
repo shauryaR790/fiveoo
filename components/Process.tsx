@@ -26,7 +26,7 @@ export default function Process() {
     <section
       id="process"
       ref={rootRef}
-      className="relative overflow-hidden border-b border-white/12 bg-black px-5 pb-12 pt-20 text-white md:px-10 md:pb-16 md:pt-28 lg:px-16"
+      className="relative theme-surface overflow-hidden border-b border-[var(--color-fg)]/12 px-5 pb-12 pt-20 md:px-10 md:pb-16 md:pt-28 lg:px-16"
       data-nav-theme="dark"
       aria-label="Process"
       style={{ fontFamily: "var(--font-card)" }}

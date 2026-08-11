@@ -40,7 +40,7 @@ export default function About() {
     <section
       id="about"
       ref={rootRef}
-      className="relative bg-transparent pb-14 text-white md:pb-20"
+      className="relative bg-transparent pb-14 text-[var(--color-fg)] md:pb-20"
       data-nav-theme="dark"
     >
       <div className="relative z-[1]">
@@ -49,7 +49,7 @@ export default function About() {
         reversed
         duration={75}
         className="pt-2 md:pt-3"
-        textClassName="text-[clamp(4.5rem,15vw,14rem)] text-white"
+        textClassName="text-[clamp(4.5rem,15vw,14rem)] text-[var(--color-fg)]"
         glyphClassName="h-[clamp(3.75rem,12.5vw,11.5rem)] w-[clamp(3.75rem,12.5vw,11.5rem)]"
       />
 

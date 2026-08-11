@@ -123,13 +123,13 @@ export default function Works() {
     <section
       id="works"
       ref={rootRef}
-      className="relative overflow-hidden bg-black text-white"
+      className="relative theme-surface overflow-hidden"
       data-nav-theme="dark"
     >
       <div className="relative px-5 pb-16 md:px-10 md:pb-24 lg:px-12">
         <h2
           data-works-title
-          className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-white will-change-transform"
+              className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-[var(--color-fg)] will-change-transform"
         >
           Selected
           <br />

@@ -53,7 +53,7 @@ export default function Pricing() {
     <section
       id="pricing"
       ref={rootRef}
-      className="relative scroll-mt-[var(--nav-height)] overflow-x-clip bg-black px-5 pb-28 pt-[calc(var(--nav-height)+2rem)] text-white md:px-10 md:pb-36 md:pt-[calc(var(--nav-height)+3rem)] lg:px-16"
+      className="relative theme-surface scroll-mt-[var(--nav-height)] overflow-x-clip px-5 pb-28 pt-[calc(var(--nav-height)+2rem)] md:px-10 md:pb-36 md:pt-[calc(var(--nav-height)+3rem)] lg:px-16"
       data-nav-theme="dark"
       style={{ fontFamily: "var(--font-card)" }}
     >
@@ -131,7 +131,7 @@ export default function Pricing() {
           return (
             <article
               key={plan.id}
-              className="relative isolate flex h-full min-h-[880px] flex-col rounded-none border border-white/10 bg-[#141414] px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
+              className="relative isolate flex h-full min-h-[880px] flex-col rounded-none border border-[var(--color-fg)]/10 bg-[var(--color-surface-muted)] px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
             >
               <div data-price-reveal className="flex flex-1 flex-col">
               <div className="mb-7 flex items-center justify-between gap-3 md:mb-8">

@@ -154,12 +154,12 @@ export default function Services() {
     <section
       id="services"
       ref={rootRef}
-      className="relative bg-black text-white"
+      className="relative theme-surface bg-[var(--color-bg)] text-[var(--color-fg)]"
       data-nav-theme="dark"
     >
       <div
         ref={stageRef}
-        className="relative min-h-[100svh] overflow-hidden bg-black md:h-[100svh]"
+        className="relative min-h-[100svh] overflow-hidden bg-[var(--color-bg)] md:h-[100svh]"
       >
         <div
           ref={headlineRef}

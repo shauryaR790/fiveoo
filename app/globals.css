@@ -1,7 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  /* Neon-noir: black canvas, white type, violet → orange bloom */
+  /* Light: white canvas, dark type, neon fog blooms */
+  --color-bg: #ffffff;
+  --color-bg-inverse: #000000;
+  --color-fg: #111111;
+  --color-fg-muted: #656564;
+  --color-fg-inverse: #ffffff;
+  --color-surface: #f7f7f5;
+  --color-surface-muted: #ebebe8;
+  --color-border: #111111;
+  --color-accent: #ff6a1a;
+  --color-accent-deep: #6b2cff;
+  --color-cursor: #ff6a1a;
+  --color-forest: #01565b;
+  --color-lime: #ff6a1a;
+  --color-neon-purple: #7b2fff;
+  --color-neon-violet: #a855ff;
+  --color-neon-orange: #ff6a1a;
+  --color-neon-amber: #ffb347;
+  --font-display: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-card: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --nav-height: 5.5rem;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: light;
+}
+
+html.dark {
+  /* Default noir: black canvas, white type, violet → orange bloom */
   --color-bg: #000000;
   --color-bg-inverse: #ffffff;
   --color-fg: #ffffff;
@@ -19,11 +46,7 @@
   --color-neon-violet: #a855ff;
   --color-neon-orange: #ff6a1a;
   --color-neon-amber: #ffb347;
-  --font-display: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
-  --font-card: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --nav-height: 5.5rem;
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -361,4 +384,28 @@ html.is-scroll-navigating #main {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-magicui-theme-vt="active"]::view-transition-new(root) {
+  clip-path: var(--magicui-theme-vt-clip-from);
+}
+
+html[data-magicui-theme-vt="active"]::view-transition-group(root) {
+  animation-duration: var(--magicui-theme-toggle-vt-duration);
+}
+
+html:not(.dark) .theme-surface {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
+html.dark .theme-surface {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
 }

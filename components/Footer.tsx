@@ -97,18 +97,18 @@ export default function Footer() {
     <footer
       id="footer"
       ref={rootRef}
-      className="relative flex min-h-dvh flex-col overflow-x-clip bg-black text-white"
+      className="relative theme-surface flex min-h-dvh flex-col overflow-x-clip"
       data-nav-theme="dark"
       style={{ fontFamily: "var(--font-card)" }}
     >
       <NeonFog variant="footer" />
       {/* Soft dissolve at page edge — overlay, not clip, so no hard fog border */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[48%] bg-gradient-to-b from-transparent via-black/55 to-black"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[48%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/55 to-[var(--color-bg)]"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-20 bg-black"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-20 bg-[var(--color-bg)]"
         aria-hidden
       />
 

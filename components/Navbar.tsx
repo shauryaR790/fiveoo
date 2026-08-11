@@ -7,6 +7,7 @@ import { NAV_LINKS } from "@/lib/constants";
 import { navigateToSection } from "@/lib/navigate";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
 import { Text3DFlip } from "@/components/ui/text-3d-flip";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,7 +91,7 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:-z-10 before:h-[calc(var(--nav-height)+2rem)] before:bg-gradient-to-b before:from-black/80 before:via-black/35 before:to-transparent"
+      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:-z-10 before:h-[calc(var(--nav-height)+2rem)] before:bg-gradient-to-b before:from-[var(--color-bg)]/80 before:via-[var(--color-bg)]/35 before:to-transparent"
     >
       <nav
         className="mx-auto flex h-[var(--nav-height)] items-center justify-between px-6 md:px-10 lg:px-12"
@@ -104,7 +105,7 @@ export default function Navbar() {
           FIVEO
         </a>
 
-        <ul className="hidden items-center md:flex md:w-[46%] md:justify-between lg:w-[41.5%]">
+        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex md:w-[46%] md:justify-between lg:w-[41.5%]">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <a
@@ -114,9 +115,9 @@ export default function Navbar() {
               >
                 <Text3DFlip
                   as="span"
-                  className="perspective-[800px] text-white"
-                  textClassName="text-white"
-                  flipTextClassName="text-white"
+                  className="perspective-[800px] text-[var(--color-fg)]"
+                  textClassName="text-[var(--color-fg)]"
+                  flipTextClassName="text-[var(--color-fg)]"
                   rotateDirection="top"
                 >
                   {link.label}
@@ -126,24 +127,28 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <button
-          type="button"
-          className="relative z-50 flex h-10 w-10 items-center justify-center md:hidden"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          <span className="sr-only">Menu</span>
-          <span className="flex w-6 flex-col gap-1.5">
-            <span
-              className={`block h-0.5 w-full bg-current transition-transform ${menuOpen ? "translate-y-[4px] rotate-45" : ""}`}
-            />
-            <span
-              className={`block h-0.5 w-full bg-current transition-transform ${menuOpen ? "-translate-y-[4px] -rotate-45" : ""}`}
-            />
-          </span>
-        </button>
+        <div className="flex items-center gap-3">
+          <AnimatedThemeToggler className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-fg)]/20 text-[var(--color-fg)] transition-colors hover:border-[var(--color-fg)]/40" />
+
+          <button
+            type="button"
+            className="relative z-50 flex h-10 w-10 items-center justify-center md:hidden"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span className="sr-only">Menu</span>
+            <span className="flex w-6 flex-col gap-1.5">
+              <span
+                className={`block h-0.5 w-full bg-current transition-transform ${menuOpen ? "translate-y-[4px] rotate-45" : ""}`}
+              />
+              <span
+                className={`block h-0.5 w-full bg-current transition-transform ${menuOpen ? "-translate-y-[4px] -rotate-45" : ""}`}
+              />
+            </span>
+          </button>
+        </div>
       </nav>
 
       <div

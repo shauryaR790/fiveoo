@@ -128,7 +128,7 @@ export default function Branding() {
       id="careers"
       ref={rootRef}
       data-nav-theme="dark"
-      className="relative -mt-px bg-black"
+      className="relative -mt-px bg-[var(--color-bg)]"
       aria-label="Branding statement"
     >
       <div
