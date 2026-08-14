@@ -62,7 +62,7 @@ export default function About() {
                 data-cursor-grow
                 className="w-full max-w-[420px] will-change-transform lg:w-[420px] lg:max-w-none"
               >
-                <div className="theme-card relative aspect-video w-full overflow-hidden rounded-2xl">
+                <div className="theme-card relative aspect-video w-full overflow-hidden">
                   <Image
                     src="/images/reels.avif"
                     alt="FIVEO showreels"

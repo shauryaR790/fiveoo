@@ -163,7 +163,7 @@ export default function Works() {
               {/* Square frames: a half-width project simply reads twice as tall */}
               <div
                 data-work-frame
-                className="theme-card relative aspect-square overflow-hidden rounded-2xl will-change-transform"
+                className="theme-card relative aspect-square overflow-hidden will-change-transform"
               >
                 <div
                   data-work-media

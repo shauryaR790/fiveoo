@@ -11,14 +11,14 @@ type Logo = { name: string; src: string };
 
 function LogoTile({ logo }: { logo: Logo }) {
   return (
-    <div className="mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center border border-[var(--color-fg)]/10 bg-white px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
+    <div className="partner-logo-tile mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
       <div className="relative h-[96%] w-[96%]">
         <Image
           src={logo.src}
           alt={logo.name}
           fill
           sizes="320px"
-          className="object-contain"
+          className="partner-logo-img object-contain"
         />
       </div>
     </div>

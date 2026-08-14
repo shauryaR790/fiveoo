@@ -435,3 +435,17 @@ html.dark .theme-leaf {
 html:not(.dark) .theme-divide-y > * + * {
   border-top-color: color-mix(in srgb, var(--color-fg) 14%, transparent);
 }
+
+.partner-logo-tile {
+  border: 1px solid color-mix(in srgb, var(--color-fg) 10%, transparent);
+  background: #ffffff;
+}
+
+html:not(.dark) .partner-logo-tile {
+  border-color: transparent;
+  background: #000000;
+}
+
+html:not(.dark) .partner-logo-img {
+  filter: brightness(0) invert(1);
+}
