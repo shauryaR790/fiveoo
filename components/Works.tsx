@@ -17,11 +17,13 @@ function WorkCard({ work }: { work: WorkItem }) {
   return (
     <article
       data-work-card
-      className="group w-[clamp(200px,22vw,320px)] shrink-0"
+      className={`group ${
+        work.size === "lg" ? "col-span-1 md:col-span-6" : "col-span-1 md:col-span-3"
+      }`}
     >
       <div
         data-work-meta
-        className="mb-[18px] flex items-baseline justify-between gap-4 text-[13px] leading-none"
+        className="mb-3 flex items-baseline justify-between gap-3 text-[12px] leading-none will-change-transform md:mb-[18px] md:text-[13px]"
       >
         <span className="truncate">{work.client}</span>
         <span className="shrink-0">{work.year}</span>
@@ -38,14 +40,18 @@ function WorkCard({ work }: { work: WorkItem }) {
           height={2000}
           unoptimized
           className="block h-auto w-full max-w-none"
-          sizes="(max-width: 768px) 55vw, 320px"
+          sizes={
+            work.size === "lg"
+              ? "(max-width: 768px) 33vw, 50vw"
+              : "(max-width: 768px) 33vw, 25vw"
+          }
         />
         <div
           data-work-overlay
           className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           aria-hidden
         />
-        <p className="pointer-events-none absolute inset-x-0 bottom-0 p-4 font-display text-lg uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:p-5 md:text-xl">
+        <p className="pointer-events-none absolute inset-x-0 bottom-0 p-3 font-display text-base uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:p-5 md:text-xl">
           {work.title}
         </p>
       </div>
@@ -55,18 +61,18 @@ function WorkCard({ work }: { work: WorkItem }) {
 
 export default function Works() {
   const rootRef = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
-    const stage = stageRef.current;
-    const track = trackRef.current;
-    if (!root || !stage || !track) return;
+    if (!root) return;
 
     const ctx = gsap.context(() => {
       const title = root.querySelector<HTMLElement>("[data-works-title]");
       const cards = gsap.utils.toArray<HTMLElement>("[data-work-card]", root);
+      const risers = cards.flatMap((card) => [
+        card.querySelector("[data-work-meta]"),
+        card.querySelector("[data-work-frame]"),
+      ]);
 
       if (prefersReducedMotion() || !title) {
         gsap.set(title, {
@@ -78,8 +84,7 @@ export default function Works() {
         return;
       }
 
-      const getScrollDistance = () =>
-        Math.max(0, track.scrollWidth - stage.clientWidth);
+      const pinDistance = `${120 + Math.max(0, WORKS.length - 6) * 18}%`;
 
       gsap.set(title, { transformOrigin: "top center" });
 
@@ -88,8 +93,7 @@ export default function Works() {
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: () =>
-            `+=${Math.max(window.innerHeight * 1.1, getScrollDistance() * 0.9)}`,
+          end: `+=${pinDistance}`,
           pin: true,
           scrub: true,
           anticipatePin: 1,
@@ -111,17 +115,19 @@ export default function Works() {
             return window.innerHeight / 2 - layoutTop - scaledH / 2;
           },
         },
-        { scale: 1, y: 0, ease: "power1.inOut", duration: 0.35 },
+        { scale: 1, y: 0, ease: "power1.inOut", duration: 0.68 },
         0,
       ).fromTo(
-        track,
-        { x: 0 },
+        risers,
+        { y: 120, opacity: 0 },
         {
-          x: () => -getScrollDistance(),
-          ease: "none",
-          duration: 0.65,
+          y: 0,
+          opacity: 1,
+          ease: "power2.out",
+          duration: 0.45,
+          stagger: 0.05,
         },
-        0.2,
+        0.42,
       );
 
       if (isMobileViewport()) return;
@@ -154,10 +160,10 @@ export default function Works() {
       className="relative theme-surface overflow-hidden"
       data-nav-theme="dark"
     >
-      <div className="relative flex min-h-[100svh] flex-col px-5 pb-16 md:px-10 md:pb-24 lg:px-12">
+      <div className="relative px-3 pb-16 md:px-10 md:pb-24 lg:px-12">
         <h2
           data-works-title
-          className="font-display shrink-0 pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-[var(--color-fg)] will-change-transform"
+          className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-[var(--color-fg)] will-change-transform"
         >
           Selected
           <br />
@@ -166,20 +172,10 @@ export default function Works() {
           (2023–2026)
         </h2>
 
-        <div
-          ref={stageRef}
-          data-works-gallery
-          className="mt-12 flex flex-1 items-start overflow-hidden md:mt-16"
-        >
-          <div
-            ref={trackRef}
-            data-works-track
-            className="flex w-max items-start gap-2.5 will-change-transform md:gap-3"
-          >
-            {WORKS.map((work) => (
-              <WorkCard key={work.id} work={work} />
-            ))}
-          </div>
+        <div className="grid grid-cols-3 items-start gap-1.5 pt-10 md:grid-cols-12 md:gap-2.5 md:pt-24 md:gap-y-8">
+          {WORKS.map((work) => (
+            <WorkCard key={work.id} work={work} />
+          ))}
         </div>
       </div>
     </section>
