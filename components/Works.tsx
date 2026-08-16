@@ -14,6 +14,8 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 function WorkCard({ work }: { work: WorkItem }) {
+  const isBrandWork = Number(work.id.slice(1)) <= 6;
+
   return (
     <article data-work-card className="group col-span-1 md:col-span-4">
       <div
@@ -26,16 +28,32 @@ function WorkCard({ work }: { work: WorkItem }) {
 
       <div
         data-work-frame
-        className="theme-card relative aspect-[3/4] overflow-hidden bg-[var(--color-surface-muted)] will-change-transform"
+        className={`theme-card relative overflow-hidden will-change-transform ${
+          isBrandWork
+            ? "bg-transparent"
+            : "aspect-[3/4] bg-[var(--color-surface-muted)]"
+        }`}
       >
-        <Image
-          src={work.src}
-          alt={work.title}
-          fill
-          unoptimized
-          className="object-contain"
-          sizes="(max-width: 768px) 33vw, 33vw"
-        />
+        {isBrandWork ? (
+          <Image
+            src={work.src}
+            alt={work.title}
+            width={1600}
+            height={2000}
+            unoptimized
+            className="block h-auto w-full max-w-none"
+            sizes="(max-width: 768px) 33vw, 33vw"
+          />
+        ) : (
+          <Image
+            src={work.src}
+            alt={work.title}
+            fill
+            unoptimized
+            className="object-contain"
+            sizes="(max-width: 768px) 33vw, 33vw"
+          />
+        )}
         <div
           data-work-overlay
           className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
