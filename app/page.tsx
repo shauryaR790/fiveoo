@@ -5,6 +5,7 @@ import Branding from "@/components/Branding";
 import Services from "@/components/Services";
 import Pricing from "@/components/Pricing";
 import Process from "@/components/Process";
+import ProcessReel from "@/components/ProcessReel";
 import Testimonials from "@/components/Testimonials";
 import Partners from "@/components/Partners";
 import Footer from "@/components/Footer";
@@ -19,6 +20,7 @@ export default function Home() {
       <Services />
       <Pricing />
       <Process />
+      <ProcessReel />
       <Partners />
       <Testimonials />
       <Footer />
