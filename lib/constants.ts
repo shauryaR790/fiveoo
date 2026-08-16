@@ -35,48 +35,6 @@ export type WorkItem = {
 
 export const WORKS: WorkItem[] = [
   {
-    id: "w1",
-    title: "Crafted for your perfect cup",
-    client: "Kopvie",
-    year: "2026",
-    src: "/images/kopvie.png",
-  },
-  {
-    id: "w2",
-    title: "Everyday deals, boldly packaged",
-    client: "Krosan",
-    year: "2026",
-    src: "/images/krosan.jpg",
-  },
-  {
-    id: "w3",
-    title: "Smarter spending starts here",
-    client: "Tustee",
-    year: "2025",
-    src: "/images/tustee.png",
-  },
-  {
-    id: "w4",
-    title: "A club identity built for play",
-    client: "Padelhub",
-    year: "2025",
-    src: "/images/padelhub.png",
-  },
-  {
-    id: "w5",
-    title: "Sunlight in a can",
-    client: "Osuika",
-    year: "2024",
-    src: "/images/osuika.png",
-  },
-  {
-    id: "w6",
-    title: "Editorial systems for beauty",
-    client: "Arvela",
-    year: "2024",
-    src: "/images/arvela.png",
-  },
-  {
     id: "w7",
     title: "Don't stop",
     client: "OCAGE",
@@ -117,6 +75,41 @@ export const WORKS: WorkItem[] = [
     client: "Poster",
     year: "2026",
     src: "/images/works/sample-06.png",
+  },
+  {
+    id: "w1",
+    title: "Crafted for your perfect cup",
+    client: "Kopvie",
+    year: "2026",
+    src: "/images/kopvie.png",
+  },
+  {
+    id: "w2",
+    title: "Everyday deals, boldly packaged",
+    client: "Krosan",
+    year: "2026",
+    src: "/images/krosan.jpg",
+  },
+  {
+    id: "w3",
+    title: "Smarter spending starts here",
+    client: "Tustee",
+    year: "2025",
+    src: "/images/tustee.png",
+  },
+  {
+    id: "w4",
+    title: "A club identity built for play",
+    client: "Padelhub",
+    year: "2025",
+    src: "/images/padelhub.png",
+  },
+  {
+    id: "w5",
+    title: "Sunlight in a can",
+    client: "Osuika",
+    year: "2024",
+    src: "/images/osuika.png",
   },
 ];
 
