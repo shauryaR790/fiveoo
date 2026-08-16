@@ -37,11 +37,13 @@ export default function Works() {
         return;
       }
 
+      const pinDistance = `${120 + Math.max(0, WORKS.length - 6) * 18}%`;
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: "+=100%",
+          end: `+=${pinDistance}`,
           pin: true,
           scrub: true,
           anticipatePin: 1,
