@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -20,9 +20,32 @@ function WorkCard({
   work: WorkItem;
   columns?: 2 | 3;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
   const colClass = columns === 2 ? "col-span-1 md:col-span-6" : "col-span-1 md:col-span-4";
   const imageSizes =
     columns === 2 ? "(max-width: 768px) 50vw, 50vw" : "(max-width: 768px) 33vw, 33vw";
+  const isVideo = work.media === "video";
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isVideo) return;
+
+    if (prefersReducedMotion()) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          void video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [isVideo]);
 
   return (
     <article data-work-card className={`group ${colClass}`}>
@@ -38,15 +61,29 @@ function WorkCard({
         data-work-frame
         className="theme-card relative overflow-hidden bg-transparent will-change-transform"
       >
-        <Image
-          src={work.src}
-          alt={work.title}
-          width={1600}
-          height={2000}
-          unoptimized
-          className="block h-auto w-full max-w-none"
-          sizes={imageSizes}
-        />
+        {isVideo ? (
+          <video
+            ref={videoRef}
+            src={work.src}
+            poster={work.poster}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label={work.title}
+            className="block h-auto w-full max-w-none"
+          />
+        ) : (
+          <Image
+            src={work.src}
+            alt={work.title}
+            width={1600}
+            height={2000}
+            unoptimized
+            className="block h-auto w-full max-w-none"
+            sizes={imageSizes}
+          />
+        )}
         <div
           data-work-overlay
           className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
