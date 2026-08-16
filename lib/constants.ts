@@ -111,6 +111,13 @@ export const WORKS: WorkItem[] = [
     year: "2024",
     src: "/images/osuika.png",
   },
+  {
+    id: "w6",
+    title: "Editorial systems for beauty",
+    client: "Arvela",
+    year: "2024",
+    src: "/images/arvela.png",
+  },
 ];
 
 export const BRANDING_FEATURES = [
