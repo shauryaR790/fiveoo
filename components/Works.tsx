@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { WORK_ROWS, WORKS, type WorkItem } from "@/lib/constants";
+import { WORKS, type WorkItem } from "@/lib/constants";
 import {
   prefersReducedMotion,
   isMobileViewport,
@@ -13,17 +13,23 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-const WORK_BY_ID = Object.fromEntries(WORKS.map((work) => [work.id, work]));
-
 function WorkCard({ work }: { work: WorkItem }) {
   return (
-    <article data-work-card className="group">
+    <article
+      data-work-card
+      data-work-size={work.size}
+      className={`group shrink-0 ${
+        work.size === "lg"
+          ? "w-[clamp(220px,28vw,420px)]"
+          : "w-[clamp(150px,18vw,280px)]"
+      }`}
+    >
       <div
         data-work-meta
-        className="mb-[18px] flex items-baseline justify-between text-[13px] leading-none will-change-transform"
+        className="mb-[18px] flex items-baseline justify-between gap-4 text-[13px] leading-none will-change-transform"
       >
-        <span>{work.client}</span>
-        <span>{work.year}</span>
+        <span className="truncate">{work.client}</span>
+        <span className="shrink-0">{work.year}</span>
       </div>
 
       <div
@@ -37,14 +43,18 @@ function WorkCard({ work }: { work: WorkItem }) {
           height={2000}
           unoptimized
           className="block h-auto w-full max-w-none"
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes={
+            work.size === "lg"
+              ? "(max-width: 768px) 70vw, 420px"
+              : "(max-width: 768px) 45vw, 280px"
+          }
         />
         <div
           data-work-overlay
           className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           aria-hidden
         />
-        <p className="pointer-events-none absolute inset-x-0 bottom-0 p-5 font-display text-xl uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:text-2xl">
+        <p className="pointer-events-none absolute inset-x-0 bottom-0 p-4 font-display text-lg uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:p-5 md:text-xl">
           {work.title}
         </p>
       </div>
@@ -54,10 +64,14 @@ function WorkCard({ work }: { work: WorkItem }) {
 
 export default function Works() {
   const rootRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
+    const stage = stageRef.current;
+    const track = trackRef.current;
+    if (!root || !stage || !track) return;
 
     const ctx = gsap.context(() => {
       const title = root.querySelector<HTMLElement>("[data-works-title]");
@@ -77,13 +91,17 @@ export default function Works() {
         return;
       }
 
-      const pinDistance = `${120 + Math.max(0, WORKS.length - 6) * 18}%`;
+      const getScrollDistance = () =>
+        Math.max(0, track.scrollWidth - stage.clientWidth);
 
+      gsap.set(title, { transformOrigin: "top center" });
+
+      const introScale = 2.2;
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: `+=${pinDistance}`,
+          end: () => `+=${Math.max(window.innerHeight * 1.2, getScrollDistance() * 0.85)}`,
           pin: true,
           scrub: true,
           anticipatePin: 1,
@@ -95,9 +113,6 @@ export default function Works() {
         },
       });
 
-      gsap.set(title, { transformOrigin: "top center" });
-
-      const introScale = 2.2;
       tl.fromTo(
         title,
         {
@@ -108,20 +123,31 @@ export default function Works() {
             return window.innerHeight / 2 - layoutTop - scaledH / 2;
           },
         },
-        { scale: 1, y: 0, ease: "power1.inOut", duration: 0.68 },
+        { scale: 1, y: 0, ease: "power1.inOut", duration: 0.42 },
         0,
-      ).fromTo(
-        risers,
-        { y: 120, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          ease: "power2.out",
-          duration: 0.45,
-          stagger: 0.05,
-        },
-        0.42,
-      );
+      )
+        .fromTo(
+          risers,
+          { y: 80, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            ease: "power2.out",
+            duration: 0.28,
+            stagger: 0.04,
+          },
+          0.24,
+        )
+        .fromTo(
+          track,
+          { x: 0 },
+          {
+            x: () => -getScrollDistance(),
+            ease: "none",
+            duration: 0.58,
+          },
+          0.42,
+        );
 
       if (isMobileViewport()) return;
 
@@ -153,10 +179,10 @@ export default function Works() {
       className="relative theme-surface overflow-hidden"
       data-nav-theme="dark"
     >
-      <div className="relative px-5 pb-16 md:px-10 md:pb-24 lg:px-12">
+      <div className="relative flex min-h-[100svh] flex-col px-5 pb-16 md:px-10 md:pb-24 lg:px-12">
         <h2
           data-works-title
-          className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-[var(--color-fg)] will-change-transform"
+          className="font-display shrink-0 pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-[var(--color-fg)] will-change-transform"
         >
           Selected
           <br />
@@ -165,35 +191,20 @@ export default function Works() {
           (2023–2026)
         </h2>
 
-        <div className="flex flex-col gap-14 pt-16 md:gap-24 md:pt-24">
-          {WORK_ROWS.map((row, rowIndex) => (
-            <div
-              key={`works-row-${rowIndex}`}
-              className="grid grid-cols-1 items-start gap-2.5 md:grid-cols-3"
-            >
-              {row.map((column, columnIndex) => {
-                if (column.type === "stack") {
-                  return (
-                    <div
-                      key={`stack-${rowIndex}-${columnIndex}`}
-                      className="flex flex-col gap-2.5"
-                    >
-                      {column.ids.map((id) => (
-                        <WorkCard key={id} work={WORK_BY_ID[id]} />
-                      ))}
-                    </div>
-                  );
-                }
-
-                return (
-                  <WorkCard
-                    key={column.id}
-                    work={WORK_BY_ID[column.id]}
-                  />
-                );
-              })}
-            </div>
-          ))}
+        <div
+          ref={stageRef}
+          data-works-gallery
+          className="mt-12 flex flex-1 items-start overflow-hidden md:mt-16"
+        >
+          <div
+            ref={trackRef}
+            data-works-track
+            className="flex w-max items-start gap-2.5 will-change-transform md:gap-3"
+          >
+            {WORKS.map((work) => (
+              <WorkCard key={work.id} work={work} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
