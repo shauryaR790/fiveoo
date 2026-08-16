@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -10,30 +10,61 @@ import {
   isMobileViewport,
   setNavInvert,
 } from "@/lib/animations";
-import { getLenis } from "@/lib/lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function WorkCard({
   work,
   columns = 3,
-  onVideoRef,
 }: {
   work: WorkItem;
   columns?: 2 | 3;
-  onVideoRef?: (id: string, node: HTMLVideoElement | null) => void;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
   const colClass = columns === 2 ? "col-span-1 md:col-span-6" : "col-span-1 md:col-span-4";
   const imageSizes =
     columns === 2 ? "(max-width: 768px) 50vw, 50vw" : "(max-width: 768px) 33vw, 33vw";
   const isVideo = work.media === "video";
 
-  const setVideoRef = useCallback(
-    (node: HTMLVideoElement | null) => {
-      onVideoRef?.(work.id, node);
-    },
-    [onVideoRef, work.id],
-  );
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isVideo || prefersReducedMotion()) return;
+
+    const syncPlayback = (entry: IntersectionObserverEntry) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
+        if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+          video.load();
+        }
+        void video.play().catch(() => {});
+        return;
+      }
+
+      video.pause();
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry) syncPlayback(entry);
+      },
+      { threshold: [0, 0.1, 0.25, 0.5], rootMargin: "80px 0px" },
+    );
+
+    observer.observe(video);
+
+    const onReady = () => {
+      const rect = video.getBoundingClientRect();
+      const visible = rect.top < window.innerHeight && rect.bottom > 0;
+      if (visible) void video.play().catch(() => {});
+    };
+
+    video.addEventListener("loadeddata", onReady);
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) onReady();
+
+    return () => {
+      observer.disconnect();
+      video.removeEventListener("loadeddata", onReady);
+    };
+  }, [isVideo]);
 
   return (
     <article data-work-card className={`group ${colClass}`}>
@@ -52,13 +83,14 @@ function WorkCard({
       >
         {isVideo ? (
           <video
-            ref={setVideoRef}
+            ref={videoRef}
             src={work.src}
             poster={work.poster}
+            autoPlay
             muted
             loop
             playsInline
-            preload="none"
+            preload="auto"
             aria-label={work.title}
             className="block h-auto w-full max-w-none [transform:translateZ(0)]"
           />
@@ -90,131 +122,18 @@ function WorkCard({
   );
 }
 
-function WebsiteWorksGrid() {
-  const videosRef = useRef<Map<string, HTMLVideoElement>>(new Map());
-  const scrollIdleRef = useRef(true);
-  const activeIdRef = useRef<string | null>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const pauseAll = useCallback(() => {
-    videosRef.current.forEach((video) => {
-      video.pause();
-    });
-    activeIdRef.current = null;
-  }, []);
-
-  const playBestVisible = useCallback(() => {
-    if (prefersReducedMotion() || !scrollIdleRef.current) return;
-
-    let bestId: string | null = null;
-    let bestRatio = 0;
-
-    videosRef.current.forEach((video, id) => {
-      const rect = video.getBoundingClientRect();
-      const visibleTop = Math.max(rect.top, 0);
-      const visibleBottom = Math.min(rect.bottom, window.innerHeight);
-      const ratio = Math.max(0, visibleBottom - visibleTop) / rect.height;
-
-      if (ratio > bestRatio) {
-        bestRatio = ratio;
-        bestId = id;
-      }
-    });
-
-    if (!bestId || bestRatio < 0.45) {
-      pauseAll();
-      return;
-    }
-
-    if (activeIdRef.current === bestId) {
-      const current = videosRef.current.get(bestId);
-      if (current?.paused) void current.play().catch(() => {});
-      return;
-    }
-
-    pauseAll();
-    const next = videosRef.current.get(bestId);
-    if (!next) return;
-
-    activeIdRef.current = bestId;
-    if (next.readyState === 0) next.load();
-    void next.play().catch(() => {});
-  }, [pauseAll]);
-
-  const registerVideo = useCallback(
-    (id: string, node: HTMLVideoElement | null) => {
-      const existing = videosRef.current.get(id);
-      if (existing) observerRef.current?.unobserve(existing);
-
-      if (node) {
-        videosRef.current.set(id, node);
-        observerRef.current?.observe(node);
-        if (scrollIdleRef.current) playBestVisible();
-      } else {
-        videosRef.current.delete(id);
-      }
-    },
-    [playBestVisible],
-  );
-
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-
-    let scrollTimer: ReturnType<typeof setTimeout> | undefined;
-    const onScrollActivity = () => {
-      scrollIdleRef.current = false;
-      pauseAll();
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        scrollIdleRef.current = true;
-        playBestVisible();
-      }, 160);
-    };
-
-    const lenis = getLenis();
-    lenis?.on("scroll", onScrollActivity);
-    window.addEventListener("scroll", onScrollActivity, { passive: true });
-
-    observerRef.current = new IntersectionObserver(
-      () => {
-        if (scrollIdleRef.current) playBestVisible();
-      },
-      { threshold: [0, 0.35, 0.65, 1] },
-    );
-
-    videosRef.current.forEach((video) => observerRef.current?.observe(video));
-    const initTimer = setTimeout(playBestVisible, 400);
-
-    return () => {
-      clearTimeout(scrollTimer);
-      clearTimeout(initTimer);
-      observerRef.current?.disconnect();
-      observerRef.current = null;
-      window.removeEventListener("scroll", onScrollActivity);
-      lenis?.off("scroll", onScrollActivity);
-      pauseAll();
-    };
-  }, [pauseAll, playBestVisible]);
-
-  return (
-    <div className="grid grid-cols-2 items-start gap-1.5 pt-8 md:grid-cols-12 md:gap-2.5 md:pt-16 md:gap-y-8">
-      {WEBSITE_WORKS.map((work) => (
-        <WorkCard key={work.id} work={work} columns={2} onVideoRef={registerVideo} />
-      ))}
-    </div>
-  );
-}
-
 export default function Works() {
   const rootRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
+    const pinRoot = pinRef.current;
+    if (!root || !pinRoot) return;
 
     const ctx = gsap.context(() => {
-      const title = root.querySelector<HTMLElement>("[data-works-title]");
-      const cards = gsap.utils.toArray<HTMLElement>("[data-work-card]", root);
+      const title = pinRoot.querySelector<HTMLElement>("[data-works-title]");
+      const cards = gsap.utils.toArray<HTMLElement>("[data-work-card]", pinRoot);
       const risers = cards.flatMap((card) => [
         card.querySelector("[data-work-meta]"),
         card.querySelector("[data-work-frame]"),
@@ -230,15 +149,14 @@ export default function Works() {
         return;
       }
 
-      const totalWorks = WORKS.length + WEBSITE_WORKS.length;
-      const pinDistance = `${120 + Math.max(0, totalWorks - 6) * 18}%`;
+      const pinDistance = `${120 + Math.max(0, WORKS.length - 6) * 18}%`;
 
       gsap.set(title, { transformOrigin: "top center" });
 
       const introScale = 2.2;
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: root,
+          trigger: pinRoot,
           start: "top top",
           end: `+=${pinDistance}`,
           pin: true,
@@ -282,7 +200,6 @@ export default function Works() {
       cards.forEach((card) => {
         const frame = card.querySelector("[data-work-frame]");
         const meta = card.querySelector("[data-work-meta]");
-        if (frame?.getAttribute("data-work-video") === "true") return;
 
         const hover = gsap
           .timeline({
@@ -308,7 +225,7 @@ export default function Works() {
       className="relative theme-surface overflow-hidden"
       data-nav-theme="dark"
     >
-      <div className="relative px-3 pb-16 md:px-10 md:pb-24 lg:px-12">
+      <div ref={pinRef} className="relative px-3 md:px-10 lg:px-12">
         <h2
           data-works-title
           className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-[var(--color-fg)] will-change-transform"
@@ -325,8 +242,14 @@ export default function Works() {
             <WorkCard key={work.id} work={work} />
           ))}
         </div>
+      </div>
 
-        <WebsiteWorksGrid />
+      <div className="relative px-3 pb-16 md:px-10 md:pb-24 lg:px-12">
+        <div className="grid grid-cols-2 items-start gap-1.5 pt-8 md:grid-cols-12 md:gap-2.5 md:pt-16 md:gap-y-8">
+          {WEBSITE_WORKS.map((work) => (
+            <WorkCard key={work.id} work={work} columns={2} />
+          ))}
+        </div>
       </div>
     </section>
   );
