@@ -120,6 +120,52 @@ export const WORKS: WorkItem[] = [
   },
 ];
 
+/** Two equal tiles per row — website design showcase below the main gallery. */
+export const WEBSITE_WORKS: WorkItem[] = [
+  {
+    id: "web1",
+    title: "3D printing agency",
+    client: "Susi Labs",
+    year: "2026",
+    src: "/images/works/website-01.png",
+  },
+  {
+    id: "web2",
+    title: "Tactical training",
+    client: "The Kraken",
+    year: "2026",
+    src: "/images/works/website-02.png",
+  },
+  {
+    id: "web3",
+    title: "Unlocking Japan's hidden gems",
+    client: "Sakazuki",
+    year: "2026",
+    src: "/images/works/website-03.png",
+  },
+  {
+    id: "web4",
+    title: "Get inspired with us",
+    client: "Mindloop",
+    year: "2026",
+    src: "/images/works/website-04.png",
+  },
+  {
+    id: "web5",
+    title: "Film & motion portfolio",
+    client: "Podium",
+    year: "2026",
+    src: "/images/works/website-05.png",
+  },
+  {
+    id: "web6",
+    title: "Nothing shown first",
+    client: "Obsidian Assembly",
+    year: "2026",
+    src: "/images/works/website-06.png",
+  },
+];
+
 export const BRANDING_FEATURES = [
   {
     id: "01",

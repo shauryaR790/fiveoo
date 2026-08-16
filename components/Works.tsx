@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { WORKS, type WorkItem } from "@/lib/constants";
+import { WORKS, WEBSITE_WORKS, type WorkItem } from "@/lib/constants";
 import {
   prefersReducedMotion,
   isMobileViewport,
@@ -13,9 +13,19 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-function WorkCard({ work }: { work: WorkItem }) {
+function WorkCard({
+  work,
+  columns = 3,
+}: {
+  work: WorkItem;
+  columns?: 2 | 3;
+}) {
+  const colClass = columns === 2 ? "col-span-1 md:col-span-6" : "col-span-1 md:col-span-4";
+  const imageSizes =
+    columns === 2 ? "(max-width: 768px) 50vw, 50vw" : "(max-width: 768px) 33vw, 33vw";
+
   return (
-    <article data-work-card className="group col-span-1 md:col-span-4">
+    <article data-work-card className={`group ${colClass}`}>
       <div
         data-work-meta
         className="mb-3 flex items-baseline justify-between gap-3 text-[12px] leading-none will-change-transform md:mb-[18px] md:text-[13px]"
@@ -35,7 +45,7 @@ function WorkCard({ work }: { work: WorkItem }) {
           height={2000}
           unoptimized
           className="block h-auto w-full max-w-none"
-          sizes="(max-width: 768px) 33vw, 33vw"
+          sizes={imageSizes}
         />
         <div
           data-work-overlay
@@ -75,7 +85,8 @@ export default function Works() {
         return;
       }
 
-      const pinDistance = `${120 + Math.max(0, WORKS.length - 6) * 18}%`;
+      const totalWorks = WORKS.length + WEBSITE_WORKS.length;
+      const pinDistance = `${120 + Math.max(0, totalWorks - 6) * 18}%`;
 
       gsap.set(title, { transformOrigin: "top center" });
 
@@ -166,6 +177,12 @@ export default function Works() {
         <div className="grid grid-cols-3 items-start gap-1.5 pt-10 md:grid-cols-12 md:gap-2.5 md:pt-24 md:gap-y-8">
           {WORKS.map((work) => (
             <WorkCard key={work.id} work={work} />
+          ))}
+        </div>
+
+        <div className="grid grid-cols-2 items-start gap-1.5 pt-8 md:grid-cols-12 md:gap-2.5 md:pt-16 md:gap-y-8">
+          {WEBSITE_WORKS.map((work) => (
+            <WorkCard key={work.id} work={work} columns={2} />
           ))}
         </div>
       </div>
