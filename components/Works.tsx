@@ -15,12 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 function WorkCard({ work }: { work: WorkItem }) {
   return (
-    <article
-      data-work-card
-      className={`group ${
-        work.size === "lg" ? "col-span-1 md:col-span-6" : "col-span-1 md:col-span-3"
-      }`}
-    >
+    <article data-work-card className="group col-span-1 md:col-span-4">
       <div
         data-work-meta
         className="mb-3 flex items-baseline justify-between gap-3 text-[12px] leading-none will-change-transform md:mb-[18px] md:text-[13px]"
@@ -31,20 +26,15 @@ function WorkCard({ work }: { work: WorkItem }) {
 
       <div
         data-work-frame
-        className="theme-card relative overflow-hidden will-change-transform"
+        className="theme-card relative aspect-[3/4] overflow-hidden bg-[var(--color-surface-muted)] will-change-transform"
       >
         <Image
           src={work.src}
           alt={work.title}
-          width={1600}
-          height={2000}
+          fill
           unoptimized
-          className="block h-auto w-full max-w-none"
-          sizes={
-            work.size === "lg"
-              ? "(max-width: 768px) 33vw, 50vw"
-              : "(max-width: 768px) 33vw, 25vw"
-          }
+          className="object-contain"
+          sizes="(max-width: 768px) 33vw, 33vw"
         />
         <div
           data-work-overlay
