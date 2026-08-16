@@ -25,17 +25,24 @@ export const HERO_SLIDES = [
 ] as const;
 
 /**
- * `span` drives the asymmetric grid: "sm" takes a quarter of the row, "lg"
- * takes half, so rows read 3 + 3 + 6 and 6 + 3 + 3.
+ * Rows alternate layout: [2 small stacked | large | large] then [large | large | 2 small stacked].
+ * Images keep their native aspect ratio — no square crop or zoom.
  */
-export const WORKS = [
+export type WorkItem = {
+  id: string;
+  title: string;
+  client: string;
+  year: string;
+  src: string;
+};
+
+export const WORKS: WorkItem[] = [
   {
     id: "w1",
     title: "Crafted for your perfect cup",
     client: "Kopvie",
     year: "2026",
     src: "/images/kopvie.png",
-    span: "sm",
   },
   {
     id: "w2",
@@ -43,7 +50,6 @@ export const WORKS = [
     client: "Krosan",
     year: "2026",
     src: "/images/krosan.jpg",
-    span: "sm",
   },
   {
     id: "w3",
@@ -51,7 +57,6 @@ export const WORKS = [
     client: "Tustee",
     year: "2025",
     src: "/images/tustee.png",
-    span: "lg",
   },
   {
     id: "w4",
@@ -59,7 +64,6 @@ export const WORKS = [
     client: "Padelhub",
     year: "2025",
     src: "/images/padelhub.png",
-    span: "lg",
   },
   {
     id: "w5",
@@ -67,7 +71,6 @@ export const WORKS = [
     client: "Osuika",
     year: "2024",
     src: "/images/osuika.png",
-    span: "sm",
   },
   {
     id: "w6",
@@ -75,7 +78,6 @@ export const WORKS = [
     client: "Arvela",
     year: "2024",
     src: "/images/arvela.png",
-    span: "sm",
   },
   {
     id: "w7",
@@ -83,7 +85,6 @@ export const WORKS = [
     client: "OCAGE",
     year: "2026",
     src: "/images/works/sample-01.png",
-    span: "sm",
   },
   {
     id: "w8",
@@ -91,7 +92,6 @@ export const WORKS = [
     client: "Editorial",
     year: "2026",
     src: "/images/works/sample-02.png",
-    span: "sm",
   },
   {
     id: "w9",
@@ -99,7 +99,6 @@ export const WORKS = [
     client: "RCDL",
     year: "2026",
     src: "/images/works/sample-03.png",
-    span: "lg",
   },
   {
     id: "w10",
@@ -107,7 +106,6 @@ export const WORKS = [
     client: "Sayansenapati",
     year: "2026",
     src: "/images/works/sample-04.png",
-    span: "lg",
   },
   {
     id: "w11",
@@ -115,7 +113,6 @@ export const WORKS = [
     client: "Streetwear",
     year: "2026",
     src: "/images/works/sample-05.png",
-    span: "sm",
   },
   {
     id: "w12",
@@ -123,8 +120,25 @@ export const WORKS = [
     client: "Poster",
     year: "2026",
     src: "/images/works/sample-06.png",
-    span: "sm",
   },
+];
+
+export const WORK_ROWS = [
+  [
+    { type: "stack", ids: ["w1", "w2"] },
+    { type: "single", id: "w3" },
+    { type: "single", id: "w4" },
+  ],
+  [
+    { type: "single", id: "w5" },
+    { type: "single", id: "w6" },
+    { type: "stack", ids: ["w7", "w8"] },
+  ],
+  [
+    { type: "stack", ids: ["w12", "w11"] },
+    { type: "single", id: "w9" },
+    { type: "single", id: "w10" },
+  ],
 ] as const;
 
 export const BRANDING_FEATURES = [
