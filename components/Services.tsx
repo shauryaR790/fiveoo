@@ -227,7 +227,7 @@ export default function Services() {
               <div
                 key={group.id}
                 data-service-card
-                className="theme-card flex min-h-[70vh] flex-col rounded-2xl p-10 text-[var(--color-fg)] will-change-transform md:h-[760px] md:min-h-0 md:w-full"
+                className="theme-card flex min-h-[70vh] flex-col rounded-none p-10 text-[var(--color-fg)] will-change-transform md:h-[760px] md:min-h-0 md:w-full"
                 style={{ fontFamily: "var(--font-card)" }}
               >
                 <h3 className="font-editorial mb-10 max-w-[360px] whitespace-pre-line text-[2rem] leading-[1.12] md:mb-[56px] md:text-[44px]">
