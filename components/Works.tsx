@@ -17,16 +17,11 @@ function WorkCard({ work }: { work: WorkItem }) {
   return (
     <article
       data-work-card
-      data-work-size={work.size}
-      className={`group shrink-0 ${
-        work.size === "lg"
-          ? "w-[clamp(220px,28vw,420px)]"
-          : "w-[clamp(150px,18vw,280px)]"
-      }`}
+      className="group w-[clamp(200px,22vw,320px)] shrink-0"
     >
       <div
         data-work-meta
-        className="mb-[18px] flex items-baseline justify-between gap-4 text-[13px] leading-none will-change-transform"
+        className="mb-[18px] flex items-baseline justify-between gap-4 text-[13px] leading-none"
       >
         <span className="truncate">{work.client}</span>
         <span className="shrink-0">{work.year}</span>
@@ -43,11 +38,7 @@ function WorkCard({ work }: { work: WorkItem }) {
           height={2000}
           unoptimized
           className="block h-auto w-full max-w-none"
-          sizes={
-            work.size === "lg"
-              ? "(max-width: 768px) 70vw, 420px"
-              : "(max-width: 768px) 45vw, 280px"
-          }
+          sizes="(max-width: 768px) 55vw, 320px"
         />
         <div
           data-work-overlay
@@ -76,10 +67,6 @@ export default function Works() {
     const ctx = gsap.context(() => {
       const title = root.querySelector<HTMLElement>("[data-works-title]");
       const cards = gsap.utils.toArray<HTMLElement>("[data-work-card]", root);
-      const risers = cards.flatMap((card) => [
-        card.querySelector("[data-work-meta]"),
-        card.querySelector("[data-work-frame]"),
-      ]);
 
       if (prefersReducedMotion() || !title) {
         gsap.set(title, {
@@ -101,7 +88,8 @@ export default function Works() {
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: () => `+=${Math.max(window.innerHeight * 1.2, getScrollDistance() * 0.85)}`,
+          end: () =>
+            `+=${Math.max(window.innerHeight * 1.1, getScrollDistance() * 0.9)}`,
           pin: true,
           scrub: true,
           anticipatePin: 1,
@@ -123,31 +111,18 @@ export default function Works() {
             return window.innerHeight / 2 - layoutTop - scaledH / 2;
           },
         },
-        { scale: 1, y: 0, ease: "power1.inOut", duration: 0.42 },
+        { scale: 1, y: 0, ease: "power1.inOut", duration: 0.35 },
         0,
-      )
-        .fromTo(
-          risers,
-          { y: 80, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            ease: "power2.out",
-            duration: 0.28,
-            stagger: 0.04,
-          },
-          0.24,
-        )
-        .fromTo(
-          track,
-          { x: 0 },
-          {
-            x: () => -getScrollDistance(),
-            ease: "none",
-            duration: 0.58,
-          },
-          0.42,
-        );
+      ).fromTo(
+        track,
+        { x: 0 },
+        {
+          x: () => -getScrollDistance(),
+          ease: "none",
+          duration: 0.65,
+        },
+        0.2,
+      );
 
       if (isMobileViewport()) return;
 
