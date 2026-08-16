@@ -3,20 +3,17 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { fadeUp, prefersReducedMotion } from "@/lib/animations";
+import { fadeUp } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ProcessReel() {
   const rootRef = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
-    const stage = stageRef.current;
-    const video = videoRef.current;
-    if (!root || !stage) return;
+    if (!root) return;
 
     const ctx = gsap.context(() => {
       fadeUp(root.querySelectorAll("[data-reel-reveal]"), {
@@ -24,39 +21,6 @@ export default function ProcessReel() {
         stagger: 0.1,
         y: 32,
       });
-
-      if (prefersReducedMotion()) return;
-
-      gsap.fromTo(
-        stage,
-        { scale: 0.94, y: 48 },
-        {
-          scale: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: stage,
-            start: "top 88%",
-            end: "top 42%",
-            scrub: true,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        stage.querySelector("[data-reel-video]"),
-        { scale: 1.08 },
-        {
-          scale: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: stage,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        },
-      );
     }, root);
 
     return () => ctx.revert();
@@ -110,29 +74,19 @@ export default function ProcessReel() {
         </div>
 
         <div
-          ref={stageRef}
-          className="relative overflow-hidden will-change-transform"
+          data-reel-reveal
+          className="relative overflow-hidden bg-black"
         >
-          <div
-            data-reel-video
-            className="relative aspect-[16/9] w-full overflow-hidden bg-black will-change-transform md:aspect-[21/9]"
-          >
+          <div className="relative aspect-video w-full">
             <video
               ref={videoRef}
               src="/videos/process-reel.mp4"
               muted
               loop
               playsInline
-              preload="metadata"
-              className="absolute inset-0 h-full w-full object-cover [image-rendering:auto]"
-            />
-            <div
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.18)_0%,transparent_22%,transparent_78%,rgba(0,0,0,0.28)_100%)]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay [background-image:radial-gradient(circle_at_20%_20%,var(--color-neon-purple)_0%,transparent_42%),radial-gradient(circle_at_80%_80%,var(--color-neon-orange)_0%,transparent_40%)]"
-              aria-hidden
+              autoPlay
+              preload="auto"
+              className="absolute inset-0 h-full w-full object-contain"
             />
           </div>
 
