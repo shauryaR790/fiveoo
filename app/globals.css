@@ -282,14 +282,14 @@ html.is-scroll-navigating #main {
   .nav-links {
     display: flex;
     left: 6.5rem;
-    right: calc(2.5rem + 2.5rem + 0.75rem);
+    right: calc(2.5rem + 2.5rem + 1.75rem);
   }
 }
 
 @media (min-width: 1024px) {
   .nav-links {
     left: calc(3rem + (100% - 6rem) * 0.585);
-    right: calc(3rem + 2.5rem + 1rem);
+    right: calc(3rem + 2.5rem + 2.25rem);
   }
 }
 
