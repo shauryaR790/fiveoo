@@ -2,6 +2,15 @@ import { NOMAD_CARDS, NOMAD_TILES } from "./data";
 
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
 
+/** Canvas ignores CSS variables in font strings — resolve from the document. */
+function canvasFont(weight: number, sizePx: number) {
+  const family =
+    typeof document !== "undefined"
+      ? getComputedStyle(document.body).fontFamily
+      : "Inter, sans-serif";
+  return `${weight} ${sizePx}px ${family}`;
+}
+
 const COLS = 4;
 const ROWS = 3;
 const COL_GAP = 0.34;
@@ -396,20 +405,20 @@ export class WorkCanvas {
   private paintCard(c: CanvasRenderingContext2D, text: string, x: number, y: number) {
     const w = this.tileW;
     const h = this.tileH;
-    const size = Math.round(clamp(this.tileW * 0.2, 36, 72));
+    const size = Math.round(clamp(this.tileW * 0.115, 20, 32));
     c.fillStyle = "#ffffff";
     c.textAlign = "center";
     c.textBaseline = "middle";
-    c.font = `500 ${size}px var(--font-inter), -apple-system, Helvetica, Arial, sans-serif`;
     const cx = x + w / 2;
     const cy = y + h / 2;
-    c.font = `400 ${Math.round(size * 1.1)}px var(--font-inter), Helvetica, Arial, sans-serif`;
-    c.fillText("*", cx, cy - size * 1.45);
-    c.font = `500 ${size}px var(--font-inter), -apple-system, Helvetica, Arial, sans-serif`;
-    c.fillText(text, cx, cy + size * 0.15);
 
-    const tw = Math.max(size * 5, c.measureText(text).width);
-    return { x: cx - tw / 2 - 20, y: cy - size * 2.4, w: tw + 40, h: size * 4.2 };
+    c.font = canvasFont(400, Math.round(size * 0.8));
+    c.fillText("*", cx, cy - size * 1.35);
+    c.font = canvasFont(500, size);
+    c.fillText(text, cx, cy);
+
+    const tw = Math.max(size * 4.2, c.measureText(text).width);
+    return { x: cx - tw / 2 - 12, y: cy - size * 2.1, w: tw + 24, h: size * 3.4 };
   }
 
   private present() {
