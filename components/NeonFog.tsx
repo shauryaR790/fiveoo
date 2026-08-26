@@ -27,9 +27,9 @@ function NeonFogBlobsFooter() {
 function NeonFogBlobsPartners() {
   return (
     <>
-      <div className="absolute bottom-[0%] left-[-14%] h-[88%] w-[52%] rounded-full bg-[var(--color-neon-purple)] opacity-55 blur-[100px] md:blur-[130px]" />
-      <div className="absolute bottom-[-2%] right-[-10%] h-[92%] w-[58%] rounded-full bg-[var(--color-neon-orange)] opacity-50 blur-[105px] md:blur-[140px]" />
-      <div className="absolute bottom-[14%] left-[28%] h-[48%] w-[40%] rounded-full bg-[var(--color-neon-amber)] opacity-35 blur-[75px] md:blur-[90px]" />
+      <div className="absolute bottom-[-32%] left-[-16%] h-[105%] w-[58%] rounded-full bg-[var(--color-neon-purple)] opacity-65 blur-[110px] md:blur-[150px]" />
+      <div className="absolute bottom-[-36%] right-[-12%] h-[110%] w-[64%] rounded-full bg-[var(--color-neon-orange)] opacity-60 blur-[115px] md:blur-[160px]" />
+      <div className="absolute bottom-[-8%] left-[24%] h-[62%] w-[44%] rounded-full bg-[var(--color-neon-amber)] opacity-45 blur-[85px] md:blur-[100px]" />
     </>
   );
 }

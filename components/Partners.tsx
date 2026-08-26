@@ -103,9 +103,9 @@ export default function Partners() {
       data-nav-theme="dark"
       aria-label="Partner logos"
     >
-      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
-        <NeonFog variant="hero" className="!h-full" />
-        <div className="absolute inset-x-0 bottom-0 h-[50%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/35 to-[var(--color-bg)]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[105%]" aria-hidden>
+        <NeonFog variant="partners" />
+        <div className="absolute inset-x-0 bottom-0 h-[32%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/12 to-[var(--color-bg)]" />
       </div>
 
       <div className="relative z-[1] flex flex-col gap-3 md:gap-4">
