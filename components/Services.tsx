@@ -8,7 +8,7 @@ import { SERVICE_GROUPS } from "@/lib/constants";
 import { prefersReducedMotion, isMobileViewport, fadeUp, setNavInvert, setNavPinDrive, refreshScrollTrigger } from "@/lib/animations";
 gsap.registerPlugin(ScrollTrigger);
 
-/** Glyphs in the scroll line — clover sits between OUR and SERVICES. */
+/** Glyphs in the scroll line - clover sits between OUR and SERVICES. */
 const HEADLINE_PARTS = [
   { type: "char" as const, value: "O" },
   { type: "char" as const, value: "U" },

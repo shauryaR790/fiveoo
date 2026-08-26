@@ -235,7 +235,7 @@ export default function Works() {
           <br />
           Works
           <br />
-          (2023–2026)
+          (2023-2026)
         </h2>
 
         <div className="grid grid-cols-3 items-start gap-1.5 pt-10 md:grid-cols-12 md:gap-2.5 md:pt-24 md:gap-y-8">

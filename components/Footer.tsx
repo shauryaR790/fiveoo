@@ -102,7 +102,7 @@ export default function Footer() {
       style={{ fontFamily: "var(--font-card)" }}
     >
       <NeonFog variant="footer" />
-      {/* Soft dissolve at page edge — overlay, not clip, so no hard fog border */}
+      {/* Soft dissolve at page edge - overlay, not clip, so no hard fog border */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[48%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/55 to-[var(--color-bg)]"
         aria-hidden
@@ -122,7 +122,7 @@ export default function Footer() {
 
       <div className="relative flex flex-1 flex-col justify-center px-5 py-16 md:px-10 md:py-20 lg:px-16">
         <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-16 lg:gap-24">
-          {/* Left — slim Habito CTA */}
+          {/* Left - slim Habito CTA */}
           <div data-footer-reveal>
             <p className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.7rem,3vw,2.65rem)] font-light leading-[1.25] tracking-[-0.03em] text-[var(--color-fg)]">
               Choose a plan, send in your request, and your design journey
@@ -141,7 +141,7 @@ export default function Footer() {
             </a>
           </div>
 
-          {/* Right — Habito link columns */}
+          {/* Right - Habito link columns */}
           <div data-footer-reveal>
             <div className="grid grid-cols-3 gap-x-6 md:gap-x-10 lg:gap-x-14">
               {FOOTER_LINK_COLUMNS.map((column, colIndex) => (

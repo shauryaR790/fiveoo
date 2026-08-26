@@ -107,7 +107,7 @@ export default function Pricing() {
           <br className="hidden md:block" />
           <span className="md:hidden"> </span>
           <span className="md:whitespace-nowrap">
-            design team — without the
+            design team, without the
           </span>
           <br className="hidden md:block" />
           <span className="md:hidden"> </span>

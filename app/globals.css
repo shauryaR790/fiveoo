@@ -126,7 +126,7 @@ body::-webkit-scrollbar {
   height: 0;
 }
 
-/* Hide scrollbars everywhere — scrolling still works */
+/* Hide scrollbars everywhere - scrolling still works */
 * {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -298,7 +298,7 @@ html.is-scroll-navigating #main {
   color: #000000;
 }
 
-/* Reusable neon bank — purple → orange bloom */
+/* Reusable neon bank - purple to orange bloom */
 .neon-fog {
   pointer-events: none;
   position: absolute;

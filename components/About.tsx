@@ -82,7 +82,7 @@ export default function About() {
                 About Us
               </p>
               <p className="text-[19px] leading-[1.65] text-[var(--color-fg)]/85 md:text-[21px]">
-                At FIVEO, we&apos;re not just a design team — we&apos;re your
+                At FIVEO, we&apos;re not just a design team. We&apos;re your
                 creative partners. We help brands grow with smart, consistent,
                 and purpose-driven design. From startups to scale-ups, our
                 subscription-based model gives you the flexibility to get
@@ -95,7 +95,7 @@ export default function About() {
                 Our idealist
               </p>
               <p className="text-[19px] leading-[1.65] text-[var(--color-fg)]/85 md:text-[21px]">
-                We believe great design is not just about how it looks — it&apos;s
+                We believe great design is not just about how it looks. It&apos;s
                 about how it works. That&apos;s why we take the time to
                 understand your business, your goals, and your audience,
                 delivering visual systems that are as strategic as they are

@@ -68,7 +68,7 @@ export default function Hero() {
       data-nav-theme="dark"
     >
       <div className="relative z-[1] flex flex-1 flex-col gap-12 lg:flex-row lg:gap-0">
-        {/* Showreel track — the bounded area the box slides within */}
+        {/* Showreel track - the bounded area the box slides within */}
         <div ref={trackRef} className="relative lg:w-[40%] lg:pt-2">
           <div
             ref={slideRef}
@@ -94,7 +94,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Massive headline — left edge aligns with the first nav link */}
+        {/* Massive headline - left edge aligns with the first nav link */}
         <div className="lg:ml-auto lg:w-[41.5%]">
           <h1 className="font-display text-left text-[clamp(2.75rem,7.8vw,7.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.03em]">
             {["We build", "seamless", "identity"].map((line, i) => (

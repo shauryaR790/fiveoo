@@ -13,7 +13,7 @@ export function isMobileViewport(): boolean {
   return window.matchMedia("(max-width: 768px)").matches;
 }
 
-/** Horizontal drift within a bounded track — matches hero showreel behaviour. */
+/** Horizontal drift within a bounded track - matches hero showreel behaviour. */
 export function bindCursorSlideTrack(
   track: HTMLElement,
   slide: HTMLElement,

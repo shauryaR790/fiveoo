@@ -33,7 +33,7 @@ export default function LenisProvider({
       window.removeEventListener("resize", onResize);
       clearTimeout(resizeTimer);
       document.documentElement.classList.remove("lenis", "lenis-smooth");
-      /* Do not kill all ScrollTriggers here — section effects own their own. */
+      /* Do not kill all ScrollTriggers here - section effects own their own. */
       destroyLenis();
     };
   }, []);

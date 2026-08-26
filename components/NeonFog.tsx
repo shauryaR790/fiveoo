@@ -25,7 +25,7 @@ function NeonFogBlobsFooter() {
 }
 
 /**
- * Original Hero fog — soft blobs only.
+ * Original Hero fog - soft blobs only.
  * Never clip with overflow:hidden (that cuts a hard line across the page).
  */
 export default function NeonFog({

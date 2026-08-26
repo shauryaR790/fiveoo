@@ -2,7 +2,7 @@ import { NOMAD_CARDS, NOMAD_TILES } from "./data";
 
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
 
-/** Canvas ignores CSS variables in font strings — resolve from the document. */
+/** Canvas ignores CSS variables in font strings - resolve from the document. */
 function canvasFont(weight: number, sizePx: number) {
   const family =
     typeof document !== "undefined"
@@ -18,7 +18,7 @@ const ROW_GAP = 0.42;
 const TILE_AR = 9 / 16;
 const COL_OFF = [0, 0.3, 0.12, 0.44];
 
-/** Fixed card cells — every other cell in the block is a work tile. */
+/** Fixed card cells - every other cell in the block is a work tile. */
 const CARD_CELLS: Record<string, number> = {
   "2,0": 0,
   "1,1": 1,

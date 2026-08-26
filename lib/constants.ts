@@ -122,7 +122,7 @@ export const WORKS: WorkItem[] = [
   },
 ];
 
-/** Two equal tiles per row — website design showcase below the main gallery. */
+/** Two equal tiles per row - website design showcase below the main gallery. */
 export const WEBSITE_WORKS: WorkItem[] = [
   {
     id: "web1",
@@ -189,17 +189,17 @@ export const BRANDING_FEATURES = [
   {
     id: "02",
     title: "Designed for startups, built to scale",
-    body: "Our branding approach grows with you — from MVP to full-scale launch. With flexible plans and scalable design systems, your brand is never boxed in by early limitations.",
+    body: "Our branding approach grows with you, from MVP to full-scale launch. With flexible plans and scalable design systems, your brand is never boxed in by early limitations.",
   },
   {
     id: "03",
     title: "All-in-one creative partner for your MVP",
-    body: "Logo, UI/UX, motion, and illustration — all done by one unified team. No need to manage multiple freelancers or vendors. You focus on the product, we handle the visuals.",
+    body: "Logo, UI/UX, motion, and illustration, all done by one unified team. No need to manage multiple freelancers or vendors. You focus on the product, we handle the visuals.",
   },
   {
     id: "04",
     title: "Fast turnaround, on your timeline",
-    body: "We understand startup timelines — our Business Plan guarantees execution within a month. Get investor-ready designs and presentation-friendly assets to confidently pitch your MVP.",
+    body: "We understand startup timelines, and our Business Plan guarantees execution within a month. Get investor-ready designs and presentation-friendly assets to confidently pitch your MVP.",
   },
 ] as const;
 
@@ -307,7 +307,7 @@ export const PRICING_PLANS = [
         "Motion Design",
         "Illustration",
         "Landing Page & Development",
-        "1–2 Month Timelines",
+        "1-2 Month Timelines",
         "Unlimited Request",
         "Unlimited Revisions",
         "1 Art Director",
@@ -358,19 +358,19 @@ export const PROCESS_STEPS = [
     number: "01",
     title: "Subscribe Plan",
     description:
-      "Choose a plan that fits your business—whether you need foundational branding or full creative support. Our flexible monthly options are built to help startups grow and scale. Subscribe, and we'll get started within 24 hours.",
+      "Choose a plan that fits your business, whether you need foundational branding or full creative support. Our flexible monthly options are built to help startups grow and scale. Subscribe, and we'll get started within 24 hours.",
   },
   {
     number: "02",
     title: "Submit Unlimited Design Requests",
     description:
-      "Send in as many design tasks as you need—logo, social media, UI/UX, or brand assets. We'll help prioritize based on your goals and timelines. No limits, just clear creative flow.",
+      "Send in as many design tasks as you need: logo, social media, UI/UX, or brand assets. We'll help prioritize based on your goals and timelines. No limits, just clear creative flow.",
   },
   {
     number: "03",
     title: "We Craft, You Review",
     description:
-      "Our team starts working right away, updating you with daily and weekly progress. Each design is shaped with your vision in mind. We revise until it's perfect—no extra cost, no stress.",
+      "Our team starts working right away, updating you with daily and weekly progress. Each design is shaped with your vision in mind. We revise until it's perfect, with no extra cost and no stress.",
   },
   {
     number: "04",
@@ -422,7 +422,7 @@ export const TESTIMONIALS = [
     avatar: "/images/partners/jonathan.avif",
     logo: "/images/partners/melanin-doctor.avif",
     feedback:
-      "Working with FIVEO felt like adding a senior design team overnight — sharp systems, clear communication, and beautiful delivery.",
+      "Working with FIVEO felt like adding a senior design team overnight: sharp systems, clear communication, and beautiful delivery.",
     services: ["Brand Guidelines", "UIUX Design", "Social Media", "Webflow"],
   },
   {
@@ -433,7 +433,7 @@ export const TESTIMONIALS = [
     avatar: "/images/partners/rico.avif",
     logo: "/images/partners/blomer.avif",
     feedback:
-      "They feel like an extension of our team — fast, precise, and obsessively consistent across every touchpoint.",
+      "They feel like an extension of our team: fast, precise, and obsessively consistent across every touchpoint.",
     services: ["Product Design", "Motion Design", "Illustration", "Landing Page"],
   },
   {
@@ -467,7 +467,7 @@ export const PARTNER_LOGOS_BOTTOM = [
   { name: "Bridge", src: "/images/logos/bridge.avif" },
 ] as const;
 
-/** Habito footer link grid — three columns, exact labels */
+/** Habito footer link grid - three columns, exact labels */
 export const FOOTER_LINK_COLUMNS = [
   [
     { label: "Home", href: "#top" },
