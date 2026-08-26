@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { WORKS, WEBSITE_WORKS, type WorkItem } from "@/lib/constants";
 import NomadWorkCanvas from "@/components/NomadWorkCanvas";
+import WorkLightbox from "@/components/WorkLightbox";
 import {
   prefersReducedMotion,
   isMobileViewport,
@@ -17,9 +18,11 @@ gsap.registerPlugin(ScrollTrigger);
 function WorkCard({
   work,
   columns = 3,
+  onImageClick,
 }: {
   work: WorkItem;
   columns?: 2 | 3;
+  onImageClick?: (work: WorkItem) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const colClass = columns === 2 ? "col-span-1 md:col-span-6" : "col-span-1 md:col-span-4";
@@ -83,40 +86,71 @@ function WorkCard({
         className={`theme-card relative overflow-hidden bg-transparent${isVideo ? "" : " will-change-transform"}`}
       >
         {isVideo ? (
-          <video
-            ref={videoRef}
-            src={work.src}
-            poster={work.poster}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-label={work.title}
-            className="block h-auto w-full max-w-none [transform:translateZ(0)]"
-          />
+          work.href ? (
+            <a
+              href={work.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${work.client} website`}
+              className="group/video block cursor-pointer"
+            >
+              <video
+                ref={videoRef}
+                src={work.src}
+                poster={work.poster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                aria-hidden
+                tabIndex={-1}
+                className="block h-auto w-full max-w-none [transform:translateZ(0)]"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover/video:bg-black/25" />
+              <p className="pointer-events-none absolute inset-x-0 bottom-0 p-3 font-display text-base uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover/video:opacity-100 md:p-5 md:text-xl">
+                Visit site →
+              </p>
+            </a>
+          ) : (
+            <video
+              ref={videoRef}
+              src={work.src}
+              poster={work.poster}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-label={work.title}
+              className="block h-auto w-full max-w-none [transform:translateZ(0)]"
+            />
+          )
         ) : (
-          <Image
-            src={work.src}
-            alt={work.title}
-            width={1600}
-            height={2000}
-            unoptimized
-            className="block h-auto w-full max-w-none"
-            sizes={imageSizes}
-          />
-        )}
-        {!isVideo && (
-          <>
+          <button
+            type="button"
+            onClick={() => onImageClick?.(work)}
+            aria-label={`View ${work.title} full size`}
+            className="group/image block w-full cursor-zoom-in text-left"
+          >
+            <Image
+              src={work.src}
+              alt={work.title}
+              width={1600}
+              height={2000}
+              unoptimized
+              className="block h-auto w-full max-w-none"
+              sizes={imageSizes}
+            />
             <div
               data-work-overlay
-              className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover/image:opacity-100"
               aria-hidden
             />
-            <p className="pointer-events-none absolute inset-x-0 bottom-0 p-3 font-display text-base uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:p-5 md:text-xl">
+            <p className="pointer-events-none absolute inset-x-0 bottom-0 p-3 font-display text-base uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover/image:opacity-100 md:p-5 md:text-xl">
               {work.title}
             </p>
-          </>
+          </button>
         )}
       </div>
     </article>
@@ -126,6 +160,7 @@ function WorkCard({
 export default function Works() {
   const rootRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const [lightboxWork, setLightboxWork] = useState<WorkItem | null>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -201,6 +236,8 @@ export default function Works() {
       cards.forEach((card) => {
         const frame = card.querySelector("[data-work-frame]");
         const meta = card.querySelector("[data-work-meta]");
+        const overlay = card.querySelector("[data-work-overlay]");
+        if (!frame || !meta || !overlay) return;
 
         const hover = gsap
           .timeline({
@@ -208,7 +245,7 @@ export default function Works() {
             defaults: { duration: 0.4, ease: "power2.out" },
           })
           .to(frame, { scale: 1.01 }, 0)
-          .to(card.querySelector("[data-work-overlay]"), { opacity: 1 }, 0)
+          .to(overlay, { opacity: 1 }, 0)
           .to(meta, { x: 8 }, 0);
 
         card.addEventListener("mouseenter", () => hover.play());
@@ -218,6 +255,9 @@ export default function Works() {
 
     return () => ctx.revert();
   }, []);
+
+  const openLightbox = (work: WorkItem) => setLightboxWork(work);
+  const closeLightbox = () => setLightboxWork(null);
 
   return (
     <section
@@ -240,7 +280,7 @@ export default function Works() {
 
         <div className="grid grid-cols-3 items-start gap-1.5 pt-10 md:grid-cols-12 md:gap-2.5 md:pt-24 md:gap-y-8">
           {WORKS.map((work) => (
-            <WorkCard key={work.id} work={work} />
+            <WorkCard key={work.id} work={work} onImageClick={openLightbox} />
           ))}
         </div>
       </div>
@@ -254,6 +294,7 @@ export default function Works() {
 
         <NomadWorkCanvas />
       </div>
+      <WorkLightbox work={lightboxWork} onClose={closeLightbox} />
       <div className="h-6 md:h-10" aria-hidden />
     </section>
   );

@@ -33,6 +33,7 @@ export type WorkItem = {
   src: string;
   poster?: string;
   media?: "image" | "video";
+  href?: string;
 };
 
 export const WORKS: WorkItem[] = [
@@ -132,6 +133,7 @@ export const WEBSITE_WORKS: WorkItem[] = [
     media: "video",
     src: "/videos/works/susi-labs.mp4",
     poster: "/images/works/website-01.png",
+    href: "https://susilabs.in/",
   },
   {
     id: "web2",
@@ -141,6 +143,7 @@ export const WEBSITE_WORKS: WorkItem[] = [
     media: "video",
     src: "/videos/works/the-kraken.mp4",
     poster: "/images/works/website-02.png",
+    href: "https://www.thekrakentraining.com/",
   },
   {
     id: "web3",
@@ -150,6 +153,7 @@ export const WEBSITE_WORKS: WorkItem[] = [
     media: "video",
     src: "/videos/works/sakazuki.mp4",
     poster: "/images/works/website-03.png",
+    href: "https://sakazuki.io/",
   },
   {
     id: "web4",
@@ -159,6 +163,7 @@ export const WEBSITE_WORKS: WorkItem[] = [
     media: "video",
     src: "/videos/works/darknode.mp4",
     poster: "/images/works/website-04.png",
+    href: "https://www.darknode.army/en",
   },
   {
     id: "web5",
@@ -168,6 +173,7 @@ export const WEBSITE_WORKS: WorkItem[] = [
     media: "video",
     src: "/videos/works/podium.mp4",
     poster: "/images/works/website-05.png",
+    href: "https://podium.global/",
   },
   {
     id: "web6",
@@ -177,6 +183,7 @@ export const WEBSITE_WORKS: WorkItem[] = [
     media: "video",
     src: "/videos/works/obsidian-assembly.mp4",
     poster: "/images/works/website-06.png",
+    href: "https://obsidianassembly.com/",
   },
 ];
 
