@@ -54,20 +54,20 @@ export default function About() {
       />
 
       <div className="mt-24 px-5 md:mt-32 md:px-8 lg:px-12">
-        <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-8">
+        <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-12 lg:gap-16">
           <div data-about-reveal className="hidden md:block lg:pt-2">
             <div ref={trackRef} className="relative w-full">
               <div
                 ref={slideRef}
                 data-cursor-grow
-                className="w-full max-w-[420px] will-change-transform lg:w-[420px] lg:max-w-none"
+                className="w-full max-w-[560px] will-change-transform lg:w-[560px] lg:max-w-none"
               >
                 <div className="theme-card relative aspect-video w-full overflow-hidden">
                   <Image
                     src="/images/reels.avif"
                     alt="FIVEO showreels"
                     fill
-                    sizes="420px"
+                    sizes="560px"
                     className="object-cover"
                     priority
                   />
@@ -76,10 +76,12 @@ export default function About() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-12 md:gap-14">
             <div data-about-reveal>
-              <p className="mb-5 text-[17px] leading-[1.6]">About Us</p>
-              <p className="text-[17px] leading-[1.6] text-[var(--color-fg)]/85">
+              <p className="mb-6 text-[22px] font-medium leading-[1.4] md:text-[26px]">
+                About Us
+              </p>
+              <p className="text-[19px] leading-[1.65] text-[var(--color-fg)]/85 md:text-[21px]">
                 At FIVEO, we&apos;re not just a design team — we&apos;re your
                 creative partners. We help brands grow with smart, consistent,
                 and purpose-driven design. From startups to scale-ups, our
@@ -89,8 +91,10 @@ export default function About() {
             </div>
 
             <div data-about-reveal>
-              <p className="mb-5 text-[17px] leading-[1.6]">Our idealist</p>
-              <p className="text-[17px] leading-[1.6] text-[var(--color-fg)]/85">
+              <p className="mb-6 text-[22px] font-medium leading-[1.4] md:text-[26px]">
+                Our idealist
+              </p>
+              <p className="text-[19px] leading-[1.65] text-[var(--color-fg)]/85 md:text-[21px]">
                 We believe great design is not just about how it looks — it&apos;s
                 about how it works. That&apos;s why we take the time to
                 understand your business, your goals, and your audience,
