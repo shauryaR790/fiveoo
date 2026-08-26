@@ -15,8 +15,9 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const lastScrollRef = useRef(0);
+  const navVisibleRef = useRef(true);
+  const scrollDeltaRef = useRef(0);
+  const navTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useLayoutEffect(() => {
     const nav = navRef.current;
@@ -79,36 +80,75 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (prefersReducedMotion()) return;
+    const nav = navRef.current;
+    if (!nav || prefersReducedMotion()) return;
 
-    const threshold = 6;
-    const topThreshold = 24;
+    const navHeight =
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--nav-height",
+        ),
+      ) || 88;
+
+    const hideDistance = 72;
+    const showDistance = 28;
+    const topThreshold = 32;
     let rafId = 0;
     let lenisCleanup: (() => void) | undefined;
 
-    const updateVisibility = (scroll: number, direction?: number) => {
+    const animateNav = (visible: boolean) => {
+      if (navVisibleRef.current === visible) return;
+
+      navVisibleRef.current = visible;
+      navTweenRef.current?.kill();
+      navTweenRef.current = gsap.to(nav, {
+        y: visible ? 0 : -navHeight,
+        duration: visible ? 0.65 : 0.5,
+        ease: visible ? "power3.out" : "power2.inOut",
+        overwrite: "auto",
+        onStart: () => {
+          nav.style.pointerEvents = visible ? "" : "none";
+        },
+      });
+    };
+
+    const updateVisibility = (
+      scroll: number,
+      direction = 0,
+      velocity = 0,
+    ) => {
       if (menuOpen) {
-        setHidden(false);
+        scrollDeltaRef.current = 0;
+        animateNav(true);
         return;
       }
 
       if (scroll <= topThreshold) {
-        setHidden(false);
-        lastScrollRef.current = scroll;
+        scrollDeltaRef.current = 0;
+        animateNav(true);
         return;
       }
 
+      const absVelocity = Math.abs(velocity);
+      const travel =
+        absVelocity > 0.08 ? absVelocity * 18 : direction === 0 ? 0 : 12;
+
       if (direction === 1) {
-        setHidden(true);
-      } else if (direction === -1) {
-        setHidden(false);
-      } else {
-        const delta = scroll - lastScrollRef.current;
-        if (delta > threshold) setHidden(true);
-        else if (delta < -threshold) setHidden(false);
+        scrollDeltaRef.current = Math.max(0, scrollDeltaRef.current + travel);
+        if (scrollDeltaRef.current >= hideDistance) {
+          animateNav(false);
+          scrollDeltaRef.current = hideDistance;
+        }
+        return;
       }
 
-      lastScrollRef.current = scroll;
+      if (direction === -1) {
+        scrollDeltaRef.current = Math.min(0, scrollDeltaRef.current - travel);
+        if (scrollDeltaRef.current <= -showDistance) {
+          animateNav(true);
+          scrollDeltaRef.current = -showDistance;
+        }
+      }
     };
 
     const attachLenis = () => {
@@ -121,15 +161,20 @@ export default function Navbar() {
       const onLenisScroll = ({
         scroll,
         direction,
+        velocity,
       }: {
         scroll: number;
         direction: number;
+        velocity: number;
       }) => {
-        updateVisibility(scroll, direction);
+        updateVisibility(scroll, direction, velocity);
       };
 
       lenis.on("scroll", onLenisScroll);
-      updateVisibility(lenis.scroll, 0);
+      gsap.set(nav, { y: 0 });
+      navVisibleRef.current = true;
+      nav.style.pointerEvents = "";
+      updateVisibility(lenis.scroll, 0, 0);
       lenisCleanup = () => lenis.off("scroll", onLenisScroll);
     };
 
@@ -138,6 +183,9 @@ export default function Navbar() {
     return () => {
       cancelAnimationFrame(rafId);
       lenisCleanup?.();
+      navTweenRef.current?.kill();
+      gsap.set(nav, { clearProps: "transform" });
+      nav.style.pointerEvents = "";
     };
   }, [menuOpen]);
 
@@ -157,11 +205,7 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className={`fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-[transform,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
-        hidden && !menuOpen
-          ? "-translate-y-full pointer-events-none"
-          : "translate-y-0"
-      }`}
+      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 will-change-transform"
     >
       <nav
         className="mx-auto flex h-[var(--nav-height)] items-center justify-between px-6 md:px-10 lg:px-12"
