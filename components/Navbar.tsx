@@ -199,7 +199,7 @@ export default function Navbar() {
           className="flex shrink-0 items-center text-[var(--color-fg)]"
           aria-label="FIVEO"
         >
-          <FiveoMark className="h-[42px] translate-y-[6px] md:h-[50px] md:translate-y-[7px]" />
+          <FiveoMark className="h-[42px] translate-y-[2px] md:h-[50px] md:translate-y-[3px]" />
         </a>
 
         <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex md:w-[46%] md:justify-between lg:w-[41.5%]">
@@ -208,7 +208,7 @@ export default function Navbar() {
               <a
                 href={link.href}
                 onClick={(e) => handleNav(e, link.href)}
-                className="block text-[17px] font-semibold tracking-[-0.01em]"
+                className="block text-[30px] font-semibold leading-none tracking-[-0.02em] md:text-[34px]"
               >
                 <Text3DFlip
                   as="span"
@@ -224,12 +224,12 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <Chatbot />
 
           <button
             type="button"
-            className="relative z-50 flex h-10 w-10 items-center justify-center md:hidden"
+            className="relative z-50 flex h-[42px] w-[42px] items-center justify-center md:hidden"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
