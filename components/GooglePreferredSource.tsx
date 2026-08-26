@@ -1,21 +1,13 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const PUBLISHER_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js";
 
 export default function GooglePreferredSource() {
   const hostRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const host = hostRef.current;
-    if (!host || host.querySelector("[google-add-preferred-source-btn]")) return;
-
-    const badge = document.createElement("div");
-    badge.setAttribute("google-add-preferred-source-btn", "");
-    badge.setAttribute("data-theme", "dark");
-    badge.setAttribute("data-lang", "en");
-    host.appendChild(badge);
-  }, []);
+  const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
     const syncTheme = () => {
@@ -37,16 +29,62 @@ export default function GooglePreferredSource() {
       attributeFilter: ["class"],
     });
 
-    return () => observer.disconnect();
+    const timer = window.setTimeout(() => {
+      const badge = hostRef.current?.querySelector(
+        "[google-add-preferred-source-btn]",
+      );
+      const rendered =
+        badge &&
+        (badge.childElementCount > 0 ||
+          (badge.textContent?.trim().length ?? 0) > 0);
+      if (!rendered) setShowFallback(true);
+    }, 3500);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
   }, []);
 
+  const domain =
+    typeof window !== "undefined" ? window.location.hostname : "fiveoo.com";
+  const deeplink = `https://www.google.com/preferences/source?q=${encodeURIComponent(domain)}`;
+
   return (
-    <>
+    <div className="google-preferred-source-wrap">
       <Script
-        src="https://news.google.com/swg/js/v1/publisher.js"
+        src={PUBLISHER_SCRIPT}
         strategy="afterInteractive"
+        onLoad={() => {
+          window.setTimeout(() => {
+            const badge = hostRef.current?.querySelector(
+              "[google-add-preferred-source-btn]",
+            );
+            const rendered =
+              badge &&
+              (badge.childElementCount > 0 ||
+                (badge.textContent?.trim().length ?? 0) > 0);
+            if (!rendered) setShowFallback(true);
+          }, 2000);
+        }}
       />
-      <div ref={hostRef} className="google-preferred-source-host min-h-10" />
-    </>
+      <div ref={hostRef} className="google-preferred-source-host min-h-10">
+        <div
+          google-add-preferred-source-btn=""
+          data-theme="dark"
+          data-lang="en"
+        />
+      </div>
+      {showFallback ? (
+        <a
+          href={deeplink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-[var(--color-fg)]/20 px-4 py-2 text-[13px] text-[var(--color-fg)] transition-opacity hover:opacity-70"
+        >
+          Add FIVEO as a Google Preferred Source
+        </a>
+      ) : null}
+    </div>
   );
 }

@@ -86,7 +86,9 @@ export default function Services() {
         "[data-service-card]",
         stage,
       );
-      gsap.set(cards, { y: 72, opacity: 1 });
+      const cardStartY = () => Math.max(window.innerHeight * 0.52, 480);
+
+      gsap.set(cards, { y: cardStartY, opacity: 1 });
       if (cardsWrap) gsap.set(cardsWrap, { y: 0, opacity: 1 });
 
       const tl = gsap.timeline({
@@ -134,13 +136,13 @@ export default function Services() {
       cards.forEach((card, index) => {
         tl.fromTo(
           card,
-          { y: 72 },
+          { y: cardStartY },
           {
             y: 0,
             ease: "power3.out",
-            duration: 0.12,
+            duration: 0.14,
           },
-          0.46 + index * 0.08,
+          0.44 + index * 0.09,
         );
       });
 
@@ -236,7 +238,7 @@ export default function Services() {
           <h2 className="sr-only">Our Services</h2>
         </div>
 
-        <div className="relative z-[4] flex min-h-[100svh] items-center justify-center px-5 py-[calc(var(--nav-height)+2rem)] md:absolute md:inset-0 md:px-[60px] md:py-0">
+        <div className="relative z-[4] flex min-h-[100svh] items-center justify-center overflow-hidden px-5 py-[calc(var(--nav-height)+2rem)] md:absolute md:inset-0 md:px-[60px] md:py-0">
           <div
             ref={cardsWrapRef}
             className="grid w-full max-w-[1600px] grid-cols-1 gap-[18px] will-change-transform md:grid-cols-3"

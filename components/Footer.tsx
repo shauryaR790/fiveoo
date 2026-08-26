@@ -140,6 +140,9 @@ export default function Footer() {
               Explore Plans
               <span aria-hidden>→</span>
             </a>
+            <div className="mt-10">
+              <GooglePreferredSource />
+            </div>
           </div>
 
           {/* Right - Habito link columns */}
@@ -203,8 +206,6 @@ export default function Footer() {
             </svg>
           </span>
         </a>
-
-        <GooglePreferredSource />
 
         <p className="text-[var(--color-fg)]/55">
           All right reserved by FIVEO Studio, {new Date().getFullYear()}
