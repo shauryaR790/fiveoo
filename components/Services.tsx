@@ -8,7 +8,7 @@ import { SERVICE_GROUPS } from "@/lib/constants";
 import { prefersReducedMotion, isMobileViewport, fadeUp, setNavInvert, setNavPinDrive, refreshScrollTrigger } from "@/lib/animations";
 gsap.registerPlugin(ScrollTrigger);
 
-/** Glyphs in the scroll line - clover sits between OUR and SERVICES. */
+/** Glyphs in the scroll line — clover sits between OUR and SERVICES. */
 const HEADLINE_PARTS = [
   { type: "char" as const, value: "O" },
   { type: "char" as const, value: "U" },
@@ -31,7 +31,6 @@ export default function Services() {
   const stageRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
-  const cardsWrapRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -41,16 +40,16 @@ export default function Services() {
 
     const ctx = gsap.context(() => {
       const letters = gsap.utils.toArray<HTMLElement>("[data-letter]", track);
-      const cardsWrap = cardsWrapRef.current;
+      const cards = gsap.utils.toArray<HTMLElement>(
+        "[data-service-card]",
+        stage,
+      );
       const headline = headlineRef.current;
 
       if (prefersReducedMotion() || isMobileViewport()) {
         gsap.set(letters, { yPercent: 0 });
-        if (cardsWrap) gsap.set(cardsWrap, { y: 0, opacity: 1 });
-        fadeUp(
-          gsap.utils.toArray<HTMLElement>("[data-service-card]", stage),
-          { trigger: stage, stagger: 0.12, y: 40 },
-        );
+        gsap.set(cards, { yPercent: 0, opacity: 1 });
+        fadeUp(cards, { trigger: stage, stagger: 0.12, y: 40 });
         ScrollTrigger.create({
           trigger: stage,
           start: "top top",
@@ -80,7 +79,7 @@ export default function Services() {
         -Math.max(0, track.scrollWidth - window.innerWidth + 48);
 
       gsap.set(letters, { yPercent: 125 });
-      if (cardsWrap) gsap.set(cardsWrap, { y: 0, opacity: 0 });
+      gsap.set(cards, { yPercent: 118 });
       if (headline) gsap.set(headline, { opacity: 1, y: 0 });
 
       const tl = gsap.timeline({
@@ -124,12 +123,12 @@ export default function Services() {
           0.14,
         )
         .to(
-          cardsWrap,
+          cards,
           {
-            y: 0,
-            opacity: 1,
+            yPercent: 0,
             ease: "power3.out",
             duration: 0.28,
+            stagger: 0.1,
           },
           0.48,
         );
@@ -147,8 +146,6 @@ export default function Services() {
         );
       }
     }, root);
-
-    requestAnimationFrame(() => refreshScrollTrigger());
 
     return () => ctx.revert();
   }, []);
@@ -224,11 +221,8 @@ export default function Services() {
           <h2 className="sr-only">Our Services</h2>
         </div>
 
-        <div className="relative z-[4] flex min-h-[100svh] items-center justify-center px-5 py-[calc(var(--nav-height)+2rem)] md:absolute md:inset-0 md:px-[60px] md:py-0">
-          <div
-            ref={cardsWrapRef}
-            className="grid w-full max-w-[1600px] grid-cols-1 gap-[18px] will-change-transform md:grid-cols-3"
-          >
+        <div className="relative z-[4] px-5 pb-10 pt-16 md:absolute md:inset-0 md:flex md:translate-y-[15px] md:items-center md:px-[60px] md:pb-0 md:pt-0">
+          <div className="grid w-full grid-cols-1 gap-[18px] md:grid-cols-3">
             {SERVICE_GROUPS.map((group) => (
               <div
                 key={group.id}
