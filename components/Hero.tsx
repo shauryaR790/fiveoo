@@ -57,7 +57,7 @@ export default function Hero() {
     const slide = slideRef.current;
     if (!track || !slide) return;
 
-    return bindCursorSlideTrack(track, slide);
+    return bindCursorSlideTrack(track, slide, { restRatio: 0 });
   }, []);
 
   return (
@@ -73,7 +73,7 @@ export default function Hero() {
           <div
             ref={slideRef}
             data-cursor-grow
-            className="w-full max-w-[420px] will-change-transform lg:w-[420px] lg:max-w-none"
+            className="mr-auto w-full max-w-[420px] will-change-transform lg:w-[420px] lg:max-w-none"
           >
             <div
               ref={mediaRef}
