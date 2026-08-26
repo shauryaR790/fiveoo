@@ -278,19 +278,23 @@ html.is-scroll-navigating #main {
 }
 
 .price-choose-btn {
-  background: #ffffff;
-  background-image: none;
+  color-scheme: light;
+  background: #ffffff !important;
+  background-image: none !important;
   color: #000000;
   border: 0;
-  box-shadow: none;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  text-shadow: none;
   font-weight: 700;
   -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
 }
 
 .price-choose-btn:hover {
-  background: var(--color-neon-orange);
-  background-image: none;
+  background: var(--color-neon-orange) !important;
+  background-image: none !important;
   color: #000000;
 }
 
