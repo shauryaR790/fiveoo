@@ -8,7 +8,7 @@ import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
 import { Text3DFlip } from "@/components/ui/text-3d-flip";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import Chatbot from "@/components/Chatbot";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -223,7 +223,7 @@ export default function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3">
-          <AnimatedThemeToggler className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-fg)]/20 text-[var(--color-fg)] transition-colors hover:border-[var(--color-fg)]/40" />
+          <Chatbot />
 
           <button
             type="button"
