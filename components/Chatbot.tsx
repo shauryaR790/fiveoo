@@ -140,8 +140,8 @@ export default function Chatbot() {
                 open ? "translate-x-0" : "translate-x-full"
               }`}
             >
-              <div className="flex shrink-0 items-center justify-between border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] px-5 py-4">
-                <FiveoMark className="h-7 md:h-8" />
+              <div className="flex shrink-0 items-center justify-between border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] py-4 pl-3 pr-5 md:pl-4">
+                <FiveoMark className="-ml-1 h-10 md:-ml-2 md:h-11" />
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
