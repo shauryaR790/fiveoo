@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import FiveoMark from "@/components/FiveoMark";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -11,8 +12,7 @@ type ChatMessage = {
 
 const INITIAL_MESSAGE: ChatMessage = {
   role: "assistant",
-  content:
-    "Hey, I am the FIVEO assistant. Ask me about services, pricing, or how to get started.",
+  content: "Hey, I am the FIVEO assistant.",
 };
 
 function BotAvatar({ size = "md" }: { size?: "sm" | "md" }) {
@@ -140,16 +140,8 @@ export default function Chatbot() {
                 open ? "translate-x-0" : "translate-x-full"
               }`}
             >
-              <div className="flex shrink-0 items-center gap-3 border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] px-5 py-4">
-                <BotAvatar />
-                <div className="min-w-0 flex-1">
-                  <p className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-                    FIVEO Assistant
-                  </p>
-                  <p className="text-[12px] text-[var(--color-fg)]/55">
-                    Ask about services and pricing
-                  </p>
-                </div>
+              <div className="flex shrink-0 items-center justify-between border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] px-5 py-4">
+                <FiveoMark className="h-7 md:h-8" />
                 <button
                   type="button"
                   onClick={() => setOpen(false)}

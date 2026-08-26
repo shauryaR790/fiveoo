@@ -9,6 +9,7 @@ import { getLenis } from "@/lib/lenis";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
 import { Text3DFlip } from "@/components/ui/text-3d-flip";
 import Chatbot from "@/components/Chatbot";
+import FiveoMark from "@/components/FiveoMark";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -195,9 +196,10 @@ export default function Navbar() {
         <a
           href="#top"
           onClick={(e) => handleNav(e, "#top")}
-          className="text-[26px] font-bold leading-none tracking-[-0.02em] md:text-[30px]"
+          className="block text-[var(--color-fg)]"
+          aria-label="FIVEO"
         >
-          FIVEO
+          <FiveoMark />
         </a>
 
         <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex md:w-[46%] md:justify-between lg:w-[41.5%]">

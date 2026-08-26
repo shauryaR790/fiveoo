@@ -49,6 +49,7 @@ function placeStar(
 }
 
 export async function initMark(svg: SVGSVGElement, ink = "#ffffff") {
+  const color = ink === "currentColor" ? "currentColor" : ink;
   try {
     await document.fonts.load("700 58px Georgia");
   } catch {
@@ -70,7 +71,7 @@ export async function initMark(svg: SVGSVGElement, ink = "#ffffff") {
   text.setAttribute("font-weight", "700");
   text.setAttribute("font-style", "italic");
   text.setAttribute("font-family", 'Georgia, "Times New Roman", Times, serif');
-  text.setAttribute("fill", ink);
+  text.setAttribute("fill", color);
 
   const tF = document.createElementNS(SVG, "tspan");
   tF.textContent = "f";
@@ -92,7 +93,7 @@ export async function initMark(svg: SVGSVGElement, ink = "#ffffff") {
   const oW = ctx.measureText("o").width;
   const dock = { x: oLeft + oW * 0.88 + 8, y: bb.y + 12, rot: 16 };
 
-  buildStar(starG, ink);
+  buildStar(starG, color);
   placeStar(starG, dock.x, dock.y, dock.rot, 0);
 
   (svg as SVGSVGElement & { _markState?: MarkState })._markState = {
@@ -102,6 +103,26 @@ export async function initMark(svg: SVGSVGElement, ink = "#ffffff") {
     dock,
     bb,
   };
+}
+
+export function setMarkFinal(svg: SVGSVGElement) {
+  const state = (svg as SVGSVGElement & { _markState?: MarkState })._markState;
+  if (!state) return;
+
+  const { wordG, maskRect, starG, dock, bb } = state;
+
+  wordG.style.opacity = "1";
+  wordG.style.filter = "none";
+
+  if (maskRect) {
+    maskRect.setAttribute("x", String(bb.x - 20));
+    maskRect.setAttribute("y", String(bb.y - 20));
+    maskRect.setAttribute("height", String(bb.height + 40));
+    maskRect.setAttribute("width", String(bb.width + 40));
+  }
+
+  placeStar(starG, dock.x, dock.y, dock.rot, 1);
+  starG.style.opacity = "1";
 }
 
 export function playMark(
