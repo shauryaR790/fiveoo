@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import { initMark, setMarkFinal } from "@/lib/nomad/mark";
+import { cropMarkViewBox, initMark, setMarkFinal } from "@/lib/nomad/mark";
 import { cn } from "@/lib/utils";
 
 type FiveoMarkProps = {
@@ -25,6 +25,7 @@ export default function FiveoMark({
     void initMark(svg, ink).then(() => {
       if (cancelled) return;
       setMarkFinal(svg);
+      cropMarkViewBox(svg);
     });
 
     return () => {

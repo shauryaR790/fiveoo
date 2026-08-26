@@ -125,6 +125,23 @@ export function setMarkFinal(svg: SVGSVGElement) {
   starG.style.opacity = "1";
 }
 
+export function cropMarkViewBox(svg: SVGSVGElement, padding = 2) {
+  const state = (svg as SVGSVGElement & { _markState?: MarkState })._markState;
+  if (!state) return;
+
+  const { bb, dock } = state;
+  const starPad = 14;
+  const minX = bb.x - padding;
+  const minY = bb.y - starPad - padding;
+  const maxX = Math.max(bb.x + bb.width, dock.x + starPad) + padding;
+  const maxY = bb.y + bb.height + padding;
+
+  svg.setAttribute(
+    "viewBox",
+    `${minX} ${minY} ${maxX - minX} ${maxY - minY}`,
+  );
+}
+
 export function playMark(
   svg: SVGSVGElement,
   { reduced = false }: { reduced?: boolean } = {},

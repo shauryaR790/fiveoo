@@ -141,7 +141,7 @@ export default function Chatbot() {
               }`}
             >
               <div className="flex shrink-0 items-center justify-between border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] py-4 pl-1 pr-5 md:pl-2">
-                <FiveoMark className="-ml-2 h-10 md:-ml-4 md:h-11" />
+                <FiveoMark className="h-10 md:h-11" />
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
