@@ -99,7 +99,7 @@ export default function Partners() {
   return (
     <section
       id="clients"
-      className="theme-surface relative overflow-x-clip bg-[var(--color-bg)] pb-16 pt-2 md:pb-24 md:pt-3"
+      className="theme-surface relative overflow-hidden bg-[var(--color-bg)] pb-8 pt-2 md:pb-10 md:pt-3"
       data-nav-theme="dark"
       aria-label="Partner logos"
     >
