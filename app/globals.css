@@ -428,14 +428,15 @@ html:not(.dark) .service-card-solid {
 
 .google-preferred-source-wrap {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  align-items: flex-start;
 }
 
 .google-preferred-source-host {
   display: flex;
   align-items: center;
   min-height: 2.5rem;
+  overflow: hidden;
+  border-radius: 9999px;
 }
 
 .theme-card {
