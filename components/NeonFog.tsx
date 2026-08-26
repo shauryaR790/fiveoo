@@ -14,6 +14,16 @@ function NeonFogBlobs() {
   );
 }
 
+function NeonFogBlobsLoader() {
+  return (
+    <>
+      <div className="absolute bottom-[-28%] left-[-18%] h-[105%] w-[58%] rounded-full bg-[var(--color-neon-purple)] opacity-38 blur-[120px] md:blur-[165px]" />
+      <div className="absolute bottom-[-32%] right-[-14%] h-[110%] w-[62%] rounded-full bg-[var(--color-neon-orange)] opacity-34 blur-[130px] md:blur-[175px]" />
+      <div className="absolute bottom-[-6%] left-[28%] h-[58%] w-[42%] rounded-full bg-[var(--color-neon-amber)] opacity-22 blur-[100px] md:blur-[125px]" />
+    </>
+  );
+}
+
 function NeonFogBlobsFooter() {
   return (
     <>
@@ -45,10 +55,10 @@ export default function NeonFog({
   if (variant === "loader") {
     return (
       <div
-        className={`pointer-events-none absolute inset-x-0 bottom-[-10%] z-0 h-[46%] ${className}`}
+        className={`pointer-events-none absolute inset-x-0 bottom-[-8%] z-0 h-[58%] [mask-image:linear-gradient(to_top,black_32%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_top,black_32%,transparent_100%)] ${className}`}
         aria-hidden
       >
-        <NeonFogBlobs />
+        <NeonFogBlobsLoader />
       </div>
     );
   }

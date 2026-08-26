@@ -51,7 +51,7 @@ export default function SiteLoader() {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] grid place-items-center overflow-hidden bg-black transition-opacity duration-[620ms] ease-out ${
+      className={`fixed inset-0 z-[9999] grid place-items-center bg-black transition-opacity duration-[620ms] ease-out ${
         fading ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
       aria-hidden={fading}

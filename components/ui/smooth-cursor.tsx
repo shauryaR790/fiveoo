@@ -180,19 +180,12 @@ export function SmoothCursor({
   const lastMousePos = useRef<Position>({ x: 0, y: 0 });
   const velocity = useRef<Position>({ x: 0, y: 0 });
   const lastUpdateTime = useRef(Date.now());
-  const previousAngle = useRef(0);
-  const accumulatedRotation = useRef(0);
   const [isEnabled, setIsEnabled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   const cursorX = useSpring(0, springConfig);
   const cursorY = useSpring(0, springConfig);
   const cursorTheme = useSpring(0, COLOR_SPRING);
-  const rotation = useSpring(0, {
-    ...springConfig,
-    damping: 60,
-    stiffness: 300,
-  });
   const scale = useSpring(1, {
     ...springConfig,
     stiffness: 500,
@@ -261,17 +254,6 @@ export function SmoothCursor({
       cursorY.set(currentPos.y);
 
       if (speed > 0.1) {
-        const currentAngle =
-          Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI) +
-          90;
-
-        let angleDiff = currentAngle - previousAngle.current;
-        if (angleDiff > 180) angleDiff -= 360;
-        if (angleDiff < -180) angleDiff += 360;
-        accumulatedRotation.current += angleDiff;
-        rotation.set(accumulatedRotation.current);
-        previousAngle.current = currentAngle;
-
         scale.set(0.95);
 
         if (timeout !== null) {
@@ -311,7 +293,7 @@ export function SmoothCursor({
         clearTimeout(timeout);
       }
     };
-  }, [cursorX, cursorY, cursorTheme, rotation, scale, isEnabled]);
+  }, [cursorX, cursorY, cursorTheme, scale, isEnabled]);
 
   if (!isEnabled) {
     return null;
@@ -327,7 +309,6 @@ export function SmoothCursor({
         top: cursorY,
         translateX: "-50%",
         translateY: "-50%",
-        rotate: rotation,
         scale: scale,
         zIndex: 10001,
         pointerEvents: "none",
