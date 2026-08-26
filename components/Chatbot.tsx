@@ -228,30 +228,30 @@ export default function Chatbot() {
     mounted
       ? createPortal(
           <div
-            className={`fixed inset-0 z-[200] flex ${
-              open ? "pointer-events-auto" : "pointer-events-none"
+            className={`fixed inset-0 z-[200] ${
+              open
+                ? backdropBlur
+                  ? "pointer-events-auto"
+                  : "pointer-events-none"
+                : "pointer-events-none"
             }`}
             aria-hidden={!open}
           >
-            <button
-              type="button"
-              aria-label="Close chat"
-              onClick={() => {
-                if (backdropBlur) setOpen(false);
-              }}
-              tabIndex={open ? 0 : -1}
-              className={`min-w-0 flex-1 transition-[opacity,backdrop-filter,background-color] duration-500 ${
-                open ? "opacity-100" : "opacity-0"
-              } ${
-                backdropBlur
-                  ? "pointer-events-auto bg-black/40 backdrop-blur-xl backdrop-saturate-150"
-                  : "pointer-events-none bg-transparent"
+            <div
+              aria-hidden
+              className={`absolute inset-0 transition-[background-color,backdrop-filter,opacity] duration-500 ${
+                open && backdropBlur
+                  ? "bg-black/40 opacity-100 backdrop-blur-xl backdrop-saturate-150"
+                  : "bg-transparent opacity-0 backdrop-blur-none"
               }`}
             />
 
             <button
               type="button"
-              onClick={() => setBackdropBlur((value) => !value)}
+              onClick={(event) => {
+                event.stopPropagation();
+                setBackdropBlur((value) => !value);
+              }}
               aria-label={backdropBlur ? "Hide background blur" : "Show background blur"}
               aria-pressed={backdropBlur}
               tabIndex={open ? 0 : -1}
@@ -290,8 +290,10 @@ export default function Chatbot() {
 
             <aside
               id="fiveo-chatbot-panel"
-              className={`flex h-dvh w-[min(100%,420px)] shrink-0 flex-col border-l border-[color-mix(in_srgb,var(--color-fg)_14%,transparent)] bg-[var(--color-bg)] shadow-[-24px_0_80px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                open ? "translate-x-0" : "translate-x-full"
+              className={`fixed right-0 top-0 flex h-dvh w-[min(100%,420px)] flex-col border-l border-[color-mix(in_srgb,var(--color-fg)_14%,transparent)] bg-[var(--color-bg)] shadow-[-24px_0_80px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                open
+                  ? "pointer-events-auto translate-x-0"
+                  : "pointer-events-none translate-x-full"
               }`}
             >
               <div className="flex shrink-0 items-center justify-between border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] py-4 pl-1 pr-5 md:pl-2">
@@ -391,7 +393,10 @@ export default function Chatbot() {
         aria-expanded={open}
         aria-controls="fiveo-chatbot-panel"
         aria-label={open ? "Close chat" : "Open chat"}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          if (open && !backdropBlur) return;
+          setOpen((value) => !value);
+        }}
         className="relative z-50 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-[11px] border border-[color-mix(in_srgb,var(--color-fg)_22%,transparent)] bg-[var(--color-bg)] p-0.5 transition-[border-color,transform] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_38%,transparent)] hover:scale-[1.03]"
       >
         <Image
