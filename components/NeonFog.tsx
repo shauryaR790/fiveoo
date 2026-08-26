@@ -1,7 +1,7 @@
 type NeonFogProps = {
   className?: string;
-  /** hero = lower bank only. continuous = Hero → About. partners = logo → heading handoff. footer = soft bottom glow. */
-  variant?: "hero" | "continuous" | "footer" | "partners";
+  /** hero = lower bank only. loader = hero fog shifted down for intro. continuous = Hero → About. partners = logo → heading handoff. footer = soft bottom glow. */
+  variant?: "hero" | "loader" | "continuous" | "footer" | "partners";
 };
 
 function NeonFogBlobs() {
@@ -42,6 +42,17 @@ export default function NeonFog({
   className = "",
   variant = "hero",
 }: NeonFogProps) {
+  if (variant === "loader") {
+    return (
+      <div
+        className={`pointer-events-none absolute inset-x-0 bottom-[-10%] z-0 h-[46%] ${className}`}
+        aria-hidden
+      >
+        <NeonFogBlobs />
+      </div>
+    );
+  }
+
   if (variant === "continuous") {
     return (
       <div

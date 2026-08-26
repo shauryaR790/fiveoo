@@ -56,7 +56,7 @@ export default function SiteLoader() {
       }`}
       aria-hidden={fading}
     >
-      <NeonFog variant="hero" />
+      <NeonFog variant="loader" />
 
       <svg
         ref={svgRef}
