@@ -86,7 +86,7 @@ export default function Services() {
         "[data-service-card]",
         stage,
       );
-      gsap.set(cards, { y: 72, opacity: 0 });
+      gsap.set(cards, { y: 72, opacity: 1 });
       if (cardsWrap) gsap.set(cardsWrap, { y: 0, opacity: 1 });
 
       const tl = gsap.timeline({
@@ -134,10 +134,9 @@ export default function Services() {
       cards.forEach((card, index) => {
         tl.fromTo(
           card,
-          { y: 72, opacity: 0 },
+          { y: 72 },
           {
             y: 0,
-            opacity: 1,
             ease: "power3.out",
             duration: 0.12,
           },
@@ -246,7 +245,7 @@ export default function Services() {
               <div
                 key={group.id}
                 data-service-card
-                className="theme-card flex min-h-[70vh] flex-col rounded-none p-10 text-[var(--color-fg)] will-change-transform md:h-[760px] md:min-h-0 md:w-full"
+                className="service-card-solid theme-card flex min-h-[70vh] flex-col rounded-none p-10 text-[var(--color-fg)] will-change-transform md:h-[760px] md:min-h-0 md:w-full"
                 style={{ fontFamily: "var(--font-card)" }}
               >
                 <h3 className="font-editorial mb-10 max-w-[360px] whitespace-pre-line text-[2rem] leading-[1.12] md:mb-[56px] md:text-[44px]">

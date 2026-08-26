@@ -416,6 +416,21 @@ html:not(.dark) .theme-surface {
   color: var(--color-fg);
 }
 
+.service-card-solid {
+  background: var(--color-surface-muted);
+  opacity: 1;
+  backface-visibility: hidden;
+}
+
+html:not(.dark) .service-card-solid {
+  background: var(--color-bg);
+}
+
+.google-preferred-source-host {
+  display: flex;
+  align-items: center;
+}
+
 .theme-card {
   border: 1px solid color-mix(in srgb, var(--color-fg) 14%, transparent);
   background: var(--color-surface-muted);

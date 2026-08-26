@@ -12,6 +12,7 @@ import {
 import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import NeonFog from "@/components/NeonFog";
+import GooglePreferredSource from "@/components/GooglePreferredSource";
 
 function BrandUnit() {
   return (
@@ -202,6 +203,8 @@ export default function Footer() {
             </svg>
           </span>
         </a>
+
+        <GooglePreferredSource />
 
         <p className="text-[var(--color-fg)]/55">
           All right reserved by FIVEO Studio, {new Date().getFullYear()}
