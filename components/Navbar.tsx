@@ -199,7 +199,7 @@ export default function Navbar() {
           className="block text-[var(--color-fg)]"
           aria-label="FIVEO"
         >
-          <FiveoMark />
+          <FiveoMark className="h-[42px] md:h-[50px]" />
         </a>
 
         <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex md:w-[46%] md:justify-between lg:w-[41.5%]">
