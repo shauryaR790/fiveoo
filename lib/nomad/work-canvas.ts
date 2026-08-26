@@ -321,7 +321,7 @@ export class WorkCanvas {
     const dpr = this.dpr;
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     c.clearRect(0, 0, this.w, this.h);
-    c.fillStyle = "#ffffff";
+    c.fillStyle = "#000000";
     c.fillRect(0, 0, this.w, this.h);
 
     const need = new Array(this.videos.length).fill(false);
@@ -388,7 +388,7 @@ export class WorkCanvas {
       }
       c.drawImage(v, sx, sy, sw, sh, x, y, w, h);
     } else {
-      c.fillStyle = "#f2f1f4";
+      c.fillStyle = "#1a1a1a";
       c.fillRect(x, y, w, h);
     }
   }
@@ -396,19 +396,20 @@ export class WorkCanvas {
   private paintCard(c: CanvasRenderingContext2D, text: string, x: number, y: number) {
     const w = this.tileW;
     const h = this.tileH;
-    const size = Math.round(clamp(this.tileW * 0.115, 17, 34));
-    c.fillStyle = "#111014";
+    const size = Math.round(clamp(this.tileW * 0.2, 36, 72));
+    c.fillStyle = "#ffffff";
     c.textAlign = "center";
     c.textBaseline = "middle";
     c.font = `500 ${size}px var(--font-inter), -apple-system, Helvetica, Arial, sans-serif`;
     const cx = x + w / 2;
     const cy = y + h / 2;
-    c.fillText(text, cx, cy);
-    c.font = `400 ${Math.round(size * 0.8)}px var(--font-inter), Helvetica, Arial, sans-serif`;
-    c.fillText("*", cx, cy - size * 1.35);
+    c.font = `400 ${Math.round(size * 1.1)}px var(--font-inter), Helvetica, Arial, sans-serif`;
+    c.fillText("*", cx, cy - size * 1.45);
+    c.font = `500 ${size}px var(--font-inter), -apple-system, Helvetica, Arial, sans-serif`;
+    c.fillText(text, cx, cy + size * 0.15);
 
-    const tw = Math.max(size * 4.2, c.measureText(text).width);
-    return { x: cx - tw / 2 - 12, y: cy - size * 2.1, w: tw + 24, h: size * 3.4 };
+    const tw = Math.max(size * 5, c.measureText(text).width);
+    return { x: cx - tw / 2 - 20, y: cy - size * 2.4, w: tw + 40, h: size * 4.2 };
   }
 
   private present() {

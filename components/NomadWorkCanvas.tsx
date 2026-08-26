@@ -63,7 +63,7 @@ export default function NomadWorkCanvas() {
   return (
     <div
       ref={containerRef}
-      className="relative mt-8 h-[100svh] w-full bg-white md:mt-12"
+      className="relative mt-8 h-[100svh] w-full bg-black md:mt-12"
       aria-label="Drag to explore selected work films"
     >
       <canvas
@@ -71,7 +71,7 @@ export default function NomadWorkCanvas() {
         className="nomad-work-canvas absolute inset-0 block h-full w-full touch-none"
       />
       <p
-        className={`pointer-events-none absolute bottom-[clamp(18px,3.4vh,34px)] left-1/2 m-0 -translate-x-1/2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#5d5b63] transition-opacity duration-700 ${
+        className={`pointer-events-none absolute bottom-[clamp(18px,3.4vh,34px)] left-1/2 m-0 -translate-x-1/2 text-[11px] font-medium uppercase tracking-[0.16em] text-white/60 transition-opacity duration-700 ${
           hintVisible ? "opacity-75" : "opacity-0"
         }`}
       >
