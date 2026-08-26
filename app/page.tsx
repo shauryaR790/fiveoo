@@ -5,7 +5,8 @@ import Branding from "@/components/Branding";
 import Services from "@/components/Services";
 import Pricing from "@/components/Pricing";
 import Process from "@/components/Process";
-import PartnersTestimonialsBand from "@/components/PartnersTestimonialsBand";
+import Partners from "@/components/Partners";
+import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -18,7 +19,8 @@ export default function Home() {
       <Services />
       <Pricing />
       <Process />
-      <PartnersTestimonialsBand />
+      <Partners />
+      <Testimonials />
       <Footer />
     </main>
   );

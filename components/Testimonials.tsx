@@ -29,7 +29,7 @@ export default function Testimonials() {
     <section
       id="partners"
       ref={rootRef}
-      className="relative overflow-x-clip px-5 pb-10 pt-10 md:px-10 md:pb-12 md:pt-14 lg:px-16"
+      className="theme-surface relative overflow-x-clip px-5 pb-10 pt-20 md:px-10 md:pb-12 md:pt-28 lg:px-16"
       data-nav-theme="dark"
       aria-label="Our partners"
       style={{ fontFamily: "var(--font-card)" }}
