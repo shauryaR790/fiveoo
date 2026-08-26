@@ -190,19 +190,19 @@ export default function Navbar() {
       className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 will-change-transform"
     >
       <nav
-        className="relative mx-auto grid h-[var(--nav-height)] grid-cols-[1fr_auto] items-center px-6 md:px-10 lg:grid-cols-[40%_41.5%_minmax(0,1fr)] lg:px-12"
+        className="relative mx-auto flex h-[var(--nav-height)] items-center justify-between px-6 md:px-10 lg:px-12"
         aria-label="Primary"
       >
         <a
           href="#top"
           onClick={(e) => handleNav(e, "#top")}
-          className="z-10 block text-[var(--color-fg)] lg:col-start-1 lg:row-start-1"
+          className="relative z-10 block text-[var(--color-fg)]"
           aria-label="FIVEO"
         >
           <FiveoMark />
         </a>
 
-        <ul className="absolute left-0 hidden items-center gap-5 md:flex lg:static lg:col-start-2 lg:row-start-1 lg:gap-6">
+        <ul className="nav-links">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <a
@@ -224,7 +224,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="col-start-2 flex items-center justify-self-end gap-3 lg:col-start-3 lg:row-start-1">
+        <div className="relative z-10 flex items-center gap-3">
           <Chatbot />
 
           <button

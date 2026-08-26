@@ -268,6 +268,28 @@ html.is-scroll-navigating #main {
   white-space: normal;
 }
 
+/* Nav links align with hero right column (40% + gap + 41.5% ml-auto layout) */
+.nav-links {
+  position: absolute;
+  left: 0;
+  display: none;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-links {
+    left: calc(3rem + (100% - 6rem) * 0.585);
+    gap: 1.25rem;
+  }
+}
+
 /* Dark-first: default nav is white; invert = black for rare light panels */
 .nav-invert {
   color: var(--color-fg-inverse);
