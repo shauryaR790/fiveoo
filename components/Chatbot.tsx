@@ -138,6 +138,7 @@ export default function Chatbot() {
   const [typingMessageIndex, setTypingMessageIndex] = useState<number | null>(
     null,
   );
+  const [backdropBlur, setBackdropBlur] = useState(true);
   const messagesRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -151,20 +152,23 @@ export default function Chatbot() {
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setBackdropBlur(true);
+      return;
+    }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
 
     document.addEventListener("keydown", onKeyDown);
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = backdropBlur ? "hidden" : "";
 
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = "";
     };
-  }, [open]);
+  }, [open, backdropBlur]);
 
   useEffect(() => {
     scrollToBottom();
@@ -232,12 +236,57 @@ export default function Chatbot() {
             <button
               type="button"
               aria-label="Close chat"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                if (backdropBlur) setOpen(false);
+              }}
               tabIndex={open ? 0 : -1}
-              className={`min-w-0 flex-1 bg-black/40 backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-500 ${
+              className={`min-w-0 flex-1 transition-[opacity,backdrop-filter,background-color] duration-500 ${
                 open ? "opacity-100" : "opacity-0"
+              } ${
+                backdropBlur
+                  ? "pointer-events-auto bg-black/40 backdrop-blur-xl backdrop-saturate-150"
+                  : "pointer-events-none bg-transparent"
               }`}
             />
+
+            <button
+              type="button"
+              onClick={() => setBackdropBlur((value) => !value)}
+              aria-label={backdropBlur ? "Hide background blur" : "Show background blur"}
+              aria-pressed={backdropBlur}
+              tabIndex={open ? 0 : -1}
+              className={`fixed left-5 top-1/2 z-[201] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_20%,transparent)] bg-[var(--color-bg)]/90 text-[var(--color-fg)] shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-md transition-[opacity,transform,border-color] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_34%,transparent)] hover:scale-[1.03] md:left-8 ${
+                open
+                  ? "pointer-events-auto translate-x-0 opacity-100"
+                  : "pointer-events-none -translate-x-2 opacity-0"
+              }`}
+            >
+              {backdropBlur ? (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+                  <path
+                    d="M1.5 9s2.8-5.25 7.5-5.25S16.5 9 16.5 9s-2.8 5.25-7.5 5.25S1.5 9 1.5 9Z"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                  />
+                  <circle cx="9" cy="9" r="2.2" stroke="currentColor" strokeWidth="1.4" />
+                  <path
+                    d="M3 15L15 3"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+                  <path
+                    d="M1.5 9s2.8-5.25 7.5-5.25S16.5 9 16.5 9s-2.8 5.25-7.5 5.25S1.5 9 1.5 9Z"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                  />
+                  <circle cx="9" cy="9" r="2.2" stroke="currentColor" strokeWidth="1.4" />
+                </svg>
+              )}
+            </button>
 
             <aside
               id="fiveo-chatbot-panel"
