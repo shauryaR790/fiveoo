@@ -12,7 +12,7 @@ type Logo = { name: string; src: string };
 
 function LogoTile({ logo }: { logo: Logo }) {
   return (
-    <div className="partner-logo-tile mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
+    <div className="partner-logo-tile flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center px-3 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
       <div className="relative h-[96%] w-[96%]">
         <Image
           src={logo.src}
@@ -99,24 +99,24 @@ export default function Partners() {
   return (
     <section
       id="clients"
-      className="relative overflow-visible bg-[var(--color-bg)] px-3 pt-2 md:px-4 md:pt-3"
+      className="relative overflow-visible bg-[var(--color-bg)] pt-2 md:pt-3"
       data-nav-theme="dark"
       aria-label="Partner logos"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[calc(100%+7rem)] md:h-[calc(100%+9rem)]"
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[calc(100%+8rem)] md:h-[calc(100%+10rem)]"
         aria-hidden
       >
         <NeonFog variant="partners" />
       </div>
 
-      <div className="relative z-[1] flex flex-col gap-3 md:gap-4">
+      <div className="relative z-[1] flex flex-col">
         <LogoRow logos={PARTNER_LOGOS_TOP} reversed duration={36} />
         <LogoRow logos={PARTNER_LOGOS_BOTTOM} reversed={false} duration={40} />
       </div>
 
       <div
-        className="pointer-events-none relative z-[1] h-28 bg-gradient-to-b from-transparent to-[var(--color-bg)] md:h-36"
+        className="pointer-events-none relative z-[1] h-32 bg-gradient-to-b from-transparent via-[var(--color-bg)]/70 to-[var(--color-bg)] md:h-40"
         aria-hidden
       />
     </section>

@@ -73,7 +73,7 @@ export default function NeonFog({
         aria-hidden
       >
         <NeonFogBlobsPartners />
-        <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/45 to-[var(--color-bg)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/30 to-[var(--color-bg)]" />
       </div>
     );
   }
