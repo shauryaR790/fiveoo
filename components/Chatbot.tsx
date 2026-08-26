@@ -15,6 +15,14 @@ const INITIAL_MESSAGE: ChatMessage = {
   content: "Hey, I am the FIVEO assistant.",
 };
 
+const THINKING_PHRASES = [
+  "Thinking...",
+  "Looking that up...",
+  "One moment...",
+  "Pulling details...",
+  "Almost there...",
+];
+
 function BotAvatar({ size = "md" }: { size?: "sm" | "md" }) {
   const dimension = size === "sm" ? "h-7 w-7" : "h-9 w-9";
 
@@ -33,13 +41,110 @@ function BotAvatar({ size = "md" }: { size?: "sm" | "md" }) {
   );
 }
 
+function ThinkingIndicator() {
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setVisible(false);
+      window.setTimeout(() => {
+        setPhraseIndex((current) => (current + 1) % THINKING_PHRASES.length);
+        setVisible(true);
+      }, 180);
+    }, 1400);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  return (
+    <span
+      className={`inline-block min-w-[9.5rem] transition-opacity duration-200 ${
+        visible ? "opacity-55" : "opacity-0"
+      }`}
+    >
+      {THINKING_PHRASES[phraseIndex]}
+    </span>
+  );
+}
+
+function TypingAssistantText({
+  text,
+  active,
+  onTick,
+  onComplete,
+}: {
+  text: string;
+  active: boolean;
+  onTick?: () => void;
+  onComplete?: () => void;
+}) {
+  const [visibleCount, setVisibleCount] = useState(active ? 0 : Infinity);
+
+  useEffect(() => {
+    if (!active) {
+      setVisibleCount(Infinity);
+      return;
+    }
+
+    setVisibleCount(0);
+    let index = 0;
+    const tokens = text.match(/\S+\s*/g) ?? (text ? [text] : []);
+
+    if (tokens.length === 0) {
+      onComplete?.();
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      index += 1;
+      setVisibleCount(index);
+      onTick?.();
+
+      if (index >= tokens.length) {
+        window.clearInterval(interval);
+        onComplete?.();
+      }
+    }, 42);
+
+    return () => window.clearInterval(interval);
+  }, [active, text]);
+
+  if (!active) {
+    return <>{text}</>;
+  }
+
+  const tokens = text.match(/\S+\s*/g) ?? (text ? [text] : []);
+  const visible = Number.isFinite(visibleCount)
+    ? tokens.slice(0, visibleCount).join("")
+    : text;
+
+  return (
+    <>
+      {visible}
+      {visibleCount < tokens.length ? (
+        <span className="ml-0.5 inline-block h-[1.05em] w-[0.45em] animate-pulse bg-[var(--color-fg)]/45 align-[-0.05em]" />
+      ) : null}
+    </>
+  );
+}
+
 export default function Chatbot() {
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
+  const [typingMessageIndex, setTypingMessageIndex] = useState<number | null>(
+    null,
+  );
   const messagesRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    const container = messagesRef.current;
+    if (!container) return;
+    container.scrollTop = container.scrollHeight;
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -62,10 +167,8 @@ export default function Chatbot() {
   }, [open]);
 
   useEffect(() => {
-    const container = messagesRef.current;
-    if (!container) return;
-    container.scrollTop = container.scrollHeight;
-  }, [messages, loading, open]);
+    scrollToBottom();
+  }, [messages, loading, open, typingMessageIndex]);
 
   const sendMessage = async () => {
     const trimmed = input.trim();
@@ -79,6 +182,7 @@ export default function Chatbot() {
     setMessages(nextMessages);
     setInput("");
     setLoading(true);
+    setTypingMessageIndex(null);
 
     try {
       const response = await fetch("/api/chat", {
@@ -97,19 +201,20 @@ export default function Chatbot() {
 
       setMessages((current) => [
         ...current,
-        { role: "assistant", content: data.reply! },
+        { role: "assistant" as const, content: data.reply! },
       ]);
+      setTypingMessageIndex(nextMessages.length);
     } catch (error) {
+      const errorContent =
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.";
+
       setMessages((current) => [
         ...current,
-        {
-          role: "assistant",
-          content:
-            error instanceof Error
-              ? error.message
-              : "Something went wrong. Please try again.",
-        },
+        { role: "assistant" as const, content: errorContent },
       ]);
+      setTypingMessageIndex(nextMessages.length);
     } finally {
       setLoading(false);
     }
@@ -171,7 +276,12 @@ export default function Chatbot() {
                     >
                       <BotAvatar size="sm" />
                       <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] bg-[var(--color-surface-muted)] px-3.5 py-2.5 text-[14px] leading-[1.45] text-[var(--color-fg)]">
-                        {message.content}
+                        <TypingAssistantText
+                          text={message.content}
+                          active={typingMessageIndex === index}
+                          onTick={scrollToBottom}
+                          onComplete={() => setTypingMessageIndex(null)}
+                        />
                       </div>
                     </div>
                   ) : (
@@ -187,8 +297,8 @@ export default function Chatbot() {
                 {loading ? (
                   <div className="mr-auto flex max-w-[92%] items-end gap-2.5">
                     <BotAvatar size="sm" />
-                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] bg-[var(--color-surface-muted)] px-3.5 py-2.5 text-[14px] text-[var(--color-fg)]/55">
-                      Thinking...
+                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] bg-[var(--color-surface-muted)] px-3.5 py-2.5 text-[14px] text-[var(--color-fg)]">
+                      <ThinkingIndicator />
                     </div>
                   </div>
                 ) : null}
@@ -211,7 +321,7 @@ export default function Chatbot() {
                   />
                   <button
                     type="submit"
-                    disabled={loading || !input.trim()}
+                    disabled={loading || !input.trim() || typingMessageIndex !== null}
                     className="rounded-full bg-[var(--color-fg)] px-4 py-2.5 text-[13px] font-semibold text-[var(--color-bg)] transition-opacity disabled:opacity-40"
                   >
                     Send
