@@ -116,22 +116,29 @@ export default function Chatbot() {
   };
 
   const panel =
-    mounted && open
+    mounted
       ? createPortal(
           <div
-            className="fixed inset-x-0 bottom-0 top-[var(--nav-height)] z-[200] flex"
-            aria-hidden={false}
+            className={`fixed inset-0 z-[200] flex ${
+              open ? "pointer-events-auto" : "pointer-events-none"
+            }`}
+            aria-hidden={!open}
           >
             <button
               type="button"
               aria-label="Close chat"
               onClick={() => setOpen(false)}
-              className="min-w-0 flex-1 bg-black/35 backdrop-blur-xl backdrop-saturate-150"
+              tabIndex={open ? 0 : -1}
+              className={`min-w-0 flex-1 bg-black/40 backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-500 ${
+                open ? "opacity-100" : "opacity-0"
+              }`}
             />
 
             <aside
               id="fiveo-chatbot-panel"
-              className="flex h-full w-[min(100%,420px)] shrink-0 flex-col border-l border-[color-mix(in_srgb,var(--color-fg)_14%,transparent)] bg-[var(--color-bg)] shadow-[-24px_0_80px_rgba(0,0,0,0.28)]"
+              className={`flex h-dvh w-[min(100%,420px)] shrink-0 flex-col border-l border-[color-mix(in_srgb,var(--color-fg)_14%,transparent)] bg-[var(--color-bg)] shadow-[-24px_0_80px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                open ? "translate-x-0" : "translate-x-full"
+              }`}
             >
               <div className="flex shrink-0 items-center gap-3 border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] px-5 py-4">
                 <BotAvatar />
