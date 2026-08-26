@@ -80,16 +80,8 @@ export default function Services() {
         -Math.max(0, track.scrollWidth - window.innerWidth + 48);
 
       gsap.set(letters, { yPercent: 125 });
+      if (cardsWrap) gsap.set(cardsWrap, { y: 120, opacity: 0 });
       if (headline) gsap.set(headline, { opacity: 1, y: 0 });
-
-      const cards = gsap.utils.toArray<HTMLElement>(
-        "[data-service-card]",
-        stage,
-      );
-      const cardStartY = () => Math.max(window.innerHeight * 0.52, 480);
-
-      gsap.set(cards, { y: cardStartY, opacity: 1 });
-      if (cardsWrap) gsap.set(cardsWrap, { y: 0, opacity: 1 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -97,7 +89,8 @@ export default function Services() {
           start: "top top",
           end: "+=340%",
           pin: true,
-          scrub: 0.65,
+          scrub: true,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: -1,
           onEnter: () => setNavPinDrive(true),
@@ -106,12 +99,10 @@ export default function Services() {
           onLeave: () => {
             setNavPinDrive(false);
             setNavInvert(false);
-            requestAnimationFrame(() => refreshScrollTrigger());
           },
           onLeaveBack: () => {
             setNavPinDrive(false);
             setNavInvert(false);
-            requestAnimationFrame(() => refreshScrollTrigger());
           },
         },
       });
@@ -131,20 +122,17 @@ export default function Services() {
           { x: 0 },
           { x: overshoot, ease: "none", duration: 0.58 },
           0.14,
-        );
-
-      cards.forEach((card, index) => {
-        tl.fromTo(
-          card,
-          { y: cardStartY },
+        )
+        .set(cardsWrap, { opacity: 1 }, 0.48)
+        .to(
+          cardsWrap,
           {
             y: 0,
             ease: "power3.out",
-            duration: 0.14,
+            duration: 0.28,
           },
-          0.44 + index * 0.09,
+          0.48,
         );
-      });
 
       if (headline) {
         tl.to(
@@ -158,8 +146,6 @@ export default function Services() {
           0.72,
         );
       }
-
-      tl.to({}, { duration: 0.1 }, 0.9);
     }, root);
 
     requestAnimationFrame(() => refreshScrollTrigger());
@@ -238,7 +224,7 @@ export default function Services() {
           <h2 className="sr-only">Our Services</h2>
         </div>
 
-        <div className="relative z-[4] flex min-h-[100svh] items-center justify-center overflow-hidden px-5 py-[calc(var(--nav-height)+2rem)] md:absolute md:inset-0 md:px-[60px] md:py-0">
+        <div className="relative z-[4] flex min-h-[100svh] items-center justify-center px-5 py-[calc(var(--nav-height)+2rem)] md:absolute md:inset-0 md:px-[60px] md:py-0">
           <div
             ref={cardsWrapRef}
             className="grid w-full max-w-[1600px] grid-cols-1 gap-[18px] will-change-transform md:grid-cols-3"
@@ -247,7 +233,7 @@ export default function Services() {
               <div
                 key={group.id}
                 data-service-card
-                className="service-card-solid theme-card flex min-h-[70vh] flex-col rounded-none p-10 text-[var(--color-fg)] will-change-transform md:h-[760px] md:min-h-0 md:w-full"
+                className="theme-card flex min-h-[70vh] flex-col rounded-none p-10 text-[var(--color-fg)] will-change-transform md:h-[760px] md:min-h-0 md:w-full"
                 style={{ fontFamily: "var(--font-card)" }}
               >
                 <h3 className="font-editorial mb-10 max-w-[360px] whitespace-pre-line text-[2rem] leading-[1.12] md:mb-[56px] md:text-[44px]">
