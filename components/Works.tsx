@@ -223,7 +223,7 @@ export default function Works() {
     <section
       id="works"
       ref={rootRef}
-      className="relative z-[1] theme-surface overflow-hidden"
+      className="relative theme-surface overflow-hidden"
       data-nav-theme="dark"
     >
       <div ref={pinRef} className="relative px-3 md:px-10 lg:px-12">
@@ -254,10 +254,7 @@ export default function Works() {
 
         <NomadWorkCanvas />
       </div>
-      <div
-        className="h-[18svh] min-h-[140px] bg-[var(--color-bg)]"
-        aria-hidden
-      />
+      <div className="h-6 md:h-10" aria-hidden />
     </section>
   );
 }

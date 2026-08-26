@@ -40,18 +40,25 @@ export default function Branding() {
         return;
       }
 
-      /* ---- The white panel arrives as a small box on the dark canvas and
-         opens out to full bleed as you scroll, the statement growing with it.
-         Only once it owns the screen do the four notes arrive, one by one, and
-         everything holds while the pin runs out. ---- */
+      gsap.set(card, { clipPath: "inset(21% 20% 21% 20%)" });
+      gsap.set(heading, { transformOrigin: "center center" });
+      gsap.set(items, { opacity: 0, y: 34 });
+
+      const headingEl = heading as HTMLElement | null;
+      const headingCenterY = (() => {
+        if (!headingEl) return 0;
+        const top = headingEl.offsetTop;
+        const h = headingEl.offsetHeight;
+        return window.innerHeight / 2 - top - h / 2;
+      })();
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: stage,
           start: "top top",
           end: "+=220%",
           pin: true,
-          pinReparent: true,
-          scrub: 0.6,
+          scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onEnter: () => setNavPinDrive(true),
@@ -68,17 +75,6 @@ export default function Branding() {
           },
         },
       });
-
-      gsap.set(heading, { transformOrigin: "center center" });
-      gsap.set(items, { opacity: 0, y: 34 });
-
-      const headingEl = heading as HTMLElement | null;
-      const headingCenterY = (() => {
-        if (!headingEl) return 0;
-        const top = headingEl.offsetTop;
-        const h = headingEl.offsetHeight;
-        return window.innerHeight / 2 - top - h / 2;
-      })();
 
       // Four explicit sides on both ends: mismatched value counts cannot be
       // interpolated, which is what made the panel snap between sizes.
@@ -133,18 +129,18 @@ export default function Branding() {
       id="careers"
       ref={rootRef}
       data-nav-theme="dark"
-      className="relative z-[5] bg-[var(--color-bg)]"
+      className="relative bg-[var(--color-bg)]"
       aria-label="Branding statement"
     >
       <div
         ref={stageRef}
-        className="relative h-[100svh] overflow-hidden bg-[var(--color-bg)]"
+        className="relative bg-[var(--color-bg)] md:h-[100svh] md:overflow-hidden"
       >
         <div
           data-branding-card
-          className="relative h-full bg-white text-black md:absolute md:inset-0 md:[clip-path:inset(21%_20%_21%_20%)]"
+          className="relative bg-white text-black md:absolute md:inset-0 md:[clip-path:inset(21%_20%_21%_20%)]"
         >
-          <div className="flex h-full min-h-[100svh] flex-col px-6 pb-16 pt-[calc(var(--nav-height)+1.5rem)] md:min-h-0 md:px-14 md:pb-0 lg:px-20 xl:px-24">
+          <div className="flex min-h-[100svh] flex-col px-6 pb-16 pt-[calc(var(--nav-height)+1.5rem)] md:h-full md:min-h-0 md:px-14 md:pb-0 lg:px-20 xl:px-24">
             {/* Fixed line breaks so the image always lands mid-statement */}
             <h2
               data-branding-heading

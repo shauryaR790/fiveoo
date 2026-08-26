@@ -24,29 +24,6 @@ export function createLenis(): Lenis {
 
   lenis.on("scroll", ScrollTrigger.update);
 
-  ScrollTrigger.scrollerProxy(document.documentElement, {
-    scrollTop(value) {
-      if (arguments.length && value !== undefined) {
-        lenis.scrollTo(value, { immediate: true });
-      }
-      return lenis.scroll;
-    },
-    getBoundingClientRect() {
-      return {
-        top: 0,
-        left: 0,
-        width: window.innerWidth,
-        height: window.innerHeight,
-      };
-    },
-  });
-
-  const onRefresh = () => {
-    lenis.resize();
-  };
-
-  ScrollTrigger.addEventListener("refresh", onRefresh);
-
   const tickerCallback = (time: number) => {
     lenis.raf(time * 1000);
   };
@@ -56,9 +33,8 @@ export function createLenis(): Lenis {
 
   lenisInstance = lenis;
 
-  (lenis as Lenis & { __ticker?: typeof tickerCallback; __onRefresh?: typeof onRefresh }).__ticker =
+  (lenis as Lenis & { __ticker?: typeof tickerCallback }).__ticker =
     tickerCallback;
-  (lenis as Lenis & { __onRefresh?: typeof onRefresh }).__onRefresh = onRefresh;
 
   return lenis;
 }
@@ -68,18 +44,10 @@ export function destroyLenis() {
 
   const ticker = (lenisInstance as Lenis & { __ticker?: (time: number) => void })
     .__ticker;
-  const onRefresh = (lenisInstance as Lenis & { __onRefresh?: () => void })
-    .__onRefresh;
 
   if (ticker) {
     gsap.ticker.remove(ticker);
   }
-
-  if (onRefresh) {
-    ScrollTrigger.removeEventListener("refresh", onRefresh);
-  }
-
-  ScrollTrigger.scrollerProxy(document.documentElement, {});
 
   lenisInstance.destroy();
   lenisInstance = null;
