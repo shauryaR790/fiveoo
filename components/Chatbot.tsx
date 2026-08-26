@@ -233,14 +233,14 @@ export default function Chatbot() {
         aria-controls="fiveo-chatbot-panel"
         aria-label={open ? "Close chat" : "Open chat"}
         onClick={() => setOpen((value) => !value)}
-        className="relative z-50 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-[color-mix(in_srgb,var(--color-fg)_22%,transparent)] bg-[var(--color-bg)] p-0.5 transition-[border-color,transform] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_38%,transparent)] hover:scale-[1.03]"
+        className="relative z-50 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-[11px] border border-[color-mix(in_srgb,var(--color-fg)_22%,transparent)] bg-[var(--color-bg)] p-0.5 transition-[border-color,transform] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_38%,transparent)] hover:scale-[1.03]"
       >
         <Image
           src="/images/chatbot-avatar.jpg"
           alt=""
           width={36}
           height={36}
-          className="h-full w-full rounded-full object-cover"
+          className="h-full w-full rounded-[9px] object-cover"
         />
       </button>
 

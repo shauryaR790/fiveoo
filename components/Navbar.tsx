@@ -196,10 +196,10 @@ export default function Navbar() {
         <a
           href="#top"
           onClick={(e) => handleNav(e, "#top")}
-          className="block text-[var(--color-fg)]"
+          className="flex shrink-0 items-center text-[var(--color-fg)]"
           aria-label="FIVEO"
         >
-          <FiveoMark className="h-[42px] md:h-[50px]" />
+          <FiveoMark className="h-[42px] translate-y-[6px] md:h-[50px] md:translate-y-[7px]" />
         </a>
 
         <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center md:flex md:w-[46%] md:justify-between lg:w-[41.5%]">
