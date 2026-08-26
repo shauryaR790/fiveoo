@@ -99,18 +99,24 @@ export default function Partners() {
   return (
     <section
       id="clients"
-      className="theme-surface relative overflow-hidden bg-[var(--color-bg)] pb-8 pt-2 md:pb-10 md:pt-3"
+      className="theme-surface relative overflow-x-clip bg-[var(--color-bg)] pt-2 md:pt-3"
       data-nav-theme="dark"
       aria-label="Partner logos"
     >
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <NeonFog variant="hero" className="!h-full" />
+        <div className="absolute inset-x-0 bottom-0 h-[50%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/35 to-[var(--color-bg)]" />
       </div>
 
       <div className="relative z-[1] flex flex-col gap-3 md:gap-4">
         <LogoRow logos={PARTNER_LOGOS_TOP} reversed duration={36} />
         <LogoRow logos={PARTNER_LOGOS_BOTTOM} reversed={false} duration={40} />
       </div>
+
+      <div
+        className="pointer-events-none relative z-[1] h-28 bg-gradient-to-b from-transparent to-[var(--color-bg)] md:h-36"
+        aria-hidden
+      />
     </section>
   );
 }
