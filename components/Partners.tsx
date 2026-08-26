@@ -99,14 +99,11 @@ export default function Partners() {
   return (
     <section
       id="clients"
-      className="relative overflow-visible bg-[var(--color-bg)] pt-2 md:pt-3"
+      className="relative overflow-x-clip bg-[var(--color-bg)] px-3 pb-16 pt-2 md:px-4 md:pb-24 md:pt-3"
       data-nav-theme="dark"
       aria-label="Partner logos"
     >
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[calc(100%+8rem)] md:h-[calc(100%+10rem)]"
-        aria-hidden
-      >
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <NeonFog variant="partners" />
       </div>
 
@@ -114,11 +111,6 @@ export default function Partners() {
         <LogoRow logos={PARTNER_LOGOS_TOP} reversed duration={36} />
         <LogoRow logos={PARTNER_LOGOS_BOTTOM} reversed={false} duration={40} />
       </div>
-
-      <div
-        className="pointer-events-none relative z-[1] h-32 bg-gradient-to-b from-transparent via-[var(--color-bg)]/70 to-[var(--color-bg)] md:h-40"
-        aria-hidden
-      />
     </section>
   );
 }
