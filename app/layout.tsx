@@ -38,7 +38,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-full bg-[var(--color-bg)] text-[var(--color-fg)] transition-colors duration-300">
+      <body
+        className="min-h-full bg-[var(--color-bg)] text-[var(--color-fg)] transition-colors duration-300"
+        suppressHydrationWarning
+      >
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--color-bg-inverse)] focus:px-4 focus:py-2 focus:text-[var(--color-fg-inverse)]"
