@@ -12,27 +12,43 @@ function canvasFont(weight: number, sizePx: number) {
 }
 
 const COLS = 4;
-const ROWS = 4;
-const COL_GAP = 0.28;
-const ROW_GAP = 0.34;
+const ROWS = 3;
+const COL_GAP = 0.34;
+const ROW_GAP = 0.42;
 const TILE_AR = 9 / 16;
 const COL_OFF = [0, 0.3, 0.12, 0.44];
 
-const SLOTS = [
-  { c: 0, r: 0, kind: "work" as const, i: 0 },
-  { c: 1, r: 0, kind: "work" as const, i: 1 },
-  { c: 2, r: 0, kind: "card" as const, i: 0 },
-  { c: 3, r: 0, kind: "work" as const, i: 2 },
-  { c: 0, r: 1, kind: "work" as const, i: 3 },
-  { c: 1, r: 1, kind: "card" as const, i: 1 },
-  { c: 2, r: 1, kind: "work" as const, i: 4 },
-  { c: 3, r: 1, kind: "work" as const, i: 5 },
-  { c: 0, r: 2, kind: "work" as const, i: 6 },
-  { c: 1, r: 2, kind: "work" as const, i: 8 },
-  { c: 2, r: 2, kind: "work" as const, i: 7 },
-  { c: 3, r: 2, kind: "work" as const, i: 9 },
-  { c: 0, r: 3, kind: "work" as const, i: 10 },
-];
+/** Fixed card cells — every other cell in the block is a work tile. */
+const CARD_CELLS: Record<string, number> = {
+  "2,0": 0,
+  "1,1": 1,
+};
+
+function buildSlots() {
+  const slots: Array<{ c: number; r: number; kind: "work" | "card"; i: number }> = [];
+  let workN = 0;
+
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const cardIdx = CARD_CELLS[`${c},${r}`];
+      if (cardIdx !== undefined) {
+        slots.push({ c, r, kind: "card", i: cardIdx });
+      } else {
+        slots.push({
+          c,
+          r,
+          kind: "work",
+          i: workN % NOMAD_TILES.length,
+        });
+        workN++;
+      }
+    }
+  }
+
+  return slots;
+}
+
+const SLOTS = buildSlots();
 
 const BLUR_SCALE = 0.34;
 const BLUR_PX = 3.3;
