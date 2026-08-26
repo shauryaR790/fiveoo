@@ -12,7 +12,6 @@ import {
 import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import NeonFog from "@/components/NeonFog";
-import GooglePreferredSource from "@/components/GooglePreferredSource";
 
 function BrandUnit() {
   return (
@@ -140,9 +139,6 @@ export default function Footer() {
               Explore Plans
               <span aria-hidden>→</span>
             </a>
-            <div className="mt-10">
-              <GooglePreferredSource />
-            </div>
           </div>
 
           {/* Right - Habito link columns */}
