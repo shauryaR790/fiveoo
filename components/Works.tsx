@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { WORKS, WEBSITE_WORKS, type WorkItem } from "@/lib/constants";
+import NomadWorkCanvas from "@/components/NomadWorkCanvas";
 import {
   prefersReducedMotion,
   isMobileViewport,
@@ -244,13 +245,16 @@ export default function Works() {
         </div>
       </div>
 
-      <div className="relative px-3 pb-16 md:px-10 md:pb-24 lg:px-12">
+      <div className="relative px-3 md:px-10 lg:px-12">
         <div className="grid grid-cols-2 items-start gap-1.5 pt-8 md:grid-cols-12 md:gap-2.5 md:pt-16 md:gap-y-8">
           {WEBSITE_WORKS.map((work) => (
             <WorkCard key={work.id} work={work} columns={2} />
           ))}
         </div>
+
+        <NomadWorkCanvas />
       </div>
+      <div className="h-6 md:h-10" aria-hidden />
     </section>
   );
 }

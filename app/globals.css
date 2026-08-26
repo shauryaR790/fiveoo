@@ -449,3 +449,15 @@ html:not(.dark) .partner-logo-tile {
 html:not(.dark) .partner-logo-img {
   filter: brightness(0) invert(1);
 }
+
+.nomad-work-canvas {
+  cursor: grab;
+}
+
+.nomad-work-canvas.is-drag {
+  cursor: grabbing;
+}
+
+.nomad-work-canvas.is-hot {
+  cursor: pointer;
+}
