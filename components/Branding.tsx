@@ -40,83 +40,85 @@ export default function Branding() {
         return;
       }
 
-      gsap.set(card, { clipPath: "inset(21% 20% 21% 20%)" });
-      gsap.set(heading, { transformOrigin: "center center" });
-      gsap.set(items, { opacity: 0, y: 34 });
-
-      const headingEl = heading as HTMLElement | null;
-      const headingCenterY = (() => {
+      const measureHeadingY = () => {
+        const headingEl = heading as HTMLElement | null;
         if (!headingEl) return 0;
         const top = headingEl.offsetTop;
         const h = headingEl.offsetHeight;
         return window.innerHeight / 2 - top - h / 2;
-      })();
+      };
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: stage,
-          start: "top top",
-          end: "+=220%",
-          pin: true,
-          scrub: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onEnter: () => setNavPinDrive(true),
-          onEnterBack: () => setNavPinDrive(true),
-          // Black nav only while the white panel owns the screen.
-          onUpdate: (self) => setNavInvert(self.progress >= 0.55),
-          onLeave: () => {
-            setNavPinDrive(false);
-            setNavInvert(false);
-          },
-          onLeaveBack: () => {
-            setNavPinDrive(false);
-            setNavInvert(false);
-          },
-        },
-      });
+      const buildTimeline = () => {
+        const headingCenterY = measureHeadingY();
 
-      // Four explicit sides on both ends: mismatched value counts cannot be
-      // interpolated, which is what made the panel snap between sizes.
-      tl.fromTo(
-        card,
-        { clipPath: "inset(21% 20% 21% 20%)" },
-        {
-          clipPath: "inset(0% 0% 0% 0%)",
-          ease: "power2.inOut",
-          duration: 0.44,
-        },
-        0,
-      )
-        /* Keep the statement optically centred in the white panel while it opens. */
-        .fromTo(
-          heading,
-          { scale: 0.82, y: headingCenterY },
-          { scale: 1, y: headingCenterY, ease: "power1.inOut", duration: 0.45 },
+        gsap.set(card, { clipPath: "inset(21% 20% 21% 20%)" });
+        gsap.set(heading, { transformOrigin: "center center", scale: 0.82, y: headingCenterY });
+        gsap.set(chip, { width: 0 });
+        gsap.set(items, { opacity: 0, y: 48 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: stage,
+            start: "top top",
+            end: "+=260%",
+            pin: true,
+            scrub: 0.65,
+            invalidateOnRefresh: true,
+            refreshPriority: 1,
+            onEnter: () => setNavPinDrive(true),
+            onEnterBack: () => setNavPinDrive(true),
+            onUpdate: (self) => setNavInvert(self.progress >= 0.55),
+            onLeave: () => {
+              setNavPinDrive(false);
+              setNavInvert(false);
+              requestAnimationFrame(() => refreshScrollTrigger());
+            },
+            onLeaveBack: () => {
+              setNavPinDrive(false);
+              setNavInvert(false);
+              requestAnimationFrame(() => refreshScrollTrigger());
+            },
+          },
+        });
+
+        tl.fromTo(
+          card,
+          { clipPath: "inset(21% 20% 21% 20%)" },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            ease: "power2.inOut",
+            duration: 0.38,
+          },
           0,
         )
-        // Width rather than scale: the words either side have to be pushed
-        // apart to make room, so this has to affect layout.
-        .fromTo(
-          chip,
-          { width: 0 },
-          { width: "1.6em", ease: "power2.out", duration: 0.32 },
-          0.12,
-        )
-        // Then it lifts to the top to make room for the feature notes.
-        .to(heading, { y: 0, ease: "power2.inOut", duration: 0.2 }, 0.48)
-        .fromTo(
-          items,
-          { opacity: 0, y: 34 },
-          {
-            opacity: 1,
-            y: 0,
-            ease: "power2.out",
-            duration: 0.12,
-            stagger: 0.08,
-          },
-          0.56,
-        );
+          .to(
+            heading,
+            { scale: 1, y: headingCenterY, ease: "power1.inOut", duration: 0.4 },
+            0,
+          )
+          .to(chip, { width: "1.6em", ease: "power2.out", duration: 0.28 }, 0.1)
+          .to(heading, { y: 0, ease: "power2.inOut", duration: 0.22 }, 0.44);
+
+        items.forEach((item, index) => {
+          tl.fromTo(
+            item,
+            { opacity: 0, y: 48 },
+            {
+              opacity: 1,
+              y: 0,
+              ease: "power2.out",
+              duration: 0.1,
+            },
+            0.5 + index * 0.07,
+          );
+        });
+
+        tl.to({}, { duration: 0.12 }, 0.88);
+
+        return tl;
+      };
+
+      buildTimeline();
     }, root);
 
     requestAnimationFrame(() => refreshScrollTrigger());
@@ -134,17 +136,16 @@ export default function Branding() {
     >
       <div
         ref={stageRef}
-        className="relative bg-[var(--color-bg)] md:h-[100svh] md:overflow-hidden"
+        className="relative h-[100svh] overflow-hidden bg-[var(--color-bg)]"
       >
         <div
           data-branding-card
-          className="relative bg-white text-black md:absolute md:inset-0 md:[clip-path:inset(21%_20%_21%_20%)]"
+          className="absolute inset-0 bg-white text-black [clip-path:inset(21%_20%_21%_20%)]"
         >
-          <div className="flex min-h-[100svh] flex-col px-6 pb-16 pt-[calc(var(--nav-height)+1.5rem)] md:h-full md:min-h-0 md:px-14 md:pb-0 lg:px-20 xl:px-24">
-            {/* Fixed line breaks so the image always lands mid-statement */}
+          <div className="flex h-full flex-col px-6 pb-16 pt-[calc(var(--nav-height)+1.5rem)] md:px-14 md:pb-0 lg:px-20 xl:px-24">
             <h2
               data-branding-heading
-              className="font-display text-center text-[clamp(2rem,5.8vw,4.75rem)] uppercase leading-[0.9] will-change-transform lg:text-[clamp(2.25rem,6.5vw,5.75rem)] xl:text-[clamp(2rem,7.8vw,7rem)] xl:leading-[0.86]"
+              className="font-display shrink-0 text-center text-[clamp(2rem,5.8vw,4.75rem)] uppercase leading-[0.9] will-change-transform lg:text-[clamp(2.25rem,6.5vw,5.75rem)] xl:text-[clamp(2rem,7.8vw,7rem)] xl:leading-[0.86]"
             >
               We build
               <br />
@@ -154,8 +155,6 @@ export default function Branding() {
                 className="relative inline-block h-[0.62em] w-0 -translate-y-[0.09em] overflow-hidden align-middle"
                 aria-hidden
               >
-                {/* Held at a fixed width and centred, so the frame opening
-                    around it reads as a reveal rather than a squash. */}
                 <span className="absolute left-1/2 top-0 block h-full w-[1.6em] -translate-x-1/2">
                   <Image
                     src="/images/krosan.jpg"

@@ -80,8 +80,14 @@ export default function Services() {
         -Math.max(0, track.scrollWidth - window.innerWidth + 48);
 
       gsap.set(letters, { yPercent: 125 });
-      if (cardsWrap) gsap.set(cardsWrap, { y: 0, opacity: 0 });
       if (headline) gsap.set(headline, { opacity: 1, y: 0 });
+
+      const cards = gsap.utils.toArray<HTMLElement>(
+        "[data-service-card]",
+        stage,
+      );
+      gsap.set(cards, { y: 72, opacity: 0 });
+      if (cardsWrap) gsap.set(cardsWrap, { y: 0, opacity: 1 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -89,8 +95,7 @@ export default function Services() {
           start: "top top",
           end: "+=340%",
           pin: true,
-          scrub: true,
-          anticipatePin: 1,
+          scrub: 0.65,
           invalidateOnRefresh: true,
           refreshPriority: -1,
           onEnter: () => setNavPinDrive(true),
@@ -99,10 +104,12 @@ export default function Services() {
           onLeave: () => {
             setNavPinDrive(false);
             setNavInvert(false);
+            requestAnimationFrame(() => refreshScrollTrigger());
           },
           onLeaveBack: () => {
             setNavPinDrive(false);
             setNavInvert(false);
+            requestAnimationFrame(() => refreshScrollTrigger());
           },
         },
       });
@@ -122,17 +129,21 @@ export default function Services() {
           { x: 0 },
           { x: overshoot, ease: "none", duration: 0.58 },
           0.14,
-        )
-        .to(
-          cardsWrap,
+        );
+
+      cards.forEach((card, index) => {
+        tl.fromTo(
+          card,
+          { y: 72, opacity: 0 },
           {
             y: 0,
             opacity: 1,
             ease: "power3.out",
-            duration: 0.28,
+            duration: 0.12,
           },
-          0.48,
+          0.46 + index * 0.08,
         );
+      });
 
       if (headline) {
         tl.to(
@@ -146,6 +157,8 @@ export default function Services() {
           0.72,
         );
       }
+
+      tl.to({}, { duration: 0.1 }, 0.9);
     }, root);
 
     requestAnimationFrame(() => refreshScrollTrigger());

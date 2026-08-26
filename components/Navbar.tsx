@@ -110,7 +110,13 @@ export default function Navbar() {
       const lenis = getLenis();
       const direction = lenis?.direction ?? Math.sign(scroll - lastScroll);
 
-      if (menuOpen || scroll <= 40) {
+      if (menuOpen || isNavPinDrive()) {
+        lastScroll = scroll;
+        animateNav(true);
+        return;
+      }
+
+      if (scroll <= 40) {
         lastScroll = scroll;
         animateNav(true);
         return;
@@ -122,8 +128,8 @@ export default function Navbar() {
         animateNav(true);
       } else {
         const delta = scroll - lastScroll;
-        if (delta > 1) animateNav(false);
-        else if (delta < -1) animateNav(true);
+        if (delta > 2) animateNav(false);
+        else if (delta < -2) animateNav(true);
       }
 
       lastScroll = scroll;
@@ -134,21 +140,29 @@ export default function Navbar() {
     nav.style.pointerEvents = "";
     lastScroll = getScrollY();
 
-    const tick = () => {
-      updateVisibility();
+    let rafId = 0;
+    let lenisCleanup: (() => void) | undefined;
+
+    const attachLenis = () => {
+      const lenis = getLenis();
+      if (!lenis) {
+        rafId = requestAnimationFrame(attachLenis);
+        return;
+      }
+
+      const onLenisScroll = () => {
+        updateVisibility();
+      };
+
+      lenis.on("scroll", onLenisScroll);
+      lenisCleanup = () => lenis.off("scroll", onLenisScroll);
     };
 
-    gsap.ticker.add(tick);
-
-    const onWindowScroll = () => {
-      updateVisibility();
-    };
-
-    window.addEventListener("scroll", onWindowScroll, { passive: true });
+    attachLenis();
 
     return () => {
-      gsap.ticker.remove(tick);
-      window.removeEventListener("scroll", onWindowScroll);
+      cancelAnimationFrame(rafId);
+      lenisCleanup?.();
       navTweenRef.current?.kill();
       gsap.set(nav, { clearProps: "transform" });
       nav.style.pointerEvents = "";
