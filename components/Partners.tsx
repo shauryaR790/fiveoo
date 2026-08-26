@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { PARTNER_LOGOS_BOTTOM, PARTNER_LOGOS_TOP } from "@/lib/constants";
 import { infiniteMarquee, prefersReducedMotion } from "@/lib/animations";
 import { getLenis } from "@/lib/lenis";
+import NeonFog from "@/components/NeonFog";
 
 type Logo = { name: string; src: string };
 
@@ -98,11 +99,15 @@ export default function Partners() {
   return (
     <section
       id="clients"
-      className="theme-surface relative bg-[var(--color-surface)] px-3 pb-16 pt-2 md:px-4 md:pb-24 md:pt-3"
+      className="theme-surface relative overflow-x-clip bg-[var(--color-bg)] px-3 pb-16 pt-2 md:px-4 md:pb-24 md:pt-3"
       data-nav-theme="dark"
       aria-label="Partner logos"
     >
-      <div className="flex flex-col gap-3 md:gap-4">
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+        <NeonFog variant="hero" className="!h-full" />
+      </div>
+
+      <div className="relative z-[1] flex flex-col gap-3 md:gap-4">
         <LogoRow logos={PARTNER_LOGOS_TOP} reversed duration={36} />
         <LogoRow logos={PARTNER_LOGOS_BOTTOM} reversed={false} duration={40} />
       </div>

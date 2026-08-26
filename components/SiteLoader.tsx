@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { initMark, playMark } from "@/lib/nomad/mark";
 import { prefersReducedMotion, refreshScrollTrigger } from "@/lib/animations";
+import NeonFog from "@/components/NeonFog";
 
 export default function SiteLoader() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -50,16 +51,18 @@ export default function SiteLoader() {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] grid place-items-center bg-black transition-opacity duration-[620ms] ease-out ${
+      className={`fixed inset-0 z-[9999] grid place-items-center overflow-hidden bg-black transition-opacity duration-[620ms] ease-out ${
         fading ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
       aria-hidden={fading}
     >
+      <NeonFog variant="hero" />
+
       <svg
         ref={svgRef}
         viewBox="0 0 480 120"
         xmlns="http://www.w3.org/2000/svg"
-        className="block h-auto w-[min(98vw,82vh)] overflow-visible"
+        className="relative z-[1] block h-auto w-[min(98vw,82vh)] overflow-visible"
       >
         <defs>
           <clipPath id="fiveoMarkClip">
@@ -73,7 +76,7 @@ export default function SiteLoader() {
       <button
         type="button"
         onClick={finish}
-        className="fixed bottom-[clamp(14px,2.4vh,26px)] right-[clamp(14px,2.4vw,26px)] min-h-11 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.18em] text-white/60 transition-colors hover:text-white"
+        className="fixed bottom-[clamp(14px,2.4vh,26px)] right-[clamp(14px,2.4vw,26px)] z-[1] min-h-11 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.18em] text-white/60 transition-colors hover:text-white"
       >
         skip intro
       </button>
