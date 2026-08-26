@@ -72,14 +72,6 @@ export default function SiteLoader() {
         <g className="mark__word" clipPath="url(#fiveoMarkClip)" />
         <g className="mark__star" />
       </svg>
-
-      <button
-        type="button"
-        onClick={finish}
-        className="fixed bottom-[clamp(14px,2.4vh,26px)] right-[clamp(14px,2.4vw,26px)] z-[1] min-h-11 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.18em] text-white/60 transition-colors hover:text-white"
-      >
-        skip intro
-      </button>
     </div>
   );
 }
