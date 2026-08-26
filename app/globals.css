@@ -278,7 +278,8 @@ html.is-scroll-navigating #main {
 }
 
 .price-choose-btn {
-  background-color: #ffffff;
+  background: #ffffff;
+  background-image: none;
   color: #000000;
   border: 0;
   box-shadow: none;
@@ -288,7 +289,8 @@ html.is-scroll-navigating #main {
 }
 
 .price-choose-btn:hover {
-  background-color: var(--color-neon-orange);
+  background: var(--color-neon-orange);
+  background-image: none;
   color: #000000;
 }
 

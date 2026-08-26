@@ -178,7 +178,7 @@ export default function Pricing() {
                 <button
                   type="button"
                   onClick={() => scrollToTarget("#top")}
-                  className="price-choose-btn relative z-[2] w-full rounded-none px-4 py-6 text-[20px] font-bold tracking-[-0.02em] transition-[background-color,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:py-7 md:text-[22px]"
+                  className="price-choose-btn relative z-[2] w-full rounded-none border-0 bg-white px-4 py-6 text-[20px] font-bold tracking-[-0.02em] text-black transition-[background-color,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[var(--color-neon-orange)] md:py-7 md:text-[22px]"
                 >
                   Choose Plan
                 </button>
