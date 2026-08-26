@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { NAV_LINKS } from "@/lib/constants";
 import { navigateToSection } from "@/lib/navigate";
+import { getLenis } from "@/lib/lenis";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
 import { Text3DFlip } from "@/components/ui/text-3d-flip";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
@@ -14,6 +15,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollRef = useRef(0);
 
   useLayoutEffect(() => {
     const nav = navRef.current;
@@ -76,6 +79,69 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (prefersReducedMotion()) return;
+
+    const threshold = 6;
+    const topThreshold = 24;
+    let rafId = 0;
+    let lenisCleanup: (() => void) | undefined;
+
+    const updateVisibility = (scroll: number, direction?: number) => {
+      if (menuOpen) {
+        setHidden(false);
+        return;
+      }
+
+      if (scroll <= topThreshold) {
+        setHidden(false);
+        lastScrollRef.current = scroll;
+        return;
+      }
+
+      if (direction === 1) {
+        setHidden(true);
+      } else if (direction === -1) {
+        setHidden(false);
+      } else {
+        const delta = scroll - lastScrollRef.current;
+        if (delta > threshold) setHidden(true);
+        else if (delta < -threshold) setHidden(false);
+      }
+
+      lastScrollRef.current = scroll;
+    };
+
+    const attachLenis = () => {
+      const lenis = getLenis();
+      if (!lenis) {
+        rafId = requestAnimationFrame(attachLenis);
+        return;
+      }
+
+      const onLenisScroll = ({
+        scroll,
+        direction,
+      }: {
+        scroll: number;
+        direction: number;
+      }) => {
+        updateVisibility(scroll, direction);
+      };
+
+      lenis.on("scroll", onLenisScroll);
+      updateVisibility(lenis.scroll, 0);
+      lenisCleanup = () => lenis.off("scroll", onLenisScroll);
+    };
+
+    attachLenis();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenisCleanup?.();
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
@@ -91,7 +157,11 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300"
+      className={`fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-[transform,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+        hidden && !menuOpen
+          ? "-translate-y-full pointer-events-none"
+          : "translate-y-0"
+      }`}
     >
       <nav
         className="mx-auto flex h-[var(--nav-height)] items-center justify-between px-6 md:px-10 lg:px-12"
