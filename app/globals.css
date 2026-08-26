@@ -274,19 +274,22 @@ html.is-scroll-navigating #main {
   left: 0;
   display: none;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
+  gap: 0;
 }
 
 @media (min-width: 768px) {
   .nav-links {
     display: flex;
+    left: 6.5rem;
+    right: calc(2.5rem + 2.5rem + 0.75rem);
   }
 }
 
 @media (min-width: 1024px) {
   .nav-links {
     left: calc(3rem + (100% - 6rem) * 0.585);
-    gap: 1.25rem;
+    right: calc(3rem + 2.5rem + 1rem);
   }
 }
 
