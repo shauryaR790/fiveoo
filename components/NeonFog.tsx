@@ -27,9 +27,9 @@ function NeonFogBlobsFooter() {
 function NeonFogBlobsPartners() {
   return (
     <>
-      <div className="absolute bottom-[0%] left-[-14%] h-[88%] w-[52%] rounded-full bg-[var(--color-neon-purple)] opacity-55 blur-[100px] md:blur-[130px]" />
-      <div className="absolute bottom-[-2%] right-[-10%] h-[92%] w-[58%] rounded-full bg-[var(--color-neon-orange)] opacity-50 blur-[105px] md:blur-[140px]" />
-      <div className="absolute bottom-[14%] left-[28%] h-[48%] w-[40%] rounded-full bg-[var(--color-neon-amber)] opacity-35 blur-[75px] md:blur-[90px]" />
+      <div className="absolute bottom-[18%] left-[-14%] h-[78%] w-[52%] rounded-full bg-[var(--color-neon-purple)] opacity-55 blur-[100px] md:blur-[130px]" />
+      <div className="absolute bottom-[16%] right-[-10%] h-[82%] w-[58%] rounded-full bg-[var(--color-neon-orange)] opacity-50 blur-[105px] md:blur-[140px]" />
+      <div className="absolute bottom-[28%] left-[28%] h-[44%] w-[40%] rounded-full bg-[var(--color-neon-amber)] opacity-35 blur-[75px] md:blur-[90px]" />
     </>
   );
 }
@@ -73,6 +73,7 @@ export default function NeonFog({
         aria-hidden
       >
         <NeonFogBlobsPartners />
+        <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/45 to-[var(--color-bg)]" />
       </div>
     );
   }
