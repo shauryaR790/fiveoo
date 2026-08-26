@@ -5,13 +5,12 @@ import NeonFog from "@/components/NeonFog";
 /** Partners logos + testimonials heading share one fog field — no hard section chop. */
 export default function PartnersTestimonialsBand() {
   return (
-    <div className="relative overflow-x-clip bg-[var(--color-bg)]">
+    <div className="relative overflow-x-clip bg-[var(--color-bg)] text-[var(--color-fg)]">
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[clamp(820px,88vw,1120px)]"
+        className="pointer-events-none absolute inset-x-0 top-[34%] z-0 h-[min(640px,58vh)] md:top-[36%] md:h-[min(720px,62vh)]"
         aria-hidden
       >
-        <NeonFog variant="hero" className="!h-full" />
-        <div className="absolute inset-x-0 bottom-0 h-[24%] bg-gradient-to-b from-transparent to-[var(--color-bg)]" />
+        <NeonFog variant="partners" />
       </div>
 
       <div className="relative z-[1]">

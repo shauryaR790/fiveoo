@@ -98,7 +98,7 @@ export default function Partners() {
   return (
     <section
       id="clients"
-      className="theme-surface relative bg-transparent px-3 pb-8 pt-2 md:px-4 md:pb-10 md:pt-3"
+      className="relative px-3 pb-8 pt-2 md:px-4 md:pb-10 md:pt-3"
       data-nav-theme="dark"
       aria-label="Partner logos"
     >
