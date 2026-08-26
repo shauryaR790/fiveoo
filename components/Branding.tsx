@@ -9,6 +9,7 @@ import {
   fadeUp,
   isMobileViewport,
   prefersReducedMotion,
+  refreshScrollTrigger,
   setNavInvert,
   setNavPinDrive,
 } from "@/lib/animations";
@@ -49,7 +50,8 @@ export default function Branding() {
           start: "top top",
           end: "+=220%",
           pin: true,
-          scrub: true,
+          pinReparent: true,
+          scrub: 0.6,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onEnter: () => setNavPinDrive(true),
@@ -67,15 +69,16 @@ export default function Branding() {
         },
       });
 
+      gsap.set(heading, { transformOrigin: "center center" });
+      gsap.set(items, { opacity: 0, y: 34 });
+
       const headingEl = heading as HTMLElement | null;
-      const centerHeadingY = () => {
+      const headingCenterY = (() => {
         if (!headingEl) return 0;
         const top = headingEl.offsetTop;
         const h = headingEl.offsetHeight;
         return window.innerHeight / 2 - top - h / 2;
-      };
-
-      gsap.set(heading, { transformOrigin: "center center" });
+      })();
 
       // Four explicit sides on both ends: mismatched value counts cannot be
       // interpolated, which is what made the panel snap between sizes.
@@ -92,8 +95,8 @@ export default function Branding() {
         /* Keep the statement optically centred in the white panel while it opens. */
         .fromTo(
           heading,
-          { scale: 0.82, y: centerHeadingY },
-          { scale: 1, y: centerHeadingY, ease: "power1.inOut", duration: 0.45 },
+          { scale: 0.82, y: headingCenterY },
+          { scale: 1, y: headingCenterY, ease: "power1.inOut", duration: 0.45 },
           0,
         )
         // Width rather than scale: the words either side have to be pushed
@@ -120,6 +123,8 @@ export default function Branding() {
         );
     }, root);
 
+    requestAnimationFrame(() => refreshScrollTrigger());
+
     return () => ctx.revert();
   }, []);
 
@@ -128,18 +133,18 @@ export default function Branding() {
       id="careers"
       ref={rootRef}
       data-nav-theme="dark"
-      className="relative -mt-px bg-[var(--color-bg)]"
+      className="relative z-[5] bg-[var(--color-bg)]"
       aria-label="Branding statement"
     >
       <div
         ref={stageRef}
-        className="relative md:h-[100svh] md:overflow-hidden"
+        className="relative h-[100svh] overflow-hidden bg-[var(--color-bg)]"
       >
         <div
           data-branding-card
-          className="relative bg-white text-black md:absolute md:inset-0 md:[clip-path:inset(21%_20%_21%_20%)]"
+          className="relative h-full bg-white text-black md:absolute md:inset-0 md:[clip-path:inset(21%_20%_21%_20%)]"
         >
-          <div className="flex min-h-[100svh] flex-col px-6 pb-16 pt-[calc(var(--nav-height)+1.5rem)] md:h-full md:min-h-0 md:px-14 md:pb-0 lg:px-20 xl:px-24">
+          <div className="flex h-full min-h-[100svh] flex-col px-6 pb-16 pt-[calc(var(--nav-height)+1.5rem)] md:min-h-0 md:px-14 md:pb-0 lg:px-20 xl:px-24">
             {/* Fixed line breaks so the image always lands mid-statement */}
             <h2
               data-branding-heading
