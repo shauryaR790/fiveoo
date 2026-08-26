@@ -80,7 +80,7 @@ export default function Services() {
         -Math.max(0, track.scrollWidth - window.innerWidth + 48);
 
       gsap.set(letters, { yPercent: 125 });
-      if (cardsWrap) gsap.set(cardsWrap, { y: 120, opacity: 0 });
+      if (cardsWrap) gsap.set(cardsWrap, { y: 0, opacity: 0 });
       if (headline) gsap.set(headline, { opacity: 1, y: 0 });
 
       const tl = gsap.timeline({
@@ -123,11 +123,11 @@ export default function Services() {
           { x: overshoot, ease: "none", duration: 0.58 },
           0.14,
         )
-        .set(cardsWrap, { opacity: 1 }, 0.48)
         .to(
           cardsWrap,
           {
             y: 0,
+            opacity: 1,
             ease: "power3.out",
             duration: 0.28,
           },
