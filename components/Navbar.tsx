@@ -16,6 +16,7 @@ export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const navVisibleRef = useRef(true);
+  const lastScrollRef = useRef(0);
   const scrollDeltaRef = useRef(0);
   const navTweenRef = useRef<gsap.core.Tween | null>(null);
 
@@ -90,8 +91,8 @@ export default function Navbar() {
         ),
       ) || 88;
 
-    const hideDistance = 72;
-    const showDistance = 28;
+    const hideDistance = 36;
+    const showDistance = 16;
     const topThreshold = 32;
     let rafId = 0;
     let lenisCleanup: (() => void) | undefined;
@@ -103,7 +104,7 @@ export default function Navbar() {
       navTweenRef.current?.kill();
       navTweenRef.current = gsap.to(nav, {
         y: visible ? 0 : -navHeight,
-        duration: visible ? 0.65 : 0.5,
+        duration: visible ? 0.6 : 0.45,
         ease: visible ? "power3.out" : "power2.inOut",
         overwrite: "auto",
         onStart: () => {
@@ -112,42 +113,34 @@ export default function Navbar() {
       });
     };
 
-    const updateVisibility = (
-      scroll: number,
-      direction = 0,
-      velocity = 0,
-    ) => {
+    const updateVisibility = (scroll: number) => {
       if (menuOpen) {
+        lastScrollRef.current = scroll;
         scrollDeltaRef.current = 0;
         animateNav(true);
         return;
       }
 
       if (scroll <= topThreshold) {
+        lastScrollRef.current = scroll;
         scrollDeltaRef.current = 0;
         animateNav(true);
         return;
       }
 
-      const absVelocity = Math.abs(velocity);
-      const travel =
-        absVelocity > 0.08 ? absVelocity * 18 : direction === 0 ? 0 : 12;
+      const delta = scroll - lastScrollRef.current;
+      lastScrollRef.current = scroll;
 
-      if (direction === 1) {
-        scrollDeltaRef.current = Math.max(0, scrollDeltaRef.current + travel);
-        if (scrollDeltaRef.current >= hideDistance) {
-          animateNav(false);
-          scrollDeltaRef.current = hideDistance;
-        }
-        return;
-      }
+      if (Math.abs(delta) < 0.25) return;
 
-      if (direction === -1) {
-        scrollDeltaRef.current = Math.min(0, scrollDeltaRef.current - travel);
-        if (scrollDeltaRef.current <= -showDistance) {
-          animateNav(true);
-          scrollDeltaRef.current = -showDistance;
-        }
+      scrollDeltaRef.current += delta;
+
+      if (scrollDeltaRef.current >= hideDistance) {
+        animateNav(false);
+        scrollDeltaRef.current = hideDistance;
+      } else if (scrollDeltaRef.current <= -showDistance) {
+        animateNav(true);
+        scrollDeltaRef.current = -showDistance;
       }
     };
 
@@ -158,23 +151,15 @@ export default function Navbar() {
         return;
       }
 
-      const onLenisScroll = ({
-        scroll,
-        direction,
-        velocity,
-      }: {
-        scroll: number;
-        direction: number;
-        velocity: number;
-      }) => {
-        updateVisibility(scroll, direction, velocity);
+      const onLenisScroll = () => {
+        updateVisibility(lenis.scroll);
       };
 
       lenis.on("scroll", onLenisScroll);
       gsap.set(nav, { y: 0 });
       navVisibleRef.current = true;
       nav.style.pointerEvents = "";
-      updateVisibility(lenis.scroll, 0, 0);
+      lastScrollRef.current = lenis.scroll;
       lenisCleanup = () => lenis.off("scroll", onLenisScroll);
     };
 
