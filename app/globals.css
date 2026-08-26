@@ -425,6 +425,16 @@ html:not(.dark) .theme-surface {
 html:not(.dark) .service-card-solid {
   background: var(--color-bg);
 }
+
+.step-index {
+  color: #ff6a1a;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
 .theme-card {
   border: 1px solid color-mix(in srgb, var(--color-fg) 14%, transparent);
   background: var(--color-surface-muted);

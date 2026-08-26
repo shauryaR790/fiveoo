@@ -57,7 +57,7 @@ export default function Process() {
                   : "border-t border-[var(--color-fg)]/12 py-9 md:py-12"
               }`}
             >
-              <span className="pt-0.5 text-[18px] font-medium tracking-[-0.02em] text-[var(--color-neon-orange)] md:text-[20px]">
+              <span className="step-index pt-0.5 text-[18px] md:text-[20px]">
                 ({step.number})
               </span>
               <div>
