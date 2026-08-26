@@ -64,7 +64,7 @@ export default function Hero() {
     <section
       id="top"
       ref={rootRef}
-      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-transparent px-6 pb-10 pt-[calc(var(--nav-height)+1.5rem)] text-[var(--color-fg)] md:px-10 lg:px-12"
+      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-transparent px-5 pb-10 pt-[calc(var(--nav-height)+1rem)] text-[var(--color-fg)] md:px-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
       data-nav-theme="dark"
     >
       <div className="relative z-[1] flex flex-1 flex-col gap-12 lg:flex-row lg:gap-0">
@@ -103,7 +103,7 @@ export default function Hero() {
                   ref={(el) => {
                     if (el) linesRef.current[i] = el;
                   }}
-                  className="block whitespace-nowrap will-change-transform"
+                  className="block will-change-transform md:whitespace-nowrap"
                 >
                   {line}
                 </span>
@@ -124,7 +124,7 @@ export default function Hero() {
 
         <div
           data-hero-sub
-          className="flex w-full items-end justify-between gap-8 lg:ml-auto lg:w-[41.5%]"
+          className="flex w-full flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-8 lg:ml-auto lg:w-[41.5%]"
         >
           <button
             type="button"

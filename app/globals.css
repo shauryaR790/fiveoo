@@ -22,9 +22,27 @@
   --font-display: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
   --font-card: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --nav-height: 5.5rem;
+  --nav-height: 4.25rem;
+  --page-px: 1.25rem;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: light;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --nav-height: 5.5rem;
+    --page-px: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --page-px: 3rem;
+  }
 }
 
 html.dark {
@@ -291,6 +309,19 @@ html.is-scroll-navigating #main {
     left: calc(3rem + (100% - 6rem) * 0.585);
     right: calc(3rem + 2.5rem + 2.25rem);
   }
+}
+
+.safe-top {
+  padding-top: max(var(--safe-top), 0px);
+}
+
+.safe-bottom {
+  padding-bottom: max(var(--safe-bottom), 0px);
+}
+
+.safe-x {
+  padding-left: max(var(--safe-left), 0px);
+  padding-right: max(var(--safe-right), 0px);
 }
 
 /* Dark-first: default nav is white; invert = black for rare light panels */

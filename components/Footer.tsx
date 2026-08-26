@@ -143,9 +143,9 @@ export default function Footer() {
 
           {/* Right - Habito link columns */}
           <div data-footer-reveal>
-            <div className="grid grid-cols-3 gap-x-6 md:gap-x-10 lg:gap-x-14">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 md:grid-cols-3 md:gap-x-10 lg:gap-x-14">
               {FOOTER_LINK_COLUMNS.map((column, colIndex) => (
-                <ul key={colIndex} className="flex flex-col gap-5 md:gap-6">
+                <ul key={colIndex} className="flex flex-col gap-4 md:gap-6">
                   {column.map((link) => (
                     <li key={link.label}>
                       <a
@@ -156,7 +156,7 @@ export default function Footer() {
                             void navigateToSection(link.href);
                           }
                         }}
-                        className="whitespace-nowrap font-[family-name:var(--font-card)] text-[20px] font-light tracking-[-0.02em] text-[var(--color-fg)] transition-opacity hover:opacity-50 md:text-[24px] lg:text-[28px]"
+                        className="inline-flex min-h-11 items-center font-[family-name:var(--font-card)] text-[18px] font-light tracking-[-0.02em] text-[var(--color-fg)] transition-opacity hover:opacity-50 md:text-[24px] lg:text-[28px]"
                       >
                         {link.label}
                       </a>

@@ -161,9 +161,12 @@ export default function Navbar() {
 
     attachLenis();
 
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+
     return () => {
       cancelAnimationFrame(rafId);
       lenisCleanup?.();
+      window.removeEventListener("scroll", updateVisibility);
       navTweenRef.current?.kill();
       gsap.set(nav, { clearProps: "transform" });
       nav.style.pointerEvents = "";
@@ -187,10 +190,10 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 will-change-transform"
+      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 will-change-transform safe-top safe-x"
     >
       <nav
-        className="relative mx-auto flex h-[var(--nav-height)] items-center justify-between px-6 md:px-10 lg:px-12"
+        className="mx-auto flex h-[var(--nav-height)] items-center justify-between px-5 md:px-10 lg:px-12"
         aria-label="Primary"
       >
         <a
@@ -224,12 +227,12 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="relative z-10 flex items-center gap-3">
+        <div className={`relative z-10 flex items-center gap-2 md:gap-3 ${menuOpen ? "max-md:hidden" : ""}`}>
           <Chatbot />
 
           <button
             type="button"
-            className="relative z-50 flex h-10 w-10 items-center justify-center md:hidden"
+            className="relative z-50 flex h-11 w-11 items-center justify-center md:hidden"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -250,7 +253,7 @@ export default function Navbar() {
 
       <div
         id="mobile-menu"
-        className={`fixed inset-0 z-40 bg-[var(--color-bg)] text-[var(--color-fg)] transition-transform duration-500 md:hidden ${
+        className={`fixed inset-0 z-[60] bg-[var(--color-bg)] text-[var(--color-fg)] transition-transform duration-500 safe-top safe-bottom safe-x md:hidden ${
           menuOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >

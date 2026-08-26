@@ -108,7 +108,7 @@ function WorkCard({
                 className="block h-auto w-full max-w-none [transform:translateZ(0)]"
               />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover/video:bg-black/25" />
-              <p className="pointer-events-none absolute inset-x-0 bottom-0 p-3 font-display text-base uppercase leading-tight text-white opacity-0 transition-opacity duration-300 group-hover/video:opacity-100 md:p-5 md:text-xl">
+              <p className="pointer-events-none absolute inset-x-0 bottom-0 p-3 font-display text-sm uppercase leading-tight text-white opacity-100 transition-opacity duration-300 md:p-5 md:text-xl md:opacity-0 md:group-hover/video:opacity-100">
                 Visit site →
               </p>
             </a>
@@ -175,7 +175,7 @@ export default function Works() {
         card.querySelector("[data-work-frame]"),
       ]);
 
-      if (prefersReducedMotion() || !title) {
+      if (prefersReducedMotion() || isMobileViewport() || !title) {
         gsap.set(title, {
           color:
             getComputedStyle(document.documentElement)
@@ -278,7 +278,7 @@ export default function Works() {
           (2023-2026)
         </h2>
 
-        <div className="grid grid-cols-3 items-start gap-1.5 pt-10 md:grid-cols-12 md:gap-2.5 md:pt-24 md:gap-y-8">
+        <div className="grid grid-cols-2 items-start gap-2 pt-8 md:grid-cols-12 md:gap-2.5 md:gap-y-8 md:pt-24">
           {WORKS.map((work) => (
             <WorkCard key={work.id} work={work} onImageClick={openLightbox} />
           ))}

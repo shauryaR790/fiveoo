@@ -12,7 +12,7 @@ type Logo = { name: string; src: string };
 
 function LogoTile({ logo }: { logo: Logo }) {
   return (
-    <div className="partner-logo-tile mr-3 flex aspect-square h-[209px] w-[209px] shrink-0 items-center justify-center px-3 md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
+    <div className="partner-logo-tile mr-2.5 flex aspect-square h-[132px] w-[132px] shrink-0 items-center justify-center px-2 sm:h-[168px] sm:w-[168px] md:mr-4 md:h-[266px] md:w-[266px] md:px-3.5 lg:h-[304px] lg:w-[304px] lg:px-4">
       <div className="relative h-[96%] w-[96%]">
         <Image
           src={logo.src}
@@ -114,7 +114,7 @@ export default function Partners() {
       </div>
 
       <div
-        className="pointer-events-none relative z-[1] h-28 bg-gradient-to-b from-transparent to-[var(--color-bg)] md:h-36"
+        className="pointer-events-none relative z-[1] h-20 bg-gradient-to-b from-transparent to-[var(--color-bg)] md:h-28"
         aria-hidden
       />
     </section>

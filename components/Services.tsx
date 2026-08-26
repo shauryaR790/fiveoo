@@ -8,7 +8,7 @@ import { SERVICE_GROUPS } from "@/lib/constants";
 import { prefersReducedMotion, isMobileViewport, fadeUp, setNavInvert, setNavPinDrive, refreshScrollTrigger } from "@/lib/animations";
 gsap.registerPlugin(ScrollTrigger);
 
-/** Glyphs in the scroll line — clover sits between OUR and SERVICES. */
+/** Glyphs in the scroll line - clover sits between OUR and SERVICES. */
 const HEADLINE_PARTS = [
   { type: "char" as const, value: "O" },
   { type: "char" as const, value: "U" },
@@ -147,6 +147,8 @@ export default function Services() {
       }
     }, root);
 
+    requestAnimationFrame(() => refreshScrollTrigger());
+
     return () => ctx.revert();
   }, []);
 
@@ -163,12 +165,11 @@ export default function Services() {
       >
         <div
           ref={headlineRef}
-          className="relative z-[2] overflow-visible pb-6 pt-[calc(var(--nav-height)+2rem)] will-change-[opacity,transform] md:absolute md:inset-x-0 md:bottom-[6%] md:pb-0 md:pt-0 lg:bottom-[7%]"
+          className="relative z-[2] overflow-x-clip overflow-y-visible pb-6 pt-[calc(var(--nav-height)+1.25rem)] will-change-[opacity,transform] md:absolute md:inset-x-0 md:bottom-[6%] md:overflow-visible md:pb-0 md:pt-0 lg:bottom-[7%]"
         >
           <div
             ref={trackRef}
-            style={{ fontSize: "clamp(4.5rem, 21vw, 28rem)" }}
-            className="font-display flex w-max items-end pl-5 pr-[10vw] uppercase leading-[0.82] text-[var(--color-fg)] will-change-transform md:pl-10 lg:pl-12"
+            className="font-display flex w-max items-end pl-5 pr-[6vw] text-[clamp(2.75rem,16vw,7rem)] uppercase leading-[0.82] text-[var(--color-fg)] will-change-transform md:pl-10 md:pr-[10vw] md:text-[clamp(4.5rem,21vw,28rem)] lg:pl-12"
           >
             {HEADLINE_PARTS.map((part, index) => {
               if (part.type === "space") {
@@ -227,10 +228,10 @@ export default function Services() {
               <div
                 key={group.id}
                 data-service-card
-                className="theme-card flex min-h-[70vh] flex-col rounded-none p-10 text-[var(--color-fg)] will-change-transform md:h-[760px] md:min-h-0 md:w-full"
+                className="theme-card flex min-h-0 flex-col rounded-none p-6 text-[var(--color-fg)] will-change-transform sm:min-h-[52vh] md:h-[760px] md:min-h-0 md:w-full md:p-10"
                 style={{ fontFamily: "var(--font-card)" }}
               >
-                <h3 className="font-editorial mb-10 max-w-[360px] whitespace-pre-line text-[2rem] leading-[1.12] md:mb-[56px] md:text-[44px]">
+                <h3 className="font-editorial mb-6 max-w-[360px] whitespace-pre-line text-[1.65rem] leading-[1.12] sm:text-[1.85rem] md:mb-[56px] md:text-[44px]">
                   {group.title}
                 </h3>
                 <ul className="flex flex-col gap-7 md:gap-8">
@@ -250,7 +251,7 @@ export default function Services() {
                           />
                         </svg>
                       </span>
-                      <span className="text-[22px] font-normal leading-[1.25] tracking-[-0.02em] md:text-[23px]">
+                      <span className="text-[18px] font-normal leading-[1.25] tracking-[-0.02em] sm:text-[20px] md:text-[23px]">
                         {item}
                       </span>
                     </li>

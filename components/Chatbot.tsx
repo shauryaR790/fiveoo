@@ -255,7 +255,7 @@ export default function Chatbot() {
               aria-label={backdropBlur ? "Hide background blur" : "Show background blur"}
               aria-pressed={backdropBlur}
               tabIndex={open ? 0 : -1}
-              className={`fixed left-5 top-1/2 z-[201] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_20%,transparent)] bg-[var(--color-bg)]/90 text-[var(--color-fg)] shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-md transition-[opacity,transform,border-color] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_34%,transparent)] hover:scale-[1.03] md:left-8 ${
+              className={`fixed left-5 top-1/2 z-[201] hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_20%,transparent)] bg-[var(--color-bg)]/90 text-[var(--color-fg)] shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-md transition-[opacity,transform,border-color] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_34%,transparent)] hover:scale-[1.03] md:left-8 md:flex ${
                 open
                   ? "pointer-events-auto translate-x-0 opacity-100"
                   : "pointer-events-none -translate-x-2 opacity-0"
@@ -290,29 +290,51 @@ export default function Chatbot() {
 
             <aside
               id="fiveo-chatbot-panel"
-              className={`fixed right-0 top-0 flex h-dvh w-[min(100%,420px)] flex-col border-l border-[color-mix(in_srgb,var(--color-fg)_14%,transparent)] bg-[var(--color-bg)] shadow-[-24px_0_80px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              className={`fixed right-0 top-0 flex h-dvh w-full max-w-[420px] flex-col border-l border-[color-mix(in_srgb,var(--color-fg)_14%,transparent)] bg-[var(--color-bg)] shadow-[-24px_0_80px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] safe-top safe-bottom safe-x ${
                 open
                   ? "pointer-events-auto translate-x-0"
                   : "pointer-events-none translate-x-full"
               }`}
             >
-              <div className="flex shrink-0 items-center justify-between border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] py-4 pl-1 pr-5 md:pl-2">
-                <FiveoMark className="h-10 md:h-11" />
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  aria-label="Close chat panel"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_16%,transparent)] text-[var(--color-fg)]/70 transition-colors hover:border-[color-mix(in_srgb,var(--color-fg)_30%,transparent)] hover:text-[var(--color-fg)]"
-                >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                    <path
-                      d="M2 2l10 10M12 2 2 12"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </button>
+              <div className="flex shrink-0 items-center justify-between border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] py-3 pl-1 pr-4 md:py-4 md:pr-5 md:pl-2">
+                <FiveoMark className="h-9 md:h-11" />
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setBackdropBlur((value) => !value)}
+                    aria-label={backdropBlur ? "Hide background blur" : "Show background blur"}
+                    aria-pressed={backdropBlur}
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_16%,transparent)] text-[var(--color-fg)]/70 transition-colors hover:border-[color-mix(in_srgb,var(--color-fg)_30%,transparent)] hover:text-[var(--color-fg)] md:hidden"
+                  >
+                    {backdropBlur ? (
+                      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden>
+                        <path d="M1.5 9s2.8-5.25 7.5-5.25S16.5 9 16.5 9s-2.8 5.25-7.5 5.25S1.5 9 1.5 9Z" stroke="currentColor" strokeWidth="1.4" />
+                        <circle cx="9" cy="9" r="2.2" stroke="currentColor" strokeWidth="1.4" />
+                        <path d="M3 15L15 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                      </svg>
+                    ) : (
+                      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden>
+                        <path d="M1.5 9s2.8-5.25 7.5-5.25S16.5 9 16.5 9s-2.8 5.25-7.5 5.25S1.5 9 1.5 9Z" stroke="currentColor" strokeWidth="1.4" />
+                        <circle cx="9" cy="9" r="2.2" stroke="currentColor" strokeWidth="1.4" />
+                      </svg>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    aria-label="Close chat panel"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_16%,transparent)] text-[var(--color-fg)]/70 transition-colors hover:border-[color-mix(in_srgb,var(--color-fg)_30%,transparent)] hover:text-[var(--color-fg)]"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+                      <path
+                        d="M2 2l10 10M12 2 2 12"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <div
@@ -356,7 +378,7 @@ export default function Chatbot() {
               </div>
 
               <form
-                className="shrink-0 border-t border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] p-4"
+                className="shrink-0 border-t border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] p-4 safe-bottom"
                 onSubmit={(event) => {
                   event.preventDefault();
                   void sendMessage();
@@ -373,7 +395,7 @@ export default function Chatbot() {
                   <button
                     type="submit"
                     disabled={loading || !input.trim() || typingMessageIndex !== null}
-                    className="rounded-full bg-[var(--color-fg)] px-4 py-2.5 text-[13px] font-semibold text-[var(--color-bg)] transition-opacity disabled:opacity-40"
+                    className="min-h-11 shrink-0 rounded-full bg-[var(--color-fg)] px-4 py-2.5 text-[13px] font-semibold text-[var(--color-bg)] transition-opacity disabled:opacity-40"
                   >
                     Send
                   </button>
@@ -393,11 +415,8 @@ export default function Chatbot() {
         aria-expanded={open}
         aria-controls="fiveo-chatbot-panel"
         aria-label={open ? "Close chat" : "Open chat"}
-        onClick={() => {
-          if (open && !backdropBlur) return;
-          setOpen((value) => !value);
-        }}
-        className="relative z-50 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-[11px] border border-[color-mix(in_srgb,var(--color-fg)_22%,transparent)] bg-[var(--color-bg)] p-0.5 transition-[border-color,transform] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_38%,transparent)] hover:scale-[1.03]"
+        onClick={() => setOpen((value) => !value)}
+        className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[11px] border border-[color-mix(in_srgb,var(--color-fg)_22%,transparent)] bg-[var(--color-bg)] p-0.5 transition-[border-color,transform] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_38%,transparent)] hover:scale-[1.03] md:h-10 md:w-10"
       >
         <Image
           src="/images/chatbot-avatar.jpg"
