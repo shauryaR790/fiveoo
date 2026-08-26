@@ -12,9 +12,9 @@ function canvasFont(weight: number, sizePx: number) {
 }
 
 const COLS = 4;
-const ROWS = 3;
-const COL_GAP = 0.34;
-const ROW_GAP = 0.42;
+const ROWS = 4;
+const COL_GAP = 0.28;
+const ROW_GAP = 0.34;
 const TILE_AR = 9 / 16;
 const COL_OFF = [0, 0.3, 0.12, 0.44];
 
@@ -28,7 +28,10 @@ const SLOTS = [
   { c: 2, r: 1, kind: "work" as const, i: 4 },
   { c: 3, r: 1, kind: "work" as const, i: 5 },
   { c: 0, r: 2, kind: "work" as const, i: 6 },
+  { c: 1, r: 2, kind: "work" as const, i: 8 },
   { c: 2, r: 2, kind: "work" as const, i: 7 },
+  { c: 3, r: 2, kind: "work" as const, i: 9 },
+  { c: 0, r: 3, kind: "work" as const, i: 10 },
 ];
 
 const BLUR_SCALE = 0.34;

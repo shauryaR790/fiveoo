@@ -7,6 +7,9 @@ export const NOMAD_TILES = [
   { src: "/nomad/tiles/nomad-mograph.mp4", label: "" },
   { src: "/nomad/tiles/scape-loop.mp4", label: "" },
   { src: "/nomad/tiles/bububar.mp4", label: "" },
+  { src: "/nomad/tiles/bpage.mp4", label: "" },
+  { src: "/nomad/tiles/cpage.mp4", label: "" },
+  { src: "/nomad/tiles/frontfiveo.mp4", label: "" },
 ] as const;
 
 export const NOMAD_CARDS = [
