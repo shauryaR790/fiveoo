@@ -16,8 +16,6 @@ export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const navVisibleRef = useRef(true);
-  const lastScrollRef = useRef(0);
-  const scrollDeltaRef = useRef(0);
   const navTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useLayoutEffect(() => {
@@ -84,27 +82,21 @@ export default function Navbar() {
     const nav = navRef.current;
     if (!nav || prefersReducedMotion()) return;
 
-    const navHeight =
-      parseFloat(
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--nav-height",
-        ),
-      ) || 88;
+    let lastScroll = 0;
 
-    const hideDistance = 36;
-    const showDistance = 16;
-    const topThreshold = 32;
-    let rafId = 0;
-    let lenisCleanup: (() => void) | undefined;
+    const getScrollY = () => getLenis()?.scroll ?? window.scrollY;
 
     const animateNav = (visible: boolean) => {
       if (navVisibleRef.current === visible) return;
 
       navVisibleRef.current = visible;
       navTweenRef.current?.kill();
+
+      const hideBy = nav.offsetHeight;
+
       navTweenRef.current = gsap.to(nav, {
-        y: visible ? 0 : -navHeight,
-        duration: visible ? 0.6 : 0.45,
+        y: visible ? 0 : -hideBy,
+        duration: visible ? 0.55 : 0.4,
         ease: visible ? "power3.out" : "power2.inOut",
         overwrite: "auto",
         onStart: () => {
@@ -113,64 +105,54 @@ export default function Navbar() {
       });
     };
 
-    const updateVisibility = (scroll: number) => {
-      if (menuOpen) {
-        lastScrollRef.current = scroll;
-        scrollDeltaRef.current = 0;
-        animateNav(true);
-        return;
-      }
-
-      if (scroll <= topThreshold) {
-        lastScrollRef.current = scroll;
-        scrollDeltaRef.current = 0;
-        animateNav(true);
-        return;
-      }
-
-      const delta = scroll - lastScrollRef.current;
-      lastScrollRef.current = scroll;
-
-      if (Math.abs(delta) < 0.25) return;
-
-      scrollDeltaRef.current += delta;
-
-      if (scrollDeltaRef.current >= hideDistance) {
-        animateNav(false);
-        scrollDeltaRef.current = hideDistance;
-      } else if (scrollDeltaRef.current <= -showDistance) {
-        animateNav(true);
-        scrollDeltaRef.current = -showDistance;
-      }
-    };
-
-    const attachLenis = () => {
+    const updateVisibility = () => {
+      const scroll = getScrollY();
       const lenis = getLenis();
-      if (!lenis) {
-        rafId = requestAnimationFrame(attachLenis);
+      const direction = lenis?.direction ?? Math.sign(scroll - lastScroll);
+
+      if (menuOpen || scroll <= 40) {
+        lastScroll = scroll;
+        animateNav(true);
         return;
       }
 
-      const onLenisScroll = () => {
-        updateVisibility(lenis.scroll);
-      };
+      if (direction > 0) {
+        animateNav(false);
+      } else if (direction < 0) {
+        animateNav(true);
+      } else {
+        const delta = scroll - lastScroll;
+        if (delta > 1) animateNav(false);
+        else if (delta < -1) animateNav(true);
+      }
 
-      lenis.on("scroll", onLenisScroll);
-      gsap.set(nav, { y: 0 });
-      navVisibleRef.current = true;
-      nav.style.pointerEvents = "";
-      lastScrollRef.current = lenis.scroll;
-      lenisCleanup = () => lenis.off("scroll", onLenisScroll);
+      lastScroll = scroll;
     };
 
-    attachLenis();
+    gsap.set(nav, { y: 0 });
+    navVisibleRef.current = true;
+    nav.style.pointerEvents = "";
+    lastScroll = getScrollY();
+
+    const tick = () => {
+      updateVisibility();
+    };
+
+    gsap.ticker.add(tick);
+
+    const onWindowScroll = () => {
+      updateVisibility();
+    };
+
+    window.addEventListener("scroll", onWindowScroll, { passive: true });
 
     return () => {
-      cancelAnimationFrame(rafId);
-      lenisCleanup?.();
+      gsap.ticker.remove(tick);
+      window.removeEventListener("scroll", onWindowScroll);
       navTweenRef.current?.kill();
       gsap.set(nav, { clearProps: "transform" });
       nav.style.pointerEvents = "";
+      navVisibleRef.current = true;
     };
   }, [menuOpen]);
 
