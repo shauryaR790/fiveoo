@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   title: "FIVEO: Seamless Brand Identity",
   description:
     "FIVEO is a creative partner for startups and scale-ups. Branding, UI/UX, and motion, on demand.",
+  other: {
+    contact: "fiveoagency@gmail.com",
+  },
 };
 
 const themeInitScript = `(function(){try{var t=localStorage.getItem("theme");document.documentElement.classList.toggle("dark",t!=="light");}catch(e){document.documentElement.classList.add("dark");}})();`;

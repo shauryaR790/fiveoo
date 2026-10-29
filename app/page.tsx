@@ -17,7 +17,9 @@ export default function Home() {
       <Works />
       <Branding />
       <Services />
-      <Pricing />
+      <div className="hidden md:block">
+        <Pricing />
+      </div>
       <Process />
       <Partners />
       <Testimonials />

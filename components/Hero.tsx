@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
+import { CONTACT_EMAIL, CONTACT_MAILTO } from "@/lib/constants";
 import { prefersReducedMotion, bindCursorSlideTrack } from "@/lib/animations";
 import { scrollToTarget } from "@/lib/lenis";
 
@@ -64,20 +65,20 @@ export default function Hero() {
     <section
       id="top"
       ref={rootRef}
-      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-transparent px-5 pb-10 pt-[calc(var(--nav-height)+1rem)] text-[var(--color-fg)] md:px-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
+      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-transparent px-5 pb-12 pt-[calc(var(--nav-height)+0.75rem)] text-[var(--color-fg)] md:px-10 md:pb-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
       data-nav-theme="dark"
     >
-      <div className="relative z-[1] flex flex-1 flex-col gap-12 lg:flex-row lg:gap-0">
+      <div className="relative z-[1] flex flex-1 flex-col gap-10 md:gap-12 lg:flex-row lg:gap-0">
         {/* Showreel track - the bounded area the box slides within */}
         <div ref={trackRef} className="relative lg:w-[40%] lg:pt-2">
           <div
             ref={slideRef}
             data-cursor-grow
-            className="mr-auto w-full max-w-[420px] will-change-transform lg:w-[420px] lg:max-w-none"
+            className="mr-auto w-full max-w-[min(100%,420px)] will-change-transform lg:w-[420px] lg:max-w-none"
           >
             <div
               ref={mediaRef}
-              className="relative aspect-video w-full overflow-hidden bg-[var(--color-bg)] will-change-transform"
+              className="relative aspect-video w-full overflow-hidden rounded-2xl bg-[var(--color-bg)] will-change-transform md:rounded-none"
             >
               <video
                 src="/videos/frontfiveo.mp4"
@@ -96,7 +97,7 @@ export default function Hero() {
 
         {/* Massive headline - left edge aligns with the first nav link */}
         <div className="lg:ml-auto lg:w-[41.5%]">
-          <h1 className="font-display text-left text-[clamp(2.75rem,7.8vw,7.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.03em]">
+          <h1 className="font-display text-left text-[clamp(2.35rem,11.2vw,7.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
             {["We build", "seamless", "identity"].map((line, i) => (
               <span key={line} className="block overflow-hidden">
                 <span
@@ -113,23 +114,28 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="relative z-[1] mt-16 flex flex-col items-start gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
+      <div className="relative z-[1] mt-12 flex flex-col items-start gap-8 md:mt-16 md:gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
         <p
           data-hero-sub
-          className="max-w-[12.5em] font-[family-name:var(--font-card)] text-[clamp(2rem,4.1vw,3.75rem)] font-light leading-[1.15] tracking-[-0.03em] lg:w-[52%]"
+          className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.65rem,5.2vw,3.75rem)] font-light leading-[1.2] tracking-[-0.03em] md:max-w-[12.5em] md:text-[clamp(2rem,4.1vw,3.75rem)] md:leading-[1.15] lg:w-[52%]"
         >
-          Pick a plan, send in your request, and your design journey starts
-          tomorrow.
+          <span className="md:hidden">
+            Brand, product, and motion—crafted with studio precision.
+          </span>
+          <span className="hidden md:inline">
+            Pick a plan, send in your request, and your design journey starts
+            tomorrow.
+          </span>
         </p>
 
         <div
           data-hero-sub
-          className="flex w-full flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-8 lg:ml-auto lg:w-[41.5%]"
+          className="flex w-full flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8 md:gap-5 lg:ml-auto lg:w-[41.5%]"
         >
           <button
             type="button"
             onClick={() => scrollToTarget("#about")}
-            className="group inline-flex items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60"
+            className="group inline-flex min-h-11 items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.2rem,4.5vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60 md:text-[clamp(1.35rem,2.4vw,2.15rem)]"
           >
             About us
             <span
@@ -139,10 +145,22 @@ export default function Hero() {
               →
             </span>
           </button>
+          <a
+            href={CONTACT_MAILTO}
+            className="group inline-flex min-h-11 items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.2rem,4.5vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60 md:hidden"
+          >
+            {CONTACT_EMAIL}
+            <span
+              aria-hidden
+              className="transition-transform group-hover:translate-x-1"
+            >
+              →
+            </span>
+          </a>
           <button
             type="button"
             onClick={() => scrollToTarget("#pricing")}
-            className="group inline-flex items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60"
+            className="group hidden min-h-11 items-center gap-3 border-b border-[var(--color-fg)] pb-1.5 text-[clamp(1.35rem,2.4vw,2.15rem)] font-normal tracking-[-0.025em] transition-opacity hover:opacity-60 md:inline-flex"
           >
             Explore Plans
             <span

@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { FOOTER_LINK_COLUMNS } from "@/lib/constants";
+import { CONTACT_EMAIL, CONTACT_MAILTO, FOOTER_LINK_COLUMNS } from "@/lib/constants";
 import {
   fadeUp,
   infiniteMarquee,
@@ -97,7 +97,7 @@ export default function Footer() {
     <footer
       id="footer"
       ref={rootRef}
-      className="relative theme-surface flex min-h-dvh flex-col overflow-x-clip"
+      className="relative theme-surface flex min-h-0 flex-col overflow-x-clip md:min-h-dvh"
       data-nav-theme="dark"
       style={{ fontFamily: "var(--font-card)" }}
     >
@@ -120,21 +120,34 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="relative flex flex-1 flex-col justify-center px-5 py-16 md:px-10 md:py-20 lg:px-16">
-        <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-16 lg:gap-24">
-          {/* Left - slim Habito CTA */}
+      <div className="relative flex flex-1 flex-col justify-center px-5 py-14 md:px-10 md:py-20 lg:px-16">
+        <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-16 lg:gap-24">
+          {/* Left - CTA */}
           <div data-footer-reveal>
-            <p className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.7rem,3vw,2.65rem)] font-light leading-[1.25] tracking-[-0.03em] text-[var(--color-fg)]">
-              Choose a plan, send in your request, and your design journey
-              starts tomorrow.
+            <p className="max-w-[18ch] font-[family-name:var(--font-card)] text-[clamp(1.55rem,4.8vw,2.65rem)] font-light leading-[1.22] tracking-[-0.03em] text-[var(--color-fg)] md:max-w-[16ch] md:leading-[1.25]">
+              <span className="md:hidden">
+                Tell us what you are building—we will reply from the studio within
+                one business day.
+              </span>
+              <span className="hidden md:inline">
+                Choose a plan, send in your request, and your design journey
+                starts tomorrow.
+              </span>
             </p>
+            <a
+              href={CONTACT_MAILTO}
+              className="mt-7 inline-flex min-h-11 items-center gap-2 border-b border-[var(--color-fg)]/75 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] text-[var(--color-fg)] transition-opacity hover:opacity-55 md:hidden"
+            >
+              {CONTACT_EMAIL}
+              <span aria-hidden>→</span>
+            </a>
             <a
               href="#pricing"
               onClick={(e) => {
                 e.preventDefault();
                 void navigateToSection("#pricing");
               }}
-              className="mt-8 inline-flex items-center gap-2 border-b border-[var(--color-fg)]/75 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] text-[var(--color-fg)] transition-opacity hover:opacity-55"
+              className="mt-8 hidden min-h-11 items-center gap-2 border-b border-[var(--color-fg)]/75 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] text-[var(--color-fg)] transition-opacity hover:opacity-55 md:inline-flex"
             >
               Explore Plans
               <span aria-hidden>→</span>
@@ -147,7 +160,12 @@ export default function Footer() {
               {FOOTER_LINK_COLUMNS.map((column, colIndex) => (
                 <ul key={colIndex} className="flex flex-col gap-4 md:gap-6">
                   {column.map((link) => (
-                    <li key={link.label}>
+                    <li
+                      key={link.label}
+                      className={
+                        link.href === "#pricing" ? "hidden md:list-item" : undefined
+                      }
+                    >
                       <a
                         href={link.href}
                         onClick={(e) => {
@@ -180,11 +198,11 @@ export default function Footer() {
 
       <div
         data-footer-reveal
-        className="relative mt-auto flex shrink-0 flex-col items-start justify-between gap-4 border-t border-[var(--color-fg)]/10 px-5 py-5 text-[13px] font-light tracking-[-0.015em] text-[var(--color-fg)] md:flex-row md:items-center md:px-10 md:py-6 lg:px-16"
+        className="relative mt-auto flex shrink-0 flex-col items-start justify-between gap-5 border-t border-[var(--color-fg)]/10 px-5 py-6 text-[13px] font-light tracking-[-0.015em] text-[var(--color-fg)] md:flex-row md:items-center md:gap-4 md:px-10 md:py-6 lg:px-16"
       >
         <a
           href="#"
-          className="inline-flex items-center gap-2.5 text-[var(--color-fg)] transition-opacity hover:opacity-60"
+          className="inline-flex min-h-11 items-center gap-2.5 text-[var(--color-fg)] transition-opacity hover:opacity-60"
         >
           Company Deck
           <span
@@ -201,6 +219,13 @@ export default function Footer() {
               />
             </svg>
           </span>
+        </a>
+
+        <a
+          href={CONTACT_MAILTO}
+          className="inline-flex min-h-11 items-center text-[var(--color-fg)]/55 transition-opacity hover:text-[var(--color-fg)] hover:opacity-100"
+        >
+          {CONTACT_EMAIL}
         </a>
 
         <p className="text-[var(--color-fg)]/55">

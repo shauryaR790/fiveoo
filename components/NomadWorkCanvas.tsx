@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { CONTACT_MAILTO } from "@/lib/constants";
 import { WorkCanvas } from "@/lib/nomad/work-canvas";
 import { scrollToTarget } from "@/lib/lenis";
 import { refreshScrollTrigger } from "@/lib/animations";
@@ -18,7 +19,11 @@ export default function NomadWorkCanvas() {
     const work = new WorkCanvas(canvas, container, {
       onRoute: (route) => {
         if (route === "about") scrollToTarget("#about");
-        else scrollToTarget("#pricing");
+        else if (window.matchMedia("(min-width: 768px)").matches) {
+          scrollToTarget("#pricing");
+        } else {
+          window.location.href = CONTACT_MAILTO;
+        }
       },
       onFirstDrag: () => setHintVisible(false),
     });

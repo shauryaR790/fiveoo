@@ -1,5 +1,7 @@
 import { NextRequest } from "next/server";
 
+import { CONTACT_EMAIL } from "@/lib/constants";
+
 type ChatMessage = {
   role: "user" | "assistant";
   content: string;
@@ -8,11 +10,11 @@ type ChatMessage = {
 const SYSTEM_PROMPT = `You are the FIVEO studio assistant on fiveoo.com. FIVEO is a creative partner for startups and scale-ups offering branding, UI/UX, motion, and design on demand.
 
 Help visitors with:
-- Services, pricing plans, and how FIVEO works
-- Navigating the site (About, Works, Services, Pricing, Process, Careers)
+- Services, pricing plans (desktop site), and how FIVEO works
+- Navigating the site (About, Works, Services, Pricing on desktop, Process, Careers)
 - General questions about starting a design project with FIVEO
 
-Keep replies concise, friendly, and professional. If you do not know something specific about the studio, say so and suggest they explore the Pricing section or reach out through the site footer.`;
+Keep replies concise, friendly, and professional. For project inquiries, direct people to email ${CONTACT_EMAIL}. On desktop they can also explore the Pricing section on the site; on mobile, pricing is not shown—email is the best next step. If you do not know something specific about the studio, say so and suggest ${CONTACT_EMAIL}.`;
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.OPENAI_API_KEY;

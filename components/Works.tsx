@@ -208,7 +208,7 @@ function PosAdShowcase() {
   return (
     <div
       ref={rootRef}
-      className="relative mt-14 border-t border-[color-mix(in_srgb,var(--color-fg)_10%,transparent)] pt-12 md:mt-20 md:pt-16"
+      className="relative mt-14 border-t border-[color-mix(in_srgb,var(--color-fg)_10%,transparent)] pt-10 md:mt-20 md:pt-16"
     >
       <div className="mb-8 flex flex-col gap-8 md:mb-10 lg:mb-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
         <h2
@@ -232,7 +232,7 @@ function PosAdShowcase() {
 
       <div
         data-pos-reveal
-        className="theme-card relative w-full overflow-hidden rounded-[25px] bg-black"
+        className="theme-card relative w-full overflow-hidden rounded-[20px] bg-black md:rounded-[25px]"
       >
         <video
           ref={videoRef}
@@ -240,7 +240,7 @@ function PosAdShowcase() {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           aria-label="FIVEO POS software product demo"
           className="block h-auto w-full max-w-none object-contain [transform:translateZ(0)] [backface-visibility:hidden]"
         />

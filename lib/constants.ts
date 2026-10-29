@@ -1,9 +1,18 @@
+export const CONTACT_EMAIL = "fiveoagency@gmail.com";
+export const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}` as const;
+
 export const NAV_LINKS = [
   { label: "About", href: "#about" },
   { label: "Works", href: "#works" },
   { label: "Services", href: "#services" },
   { label: "Careers", href: "#careers" },
   { label: "Pricing", href: "#pricing" },
+] as const;
+
+/** Mobile nav: no pricing section; direct contact instead. */
+export const MOBILE_NAV_LINKS = [
+  ...NAV_LINKS.filter((link) => link.href !== "#pricing"),
+  { label: "Contact", href: CONTACT_MAILTO },
 ] as const;
 
 export const HERO_SLIDES = [

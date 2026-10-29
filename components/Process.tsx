@@ -27,16 +27,16 @@ export default function Process() {
     <section
       id="process"
       ref={rootRef}
-      className="theme-surface relative overflow-hidden px-5 pb-12 pt-20 md:px-10 md:pb-16 md:pt-28 lg:px-16"
+      className="theme-surface relative overflow-hidden px-5 pb-12 pt-16 md:px-10 md:pb-16 md:pt-28 lg:px-16"
       data-nav-theme="dark"
       aria-label="Process"
       style={{ fontFamily: "var(--font-card)" }}
     >
-      <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2 md:gap-14 lg:gap-24">
+      <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-14 lg:gap-24">
         <div className="mt-[7px] md:-mt-[3px] lg:-mt-px">
           <h2
             data-process-reveal
-            className="font-display m-0 max-w-[8ch] text-[clamp(4rem,9vw,8.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.055em] text-[var(--color-fg)] md:sticky md:top-24"
+            className="font-display m-0 max-w-[8ch] text-[clamp(2.65rem,12vw,8.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.055em] text-[var(--color-fg)] md:sticky md:top-24 md:leading-[0.88]"
           >
             <span className="block">Seamless</span>
             <span className="block">Process,</span>

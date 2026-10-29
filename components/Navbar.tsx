@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { NAV_LINKS } from "@/lib/constants";
+import { MOBILE_NAV_LINKS, NAV_LINKS } from "@/lib/constants";
 import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
@@ -182,6 +182,10 @@ export default function Navbar() {
   }, [menuOpen]);
 
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("mailto:")) {
+      setMenuOpen(false);
+      return;
+    }
     e.preventDefault();
     setMenuOpen(false);
     void navigateToSection(href);
@@ -257,13 +261,13 @@ export default function Navbar() {
           menuOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <ul className="flex h-full flex-col justify-center gap-8 px-8 pt-16">
-          {NAV_LINKS.map((link) => (
+        <ul className="flex h-full flex-col justify-center gap-8 px-8 pt-16 pb-[max(2rem,var(--safe-bottom))]">
+          {MOBILE_NAV_LINKS.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
                 onClick={(e) => handleNav(e, link.href)}
-                className="font-display text-4xl uppercase tracking-tight"
+                className="font-display text-[clamp(2.25rem,10vw,3.5rem)] uppercase leading-[0.95] tracking-[-0.04em]"
               >
                 {link.label}
               </a>
