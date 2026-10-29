@@ -232,7 +232,7 @@ function PosAdShowcase() {
 
       <div
         data-pos-reveal
-        className="theme-card relative w-full overflow-hidden bg-black"
+        className="theme-card relative w-full overflow-hidden rounded-[25px] bg-black"
       >
         <video
           ref={videoRef}
