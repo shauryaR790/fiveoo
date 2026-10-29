@@ -11,6 +11,7 @@ import {
   prefersReducedMotion,
   isMobileViewport,
   setNavInvert,
+  fadeUp,
 } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -157,6 +158,97 @@ function WorkCard({
   );
 }
 
+function PosAdShowcase() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const ctx = gsap.context(() => {
+      fadeUp(root.querySelectorAll("[data-pos-reveal]"), {
+        trigger: root,
+        stagger: 0.12,
+        y: 40,
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || prefersReducedMotion()) return;
+
+    const syncPlayback = (entry: IntersectionObserverEntry) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
+        if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+          video.load();
+        }
+        void video.play().catch(() => {});
+        return;
+      }
+
+      video.pause();
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry) syncPlayback(entry);
+      },
+      { threshold: [0, 0.15, 0.35], rootMargin: "120px 0px" },
+    );
+
+    observer.observe(video);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={rootRef}
+      className="relative mt-14 border-t border-[color-mix(in_srgb,var(--color-fg)_10%,transparent)] pt-12 md:mt-20 md:pt-16"
+    >
+      <div className="mb-8 flex flex-col gap-8 md:mb-10 lg:mb-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+        <h2
+          data-pos-reveal
+          className="font-display text-left text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] tracking-[-0.03em] text-[var(--color-fg)]"
+        >
+          The new
+          <br />
+          POS software
+        </h2>
+        <p
+          data-pos-reveal
+          className="max-w-[34rem] font-[family-name:var(--font-card)] text-[15px] font-light leading-[1.55] tracking-[-0.02em] text-[var(--color-fg)]/90 md:text-[17px] lg:max-w-[38%] lg:text-[18px]"
+        >
+          Ring up sales, sync inventory, and take payments from one clean
+          interface. Every transaction updates stock in real time, so your team
+          moves fast at the counter while you track performance from a single
+          dashboard—no patchwork tools, no slowdown at peak hours.
+        </p>
+      </div>
+
+      <div
+        data-pos-reveal
+        className="theme-card relative w-full overflow-hidden bg-black"
+      >
+        <video
+          ref={videoRef}
+          src="/videos/POS_AD.mp4"
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label="FIVEO POS software product demo"
+          className="block h-auto w-full max-w-none object-contain [transform:translateZ(0)] [backface-visibility:hidden]"
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function Works() {
   const rootRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
@@ -291,6 +383,8 @@ export default function Works() {
             <WorkCard key={work.id} work={work} columns={2} />
           ))}
         </div>
+
+        <PosAdShowcase />
 
         <NomadWorkCanvas />
       </div>
