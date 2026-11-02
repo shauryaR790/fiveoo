@@ -156,7 +156,7 @@ export default function Testimonials() {
                         {item.services.map((service) => (
                           <span
                             key={service}
-                            className="rounded-full border border-[var(--color-fg)]/75 px-4 py-2 text-[13px] font-normal tracking-[-0.015em] text-[var(--color-fg)] md:px-5 md:py-2.5 md:text-[14px]"
+                            className="glass-fallback rounded-full px-4 py-2 text-[13px] font-normal tracking-[-0.015em] text-[var(--color-fg)] md:px-5 md:py-2.5 md:text-[14px]"
                           >
                             {service}
                           </span>

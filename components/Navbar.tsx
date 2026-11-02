@@ -8,6 +8,7 @@ import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
 import { Text3DFlip } from "@/components/ui/text-3d-flip";
+import LiquidGlass from "@/components/ui/liquid-glass";
 import Chatbot from "@/components/Chatbot";
 import FiveoMark from "@/components/FiveoMark";
 
@@ -196,72 +197,93 @@ export default function Navbar() {
       ref={navRef}
       className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 will-change-transform safe-top safe-x"
     >
-      <nav
-        className="mx-auto flex h-[var(--nav-height)] items-center justify-between px-5 md:px-10 lg:px-12"
-        aria-label="Primary"
-      >
-        <a
-          href="#top"
-          onClick={(e) => handleNav(e, "#top")}
-          className="relative z-10 block text-[var(--color-fg)]"
-          aria-label="FIVEO"
+      <div className="px-3 pt-2 md:px-5 md:pt-3 lg:px-6">
+        <LiquidGlass
+          preset="nav"
+          cornerRadius={22}
+          className="w-full"
+          contentClassName="w-full"
         >
-          <FiveoMark />
-        </a>
-
-        <ul className="nav-links">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                onClick={(e) => handleNav(e, link.href)}
-                className="block text-[17px] font-semibold tracking-[-0.01em]"
-              >
-                <Text3DFlip
-                  as="span"
-                  className="perspective-[800px] text-[var(--color-fg)]"
-                  textClassName="text-[var(--color-fg)]"
-                  flipTextClassName="text-[var(--color-fg)]"
-                  rotateDirection="top"
-                >
-                  {link.label}
-                </Text3DFlip>
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className={`relative z-10 flex items-center gap-2 md:gap-3 ${menuOpen ? "max-md:hidden" : ""}`}>
-          <Chatbot />
-
-          <button
-            type="button"
-            className="relative z-50 flex h-11 w-11 items-center justify-center md:hidden"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen((v) => !v)}
+          <nav
+            className="relative mx-auto flex h-[calc(var(--nav-height)-0.65rem)] w-full items-center justify-between px-3 md:h-[calc(var(--nav-height)-0.85rem)] md:px-5 lg:px-6"
+            aria-label="Primary"
           >
-            <span className="sr-only">Menu</span>
-            <span className="flex w-6 flex-col gap-1.5">
-              <span
-                className={`block h-0.5 w-full bg-current transition-transform ${menuOpen ? "translate-y-[4px] rotate-45" : ""}`}
-              />
-              <span
-                className={`block h-0.5 w-full bg-current transition-transform ${menuOpen ? "-translate-y-[4px] -rotate-45" : ""}`}
-              />
-            </span>
-          </button>
-        </div>
-      </nav>
+            <a
+              href="#top"
+              onClick={(e) => handleNav(e, "#top")}
+              className="relative z-10 block text-[var(--color-fg)]"
+              aria-label="FIVEO"
+            >
+              <FiveoMark />
+            </a>
+
+            <ul className="nav-links">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={(e) => handleNav(e, link.href)}
+                    className="block text-[17px] font-semibold tracking-[-0.01em]"
+                  >
+                    <Text3DFlip
+                      as="span"
+                      className="perspective-[800px] text-[var(--color-fg)]"
+                      textClassName="text-[var(--color-fg)]"
+                      flipTextClassName="text-[var(--color-fg)]"
+                      rotateDirection="top"
+                    >
+                      {link.label}
+                    </Text3DFlip>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <div
+              className={`relative z-10 flex items-center gap-2 md:gap-3 ${
+                menuOpen ? "max-md:hidden" : ""
+              }`}
+            >
+              <Chatbot />
+
+              <LiquidGlass
+                as="button"
+                preset="control"
+                cornerRadius={12}
+                className="relative z-50 h-11 w-11 md:hidden"
+                contentClassName="h-full w-full items-center justify-center"
+                aria-expanded={menuOpen}
+                aria-controls="mobile-menu"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                onClick={() => setMenuOpen((v) => !v)}
+              >
+                <span className="sr-only">Menu</span>
+                <span className="flex w-5 flex-col gap-1.5 text-[var(--color-fg)]">
+                  <span
+                    className={`block h-0.5 w-full bg-current transition-transform ${
+                      menuOpen ? "translate-y-[4px] rotate-45" : ""
+                    }`}
+                  />
+                  <span
+                    className={`block h-0.5 w-full bg-current transition-transform ${
+                      menuOpen ? "-translate-y-[4px] -rotate-45" : ""
+                    }`}
+                  />
+                </span>
+              </LiquidGlass>
+            </div>
+          </nav>
+        </LiquidGlass>
+      </div>
 
       <div
         id="mobile-menu"
-        className={`fixed inset-0 z-[60] bg-[var(--color-bg)] text-[var(--color-fg)] transition-transform duration-500 safe-top safe-bottom safe-x md:hidden ${
+        className={`fixed inset-0 z-[60] text-[var(--color-fg)] transition-transform duration-500 safe-top safe-bottom safe-x md:hidden ${
           menuOpen ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <ul className="flex h-full flex-col justify-center gap-8 px-8 pt-16 pb-[max(2rem,var(--safe-bottom))]">
+        <div className="absolute inset-0 bg-[var(--color-bg)]/75 backdrop-blur-2xl" />
+        <ul className="relative z-[1] flex h-full flex-col justify-center gap-8 px-8 pt-16 pb-[max(2rem,var(--safe-bottom))]">
           {MOBILE_NAV_LINKS.map((link) => (
             <li key={link.href}>
               <a

@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { SERVICE_GROUPS } from "@/lib/constants";
 import { prefersReducedMotion, isMobileViewport, fadeUp, setNavInvert, setNavPinDrive, refreshScrollTrigger } from "@/lib/animations";
+import LiquidGlass from "@/components/ui/liquid-glass";
 gsap.registerPlugin(ScrollTrigger);
 
 /** Glyphs in the scroll line - clover sits between OUR and SERVICES. */
@@ -225,39 +226,46 @@ export default function Services() {
         <div className="relative z-[4] px-5 pb-10 pt-16 md:absolute md:inset-0 md:flex md:translate-y-[15px] md:items-center md:px-[60px] md:pb-0 md:pt-0">
           <div className="grid w-full grid-cols-1 gap-[18px] md:grid-cols-3">
             {SERVICE_GROUPS.map((group) => (
-              <div
+              <LiquidGlass
                 key={group.id}
-                data-service-card
-                className="theme-card flex min-h-0 flex-col rounded-none p-6 text-[var(--color-fg)] will-change-transform sm:min-h-[52vh] md:h-[760px] md:min-h-0 md:w-full md:p-10"
+                preset="card"
+                cornerRadius={24}
+                className="theme-card-glass min-h-0 w-full will-change-transform sm:min-h-[52vh] md:h-[760px] md:min-h-0"
+                contentClassName="h-full min-h-0 flex-col items-stretch p-6 text-[var(--color-fg)] md:p-10"
                 style={{ fontFamily: "var(--font-card)" }}
               >
-                <h3 className="font-editorial mb-6 max-w-[360px] whitespace-pre-line text-[1.65rem] leading-[1.12] sm:text-[1.85rem] md:mb-[56px] md:text-[44px]">
-                  {group.title}
-                </h3>
-                <ul className="flex flex-col gap-7 md:gap-8">
-                  {group.items.map((item) => (
-                    <li key={item} className="flex items-center gap-3.5">
-                      <span
-                        className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-black"
-                        aria-hidden
-                      >
-                        <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
-                          <path
-                            d="M2.1 5.15 4.05 7.1 7.9 2.9"
-                            stroke="#fff"
-                            strokeWidth="1.7"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </span>
-                      <span className="text-[18px] font-normal leading-[1.25] tracking-[-0.02em] sm:text-[20px] md:text-[23px]">
-                        {item}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <div
+                  data-service-card
+                  className="flex h-full min-h-0 flex-col"
+                >
+                  <h3 className="font-editorial mb-6 max-w-[360px] whitespace-pre-line text-[1.65rem] leading-[1.12] sm:text-[1.85rem] md:mb-[56px] md:text-[44px]">
+                    {group.title}
+                  </h3>
+                  <ul className="flex flex-col gap-7 md:gap-8">
+                    {group.items.map((item) => (
+                      <li key={item} className="flex items-center gap-3.5">
+                        <span
+                          className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-black"
+                          aria-hidden
+                        >
+                          <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
+                            <path
+                              d="M2.1 5.15 4.05 7.1 7.9 2.9"
+                              stroke="#fff"
+                              strokeWidth="1.7"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </span>
+                        <span className="text-[18px] font-normal leading-[1.25] tracking-[-0.02em] sm:text-[20px] md:text-[23px]">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </LiquidGlass>
             ))}
           </div>
         </div>

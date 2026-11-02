@@ -12,6 +12,7 @@ import {
 import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import NeonFog from "@/components/NeonFog";
+import LiquidGlass from "@/components/ui/liquid-glass";
 
 function BrandUnit() {
   return (
@@ -134,24 +135,30 @@ export default function Footer() {
                 starts tomorrow.
               </span>
             </p>
-            <a
+            <LiquidGlass
+              as="a"
               href={CONTACT_MAILTO}
-              className="mt-7 inline-flex min-h-11 items-center gap-2 border-b border-[var(--color-fg)]/75 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] text-[var(--color-fg)] transition-opacity hover:opacity-55 md:hidden"
+              preset="pill"
+              className="mt-7 inline-flex md:hidden"
+              contentClassName="items-center gap-2"
             >
-              {CONTACT_EMAIL}
+              <span className="text-[15px] font-medium tracking-[-0.015em] text-[var(--color-fg)]">
+                {CONTACT_EMAIL}
+              </span>
               <span aria-hidden>→</span>
-            </a>
-            <a
-              href="#pricing"
-              onClick={(e) => {
-                e.preventDefault();
-                void navigateToSection("#pricing");
-              }}
-              className="mt-8 hidden min-h-11 items-center gap-2 border-b border-[var(--color-fg)]/75 pb-0.5 font-[family-name:var(--font-card)] text-[15px] font-light tracking-[-0.015em] text-[var(--color-fg)] transition-opacity hover:opacity-55 md:inline-flex"
+            </LiquidGlass>
+            <LiquidGlass
+              as="button"
+              preset="pill"
+              className="mt-8 hidden md:inline-flex"
+              contentClassName="items-center gap-2"
+              onClick={() => void navigateToSection("#pricing")}
             >
-              Explore Plans
+              <span className="text-[15px] font-medium tracking-[-0.015em] text-[var(--color-fg)]">
+                Explore Plans
+              </span>
               <span aria-hidden>→</span>
-            </a>
+            </LiquidGlass>
           </div>
 
           {/* Right - Habito link columns */}

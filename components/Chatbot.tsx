@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import FiveoMark from "@/components/FiveoMark";
+import LiquidGlass from "@/components/ui/liquid-glass";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -255,11 +256,11 @@ export default function Chatbot() {
               aria-label={backdropBlur ? "Hide background blur" : "Show background blur"}
               aria-pressed={backdropBlur}
               tabIndex={open ? 0 : -1}
-              className={`fixed left-5 top-1/2 z-[201] hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_20%,transparent)] bg-[var(--color-bg)]/90 text-[var(--color-fg)] shadow-[0_8px_32px_rgba(0,0,0,0.28)] backdrop-blur-md transition-[opacity,transform,border-color] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_34%,transparent)] hover:scale-[1.03] md:left-8 md:flex ${
+              className={`fixed left-5 top-1/2 z-[201] hidden h-11 w-11 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full text-[var(--color-fg)] transition-[opacity,transform] duration-300 md:left-8 md:flex ${
                 open
                   ? "pointer-events-auto translate-x-0 opacity-100"
                   : "pointer-events-none -translate-x-2 opacity-0"
-              }`}
+              } glass-fallback`}
             >
               {backdropBlur ? (
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
@@ -290,21 +291,24 @@ export default function Chatbot() {
 
             <aside
               id="fiveo-chatbot-panel"
-              className={`fixed right-0 top-0 flex h-dvh w-full max-w-[420px] flex-col border-l border-[color-mix(in_srgb,var(--color-fg)_14%,transparent)] bg-[var(--color-bg)] shadow-[-24px_0_80px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] safe-top safe-bottom safe-x ${
+              className={`fixed right-0 top-0 flex h-dvh w-full max-w-[420px] flex-col border-l border-white/10 bg-[color-mix(in_srgb,var(--color-bg)_55%,transparent)] shadow-[-24px_0_80px_rgba(0,0,0,0.28)] backdrop-blur-[28px] backdrop-saturate-150 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] safe-top safe-bottom safe-x ${
                 open
                   ? "pointer-events-auto translate-x-0"
                   : "pointer-events-none translate-x-full"
               }`}
             >
-              <div className="flex shrink-0 items-center justify-between border-b border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] py-3 pl-1 pr-4 md:py-4 md:pr-5 md:pl-2">
+              <div className="flex shrink-0 items-center justify-between border-b border-white/10 py-3 pl-1 pr-4 md:py-4 md:pr-5 md:pl-2">
                 <FiveoMark className="h-9 md:h-11" />
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setBackdropBlur((value) => !value)}
+                  <LiquidGlass
+                    as="button"
+                    preset="control"
+                    cornerRadius={999}
+                    className="h-11 w-11 md:hidden"
+                    contentClassName="h-full w-full items-center justify-center text-[var(--color-fg)]/75"
                     aria-label={backdropBlur ? "Hide background blur" : "Show background blur"}
-                    aria-pressed={backdropBlur}
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_16%,transparent)] text-[var(--color-fg)]/70 transition-colors hover:border-[color-mix(in_srgb,var(--color-fg)_30%,transparent)] hover:text-[var(--color-fg)] md:hidden"
+                    aria-expanded={backdropBlur}
+                    onClick={() => setBackdropBlur((value) => !value)}
                   >
                     {backdropBlur ? (
                       <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden>
@@ -318,12 +322,15 @@ export default function Chatbot() {
                         <circle cx="9" cy="9" r="2.2" stroke="currentColor" strokeWidth="1.4" />
                       </svg>
                     )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOpen(false)}
+                  </LiquidGlass>
+                  <LiquidGlass
+                    as="button"
+                    preset="control"
+                    cornerRadius={999}
+                    className="h-11 w-11"
+                    contentClassName="h-full w-full items-center justify-center text-[var(--color-fg)]/75"
                     aria-label="Close chat panel"
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-fg)_16%,transparent)] text-[var(--color-fg)]/70 transition-colors hover:border-[color-mix(in_srgb,var(--color-fg)_30%,transparent)] hover:text-[var(--color-fg)]"
+                    onClick={() => setOpen(false)}
                   >
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                       <path
@@ -333,7 +340,7 @@ export default function Chatbot() {
                         strokeLinecap="round"
                       />
                     </svg>
-                  </button>
+                  </LiquidGlass>
                 </div>
               </div>
 
@@ -348,7 +355,7 @@ export default function Chatbot() {
                       className="mr-auto flex max-w-[92%] items-end gap-2.5"
                     >
                       <BotAvatar size="sm" />
-                      <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] bg-[var(--color-surface-muted)] px-3.5 py-2.5 text-[14px] leading-[1.45] text-[var(--color-fg)]">
+                      <div className="glass-fallback rounded-2xl px-3.5 py-2.5 text-[14px] leading-[1.45] text-[var(--color-fg)]">
                         <TypingAssistantText
                           text={message.content}
                           active={typingMessageIndex === index}
@@ -370,7 +377,7 @@ export default function Chatbot() {
                 {loading ? (
                   <div className="mr-auto flex max-w-[92%] items-end gap-2.5">
                     <BotAvatar size="sm" />
-                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-fg)_12%,transparent)] bg-[var(--color-surface-muted)] px-3.5 py-2.5 text-[14px] text-[var(--color-fg)]">
+                    <div className="glass-fallback rounded-2xl px-3.5 py-2.5 text-[14px] text-[var(--color-fg)]">
                       <ThinkingIndicator />
                     </div>
                   </div>
@@ -390,15 +397,19 @@ export default function Chatbot() {
                     onChange={(event) => setInput(event.target.value)}
                     placeholder="Ask anything..."
                     aria-label="Chat message"
-                    className="min-w-0 flex-1 rounded-full border border-[color-mix(in_srgb,var(--color-fg)_16%,transparent)] bg-transparent px-4 py-2.5 text-[14px] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-fg)]/40 focus:border-[color-mix(in_srgb,var(--color-fg)_32%,transparent)]"
+                    className="glass-fallback min-w-0 flex-1 rounded-full px-4 py-2.5 text-[14px] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-fg)]/40"
                   />
-                  <button
+                  <LiquidGlass
+                    as="button"
                     type="submit"
+                    preset="pill"
+                    overLight
                     disabled={loading || !input.trim() || typingMessageIndex !== null}
-                    className="min-h-11 shrink-0 rounded-full bg-[var(--color-fg)] px-4 py-2.5 text-[13px] font-semibold text-[var(--color-bg)] transition-opacity disabled:opacity-40"
+                    className="min-h-11 shrink-0"
+                    contentClassName="items-center justify-center"
                   >
-                    Send
-                  </button>
+                    <span className="text-[13px] font-semibold text-black">Send</span>
+                  </LiquidGlass>
                 </div>
               </form>
             </aside>
@@ -409,14 +420,17 @@ export default function Chatbot() {
 
   return (
     <>
-      <button
-        type="button"
-        data-chatbot-trigger
+      <LiquidGlass
+        as="button"
+        preset="control"
+        cornerRadius={12}
+        className="relative z-50 h-11 w-11 shrink-0 md:h-10 md:w-10"
+        contentClassName="h-full w-full items-center justify-center p-0.5"
+        data-chatbot-trigger=""
         aria-expanded={open}
         aria-controls="fiveo-chatbot-panel"
         aria-label={open ? "Close chat" : "Open chat"}
         onClick={() => setOpen((value) => !value)}
-        className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[11px] border border-[color-mix(in_srgb,var(--color-fg)_22%,transparent)] bg-[var(--color-bg)] p-0.5 transition-[border-color,transform] duration-300 hover:border-[color-mix(in_srgb,var(--color-fg)_38%,transparent)] hover:scale-[1.03] md:h-10 md:w-10"
       >
         <Image
           src="/images/chatbot-avatar.jpg"
@@ -425,7 +439,7 @@ export default function Chatbot() {
           height={36}
           className="h-full w-full rounded-[9px] object-cover"
         />
-      </button>
+      </LiquidGlass>
 
       {panel}
     </>

@@ -299,15 +299,15 @@ html.is-scroll-navigating #main {
 @media (min-width: 768px) {
   .nav-links {
     display: flex;
-    left: 6.5rem;
-    right: calc(2.5rem + 2.5rem + 1.75rem);
+    left: 5.75rem;
+    right: calc(1.25rem + 2.75rem + 1.25rem);
   }
 }
 
 @media (min-width: 1024px) {
   .nav-links {
-    left: calc(3rem + (100% - 6rem) * 0.585);
-    right: calc(3rem + 2.5rem + 2.25rem);
+    left: calc(1.5rem + (100% - 3rem) * 0.585);
+    right: calc(1.5rem + 2.75rem + 1.5rem);
   }
 }
 
@@ -499,6 +499,46 @@ html:not(.dark) .service-card-solid {
 html:not(.dark) .theme-card {
   border-color: color-mix(in srgb, var(--color-fg) 16%, transparent);
   background: var(--color-bg);
+}
+
+/* Apple liquid glass material system (pairs with LiquidGlass component) */
+.liquid-glass {
+  --lg-radius: 28px;
+  --lg-blur: 18px;
+  --lg-sat: 145%;
+}
+
+.liquid-glass__material {
+  will-change: backdrop-filter, filter;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .liquid-glass__material {
+    background: color-mix(in srgb, var(--color-surface-muted) 88%, transparent) !important;
+  }
+}
+
+html.dark .theme-card-glass {
+  border-color: transparent;
+  background: transparent;
+}
+
+/* Soft glass fallback when SVG refraction is reduced */
+.glass-fallback {
+  border: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+  background: color-mix(in srgb, var(--color-surface-muted) 55%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+html:not(.dark) .glass-fallback {
+  background: color-mix(in srgb, #ffffff 62%, transparent);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .theme-leaf {

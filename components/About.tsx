@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Marquee from "@/components/Marquee";
+import LiquidGlass from "@/components/ui/liquid-glass";
 import { fadeUp, bindCursorSlideTrack } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -62,16 +63,23 @@ export default function About() {
                 data-cursor-grow
                 className="w-full max-w-[560px] will-change-transform lg:w-[560px] lg:max-w-none"
               >
-                <div className="theme-card relative aspect-video w-full overflow-hidden">
-                  <Image
-                    src="/images/reels.avif"
-                    alt="FIVEO showreels"
-                    fill
-                    sizes="560px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
+                <LiquidGlass
+                  preset="card"
+                  cornerRadius={20}
+                  className="w-full overflow-hidden"
+                  contentClassName="p-0"
+                >
+                  <div className="relative aspect-video w-full overflow-hidden rounded-[18px]">
+                    <Image
+                      src="/images/reels.avif"
+                      alt="FIVEO showreels"
+                      fill
+                      sizes="560px"
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                </LiquidGlass>
               </div>
             </div>
           </div>
