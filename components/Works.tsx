@@ -207,6 +207,7 @@ function PosAdShowcase() {
 
   return (
     <div
+      id="pos"
       ref={rootRef}
       className="relative mt-14 border-t border-[color-mix(in_srgb,var(--color-fg)_10%,transparent)] pt-10 md:mt-20 md:pt-16"
     >
@@ -236,7 +237,7 @@ function PosAdShowcase() {
       >
         <video
           ref={videoRef}
-          src="/videos/POS_AD.mp4"
+          src="/videos/web_pos.mp4"
           muted
           loop
           playsInline

@@ -39,7 +39,10 @@ export default function FiveoMark({
       viewBox="0 0 480 120"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
-      className={cn("block h-[34px] w-auto overflow-visible md:h-[40px]", className)}
+      className={cn(
+        "block w-auto overflow-visible",
+        className || "h-[34px] md:h-[40px]",
+      )}
     >
       <defs>
         <clipPath id={clipId}>

@@ -139,8 +139,7 @@ export default function Footer() {
               as="a"
               href={CONTACT_MAILTO}
               preset="pill"
-              className="mt-7 inline-flex md:hidden"
-              contentClassName="items-center gap-2"
+              className="mt-7 gap-2 md:hidden"
             >
               <span className="text-[15px] font-medium tracking-[-0.015em] text-[var(--color-fg)]">
                 {CONTACT_EMAIL}
@@ -150,8 +149,7 @@ export default function Footer() {
             <LiquidGlass
               as="button"
               preset="pill"
-              className="mt-8 hidden md:inline-flex"
-              contentClassName="items-center gap-2"
+              className="mt-8 hidden gap-2 md:inline-flex"
               onClick={() => void navigateToSection("#pricing")}
             >
               <span className="text-[15px] font-medium tracking-[-0.015em] text-[var(--color-fg)]">

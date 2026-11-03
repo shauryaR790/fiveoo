@@ -8,7 +8,6 @@ import Process from "@/components/Process";
 import Partners from "@/components/Partners";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
-import FloatingGlassCTA from "@/components/FloatingGlassCTA";
 
 export default function Home() {
   return (
@@ -25,7 +24,6 @@ export default function Home() {
       <Partners />
       <Testimonials />
       <Footer />
-      <FloatingGlassCTA />
     </main>
   );
 }

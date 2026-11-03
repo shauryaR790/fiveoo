@@ -1,10 +1,11 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { CONTACT_EMAIL, CONTACT_MAILTO } from "@/lib/constants";
 import { prefersReducedMotion, bindCursorSlideTrack } from "@/lib/animations";
 import { scrollToTarget } from "@/lib/lenis";
+import NeonFog from "@/components/NeonFog";
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
@@ -12,6 +13,7 @@ export default function Hero() {
   const linesRef = useRef<HTMLSpanElement[]>([]);
   const trackRef = useRef<HTMLDivElement>(null);
   const slideRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -26,9 +28,11 @@ export default function Hero() {
 
       gsap.from(mediaRef.current, {
         opacity: 0,
-        scale: 1.04,
-        duration: 1.3,
+        y: 28,
+        scale: 0.98,
+        duration: 1.2,
         ease: "power3.out",
+        delay: 0.05,
       });
 
       gsap.from(linesRef.current, {
@@ -52,52 +56,39 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
-  /** Showreel drifts horizontally with the cursor, only when near it. */
   useLayoutEffect(() => {
     const track = trackRef.current;
     const slide = slideRef.current;
     if (!track || !slide) return;
 
-    return bindCursorSlideTrack(track, slide, { restRatio: 0 });
+    return bindCursorSlideTrack(track, slide, { restRatio: 1 });
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || prefersReducedMotion()) return;
+    void video.play().catch(() => {});
   }, []);
 
   return (
     <section
       id="top"
       ref={rootRef}
-      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-transparent px-5 pb-12 pt-[calc(var(--nav-height)+0.75rem)] text-[var(--color-fg)] md:px-10 md:pb-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
+      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-black px-5 pb-12 pt-[calc(var(--nav-height)+0.75rem)] text-[var(--color-fg)] md:px-10 md:pb-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
       data-nav-theme="dark"
     >
-      <div className="relative z-[1] flex flex-1 flex-col gap-10 md:gap-12 lg:flex-row lg:gap-0">
-        {/* Showreel track - the bounded area the box slides within */}
-        <div ref={trackRef} className="relative lg:w-[40%] lg:pt-2">
-          <div
-            ref={slideRef}
-            data-cursor-grow
-            className="mr-auto w-full max-w-[min(100%,420px)] will-change-transform lg:w-[420px] lg:max-w-none"
-          >
-            <div
-              ref={mediaRef}
-              className="relative aspect-video w-full overflow-hidden rounded-2xl bg-[var(--color-bg)] will-change-transform md:rounded-none"
-            >
-              <video
-                src="/videos/frontfiveo.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <p data-hero-sub className="mt-3 text-[15px] text-[var(--color-fg)]">
-              FIVEO Showreels
-            </p>
-          </div>
-        </div>
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+        <img
+          src="/images/hero-deck.png"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-left-bottom"
+        />
+      </div>
+      <NeonFog variant="hero" />
 
-        {/* Massive headline - left edge aligns with the first nav link */}
-        <div className="lg:ml-auto lg:w-[41.5%]">
-          <h1 className="font-display text-left text-[clamp(2.35rem,11.2vw,7.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
+      <div className="relative z-[1] flex flex-1 flex-col gap-10 md:gap-12 lg:flex-row lg:items-center lg:gap-0">
+        <div className="flex flex-1 flex-col justify-center">
+          <h1 className="font-display max-w-[14ch] text-left text-[clamp(2.35rem,11.2vw,7.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
             {["We build", "seamless", "identity"].map((line, i) => (
               <span key={line} className="block overflow-hidden">
                 <span
@@ -111,6 +102,53 @@ export default function Hero() {
               </span>
             ))}
           </h1>
+        </div>
+
+        {/* POS product — fills the right field over the glass panels */}
+        <div
+          ref={trackRef}
+          className="relative order-first w-full lg:order-none lg:ml-auto lg:w-[42%] lg:max-w-[480px]"
+        >
+          <div
+            ref={slideRef}
+            data-cursor-grow
+            className="ml-auto w-full max-w-[min(100%,420px)] will-change-transform lg:ml-auto lg:w-full lg:max-w-none"
+          >
+            <button
+              type="button"
+              onClick={() => scrollToTarget("#pos")}
+              className="group block w-full text-left"
+              aria-label="Watch the new POS software"
+            >
+              <div
+                ref={mediaRef}
+                className="relative aspect-video w-full overflow-hidden rounded-none bg-black/50 ring-1 ring-white/15 will-change-transform"
+              >
+                <video
+                  ref={videoRef}
+                  src="/videos/web_pos.mp4"
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                  preload="metadata"
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                />
+              </div>
+              <p
+                data-hero-sub
+                className="mt-3 flex items-center gap-2 text-[15px] text-[var(--color-fg)]"
+              >
+                The new POS
+                <span
+                  aria-hidden
+                  className="transition-transform group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </p>
+            </button>
+          </div>
         </div>
       </div>
 

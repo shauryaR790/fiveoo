@@ -88,6 +88,42 @@ html.dark {
   --font-display: var(--font-display);
   --font-body: var(--font-body);
   --font-card: var(--font-card);
+  --font-instrument-serif: "Instrument Serif", Georgia, serif;
+  --animate-fade-slide-in-1: fade-slide-in 0.7s ease-out both;
+  --animate-fade-slide-in-2: fade-slide-in 0.7s ease-out 0.08s both;
+  --animate-fade-slide-in-3: fade-slide-in 0.7s ease-out 0.16s both;
+  --animate-fade-slide-in-4: fade-slide-in 0.7s ease-out 0.24s both;
+}
+
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide-in-1 {
+  animation: var(--animate-fade-slide-in-1);
+}
+
+.animate-fade-slide-in-2 {
+  animation: var(--animate-fade-slide-in-2);
+}
+
+.animate-fade-slide-in-3 {
+  animation: var(--animate-fade-slide-in-3);
+}
+
+.animate-fade-slide-in-4 {
+  animation: var(--animate-fade-slide-in-4);
+}
+
+.font-instrument-serif {
+  font-family: var(--font-instrument-serif);
 }
 
 * {
@@ -170,6 +206,23 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
+}
+
+/* Hero band: pure black + fine film grain (no grey cast) */
+.hero-grain-bg {
+  background-color: #000000;
+}
+
+.hero-grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
 }
 
 #main {
@@ -284,31 +337,6 @@ html.is-scroll-navigating #main {
   overflow: visible;
   clip: auto;
   white-space: normal;
-}
-
-/* Nav links align with hero right column (40% + gap + 41.5% ml-auto layout) */
-.nav-links {
-  position: absolute;
-  left: 0;
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0;
-}
-
-@media (min-width: 768px) {
-  .nav-links {
-    display: flex;
-    left: 5.75rem;
-    right: calc(1.25rem + 2.75rem + 1.25rem);
-  }
-}
-
-@media (min-width: 1024px) {
-  .nav-links {
-    left: calc(1.5rem + (100% - 3rem) * 0.585);
-    right: calc(1.5rem + 2.75rem + 1.5rem);
-  }
 }
 
 .safe-top {
@@ -503,9 +531,46 @@ html:not(.dark) .theme-card {
 
 /* Apple liquid glass material system (pairs with LiquidGlass component) */
 .liquid-glass {
-  --lg-radius: 28px;
-  --lg-blur: 18px;
-  --lg-sat: 145%;
+  --lg-radius: 12px;
+  --lg-blur: 22px;
+  --lg-sat: 170%;
+  isolation: isolate;
+}
+
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.08) 28%,
+    rgba(255, 255, 255, 0) 52%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  opacity: 0.85;
+  mix-blend-mode: soft-light;
+}
+
+.liquid-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 80% at 20% 0%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0) 55%
+  );
+  opacity: 0.7;
+}
+
+.nav-glass-pill {
+  min-height: 0;
+  line-height: 1;
 }
 
 .liquid-glass__material {

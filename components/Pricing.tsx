@@ -7,6 +7,7 @@ import { fadeUp } from "@/lib/animations";
 import { scrollToTarget } from "@/lib/lenis";
 import NeonFog from "@/components/NeonFog";
 import LiquidGlass from "@/components/ui/liquid-glass";
+
 function FeatureRow({ feature }: { feature: string }) {
   return (
     <li className="flex items-center gap-3.5">
@@ -130,71 +131,65 @@ export default function Pricing() {
             "featuresExtra" in content ? content.featuresExtra : null;
 
           return (
-            <LiquidGlass
+            <article
               key={plan.id}
-              preset="card"
-              cornerRadius={28}
-              className="theme-card-glass h-full min-h-[880px] w-full md:min-h-[1020px] lg:min-h-[1100px]"
-              contentClassName="h-full flex-col items-stretch px-7 py-8 md:px-8 md:py-10 lg:px-10 lg:py-11"
+              className="theme-card glass-fallback relative isolate flex h-full min-h-[880px] flex-col rounded-[28px] px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
             >
-              <article className="relative isolate flex h-full min-h-0 flex-1 flex-col">
-                <div data-price-reveal className="flex flex-1 flex-col">
-                  <div className="mb-7 flex items-center justify-between gap-3 md:mb-8">
-                    <h3 className="font-editorial text-[1.45rem] font-normal tracking-[-0.035em] md:text-[1.65rem] lg:text-[1.8rem]">
-                      {plan.name}
-                    </h3>
-                    <span className="glass-fallback shrink-0 rounded-full px-5 py-3.5 text-[13px] font-medium leading-none tracking-[-0.015em] text-[var(--color-fg)] md:px-6 md:py-4 md:text-[15px]">
-                      {plan.badge}
+              <div data-price-reveal className="flex flex-1 flex-col">
+                <div className="mb-7 flex items-center justify-between gap-3 md:mb-8">
+                  <h3 className="font-editorial text-[1.45rem] font-normal tracking-[-0.035em] md:text-[1.65rem] lg:text-[1.8rem]">
+                    {plan.name}
+                  </h3>
+                  <span className="glass-fallback shrink-0 rounded-full px-5 py-3.5 text-[13px] font-medium leading-none tracking-[-0.015em] text-[var(--color-fg)] md:px-6 md:py-4 md:text-[15px]">
+                    {plan.badge}
+                  </span>
+                </div>
+
+                <p className="font-editorial mb-6 flex flex-wrap items-baseline gap-x-1 leading-none tracking-[-0.045em] md:mb-7">
+                  <span className="text-[clamp(2.85rem,3.8vw,3.85rem)] font-semibold">
+                    {content.price}
+                  </span>
+                  {content.unit ? (
+                    <span className="text-[1rem] font-normal tracking-[-0.02em] text-[var(--color-fg)]/70 md:text-[1.05rem]">
+                      {content.unit}
                     </span>
-                  </div>
-
-                  <p className="font-editorial mb-6 flex flex-wrap items-baseline gap-x-1 leading-none tracking-[-0.045em] md:mb-7">
-                    <span className="text-[clamp(2.85rem,3.8vw,3.85rem)] font-semibold">
-                      {content.price}
-                    </span>
-                    {content.unit ? (
-                      <span className="text-[1rem] font-normal tracking-[-0.02em] text-[var(--color-fg)]/70 md:text-[1.05rem]">
-                        {content.unit}
-                      </span>
-                    ) : null}
-                  </p>
-
-                  <div className="mb-8 border-t border-[var(--color-fg)]/12 md:mb-9" />
-
-                  <ul className="flex flex-col gap-7 md:gap-8">
-                    {content.features.map((feature) => (
-                      <FeatureRow key={feature} feature={feature} />
-                    ))}
-                  </ul>
-
-                  {featuresExtra?.length ? (
-                    <>
-                      <div className="my-8 border-t border-[var(--color-fg)]/12 md:my-9" />
-                      <ul className="flex flex-col gap-7 md:gap-8">
-                        {featuresExtra.map((feature) => (
-                          <FeatureRow key={feature} feature={feature} />
-                        ))}
-                      </ul>
-                    </>
                   ) : null}
-                </div>
+                </p>
 
-                <div className="mt-auto pt-12">
-                  <LiquidGlass
-                    as="button"
-                    preset="pill"
-                    overLight
-                    className="price-choose-btn w-full"
-                    contentClassName="w-full justify-center py-1"
-                    onClick={() => scrollToTarget("#top")}
-                  >
-                    <span className="text-[20px] font-bold tracking-[-0.02em] text-black md:text-[22px]">
-                      Choose Plan
-                    </span>
-                  </LiquidGlass>
-                </div>
-              </article>
-            </LiquidGlass>
+                <div className="mb-8 border-t border-[var(--color-fg)]/12 md:mb-9" />
+
+                <ul className="flex flex-col gap-7 md:gap-8">
+                  {content.features.map((feature) => (
+                    <FeatureRow key={feature} feature={feature} />
+                  ))}
+                </ul>
+
+                {featuresExtra?.length ? (
+                  <>
+                    <div className="my-8 border-t border-[var(--color-fg)]/12 md:my-9" />
+                    <ul className="flex flex-col gap-7 md:gap-8">
+                      {featuresExtra.map((feature) => (
+                        <FeatureRow key={feature} feature={feature} />
+                      ))}
+                    </ul>
+                  </>
+                ) : null}
+              </div>
+
+              <div className="mt-auto pt-12">
+                <LiquidGlass
+                  as="button"
+                  preset="pill"
+                  overLight
+                  className="price-choose-btn w-full py-5 md:py-6"
+                  onClick={() => scrollToTarget("#top")}
+                >
+                  <span className="text-[20px] font-bold tracking-[-0.02em] text-black md:text-[22px]">
+                    Choose Plan
+                  </span>
+                </LiquidGlass>
+              </div>
+            </article>
           );
         })}
         </div>

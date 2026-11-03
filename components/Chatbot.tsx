@@ -130,7 +130,12 @@ function TypingAssistantText({
   );
 }
 
-export default function Chatbot() {
+export default function Chatbot({
+  embedded = false,
+}: {
+  /** Sit inside a shared glass dock without its own glass shell. */
+  embedded?: boolean;
+}) {
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -304,8 +309,8 @@ export default function Chatbot() {
                     as="button"
                     preset="control"
                     cornerRadius={999}
-                    className="h-11 w-11 md:hidden"
-                    contentClassName="h-full w-full items-center justify-center text-[var(--color-fg)]/75"
+                    padding="0"
+                    className="h-11 w-11 text-[var(--color-fg)]/75 md:hidden"
                     aria-label={backdropBlur ? "Hide background blur" : "Show background blur"}
                     aria-expanded={backdropBlur}
                     onClick={() => setBackdropBlur((value) => !value)}
@@ -327,8 +332,8 @@ export default function Chatbot() {
                     as="button"
                     preset="control"
                     cornerRadius={999}
-                    className="h-11 w-11"
-                    contentClassName="h-full w-full items-center justify-center text-[var(--color-fg)]/75"
+                    padding="0"
+                    className="h-11 w-11 text-[var(--color-fg)]/75"
                     aria-label="Close chat panel"
                     onClick={() => setOpen(false)}
                   >
@@ -406,7 +411,6 @@ export default function Chatbot() {
                     overLight
                     disabled={loading || !input.trim() || typingMessageIndex !== null}
                     className="min-h-11 shrink-0"
-                    contentClassName="items-center justify-center"
                   >
                     <span className="text-[13px] font-semibold text-black">Send</span>
                   </LiquidGlass>
@@ -418,29 +422,50 @@ export default function Chatbot() {
         )
       : null;
 
+  const trigger = embedded ? (
+    <button
+      type="button"
+      data-chatbot-trigger
+      aria-expanded={open}
+      aria-controls="fiveo-chatbot-panel"
+      aria-label={open ? "Close chat" : "Open chat"}
+      onClick={() => setOpen((value) => !value)}
+      className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white/10 p-0.5 transition-transform hover:scale-[1.04] active:scale-[0.98]"
+    >
+      <Image
+        src="/images/chatbot-avatar.jpg"
+        alt=""
+        width={40}
+        height={40}
+        className="h-full w-full rounded-full object-cover"
+      />
+    </button>
+  ) : (
+    <LiquidGlass
+      as="button"
+      preset="control"
+      cornerRadius={12}
+      padding="3px"
+      className="relative z-50 h-11 w-11 shrink-0 md:h-14 md:w-14"
+      data-chatbot-trigger=""
+      aria-expanded={open}
+      aria-controls="fiveo-chatbot-panel"
+      aria-label={open ? "Close chat" : "Open chat"}
+      onClick={() => setOpen((value) => !value)}
+    >
+      <Image
+        src="/images/chatbot-avatar.jpg"
+        alt=""
+        width={48}
+        height={48}
+        className="h-full w-full rounded-[9px] object-cover"
+      />
+    </LiquidGlass>
+  );
+
   return (
     <>
-      <LiquidGlass
-        as="button"
-        preset="control"
-        cornerRadius={12}
-        className="relative z-50 h-11 w-11 shrink-0 md:h-10 md:w-10"
-        contentClassName="h-full w-full items-center justify-center p-0.5"
-        data-chatbot-trigger=""
-        aria-expanded={open}
-        aria-controls="fiveo-chatbot-panel"
-        aria-label={open ? "Close chat" : "Open chat"}
-        onClick={() => setOpen((value) => !value)}
-      >
-        <Image
-          src="/images/chatbot-avatar.jpg"
-          alt=""
-          width={36}
-          height={36}
-          className="h-full w-full rounded-[9px] object-cover"
-        />
-      </LiquidGlass>
-
+      {trigger}
       {panel}
     </>
   );

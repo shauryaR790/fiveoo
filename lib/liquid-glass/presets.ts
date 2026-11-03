@@ -13,16 +13,16 @@ export type LiquidGlassPreset = {
 
 /** Apple-inspired material recipes tuned for FIVEO’s dark-first studio UI. */
 export const LIQUID_GLASS_PRESETS = {
-  /** Floating navigation capsule / bar */
+  /** Floating navigation capsule / dock */
   nav: {
     displacementScale: 48,
-    blurAmount: 0.085,
-    saturation: 145,
+    blurAmount: 0.14,
+    saturation: 170,
     aberrationIntensity: 1.4,
-    cornerRadius: 28,
+    cornerRadius: 999,
     elasticity: 0,
     mode: "standard" as const,
-    padding: "0",
+    padding: "8px 12px",
   },
   /** Pricing / content cards */
   card: {

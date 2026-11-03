@@ -7,10 +7,11 @@ import { MOBILE_NAV_LINKS, NAV_LINKS } from "@/lib/constants";
 import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
-import { Text3DFlip } from "@/components/ui/text-3d-flip";
+import { ArrowUpRight } from "lucide-react";
 import LiquidGlass from "@/components/ui/liquid-glass";
 import Chatbot from "@/components/Chatbot";
 import FiveoMark from "@/components/FiveoMark";
+import { CONTACT_MAILTO } from "@/lib/constants";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -197,84 +198,86 @@ export default function Navbar() {
       ref={navRef}
       className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 will-change-transform safe-top safe-x"
     >
-      <div className="px-3 pt-2 md:px-5 md:pt-3 lg:px-6">
-        <LiquidGlass
-          preset="nav"
-          cornerRadius={22}
-          className="w-full"
-          contentClassName="w-full"
+      <nav
+        className="relative mx-auto flex h-[var(--nav-height)] items-center justify-between px-5 md:px-10 lg:px-12"
+        aria-label="Primary"
+      >
+        <a
+          href="#top"
+          onClick={(e) => handleNav(e, "#top")}
+          className="relative z-10 flex h-14 items-center text-[var(--color-fg)]"
+          aria-label="FIVEO"
         >
-          <nav
-            className="relative mx-auto flex h-[calc(var(--nav-height)-0.65rem)] w-full items-center justify-between px-3 md:h-[calc(var(--nav-height)-0.85rem)] md:px-5 lg:px-6"
-            aria-label="Primary"
+          <FiveoMark className="h-11 w-auto md:h-14" />
+        </a>
+
+        {/* Desktop: centered liquid-glass island */}
+        <div className="pointer-events-none absolute inset-x-0 top-1/2 z-[5] hidden -translate-y-1/2 justify-center md:flex">
+          <LiquidGlass
+            preset="nav"
+            cornerRadius={999}
+            padding="5px 6px"
+            className="pointer-events-auto"
           >
-            <a
-              href="#top"
-              onClick={(e) => handleNav(e, "#top")}
-              className="relative z-10 block text-[var(--color-fg)]"
-              aria-label="FIVEO"
+            <nav
+              className="relative z-[2] flex items-center gap-0.5"
+              aria-label="Section links"
             >
-              <FiveoMark />
-            </a>
-
-            <ul className="nav-links">
               {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => handleNav(e, link.href)}
-                    className="block text-[17px] font-semibold tracking-[-0.01em]"
-                  >
-                    <Text3DFlip
-                      as="span"
-                      className="perspective-[800px] text-[var(--color-fg)]"
-                      textClassName="text-[var(--color-fg)]"
-                      flipTextClassName="text-[var(--color-fg)]"
-                      rotateDirection="top"
-                    >
-                      {link.label}
-                    </Text3DFlip>
-                  </a>
-                </li>
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleNav(e, link.href)}
+                  className="rounded-full px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white lg:px-3.5"
+                >
+                  {link.label}
+                </a>
               ))}
-            </ul>
-
-            <div
-              className={`relative z-10 flex items-center gap-2 md:gap-3 ${
-                menuOpen ? "max-md:hidden" : ""
-              }`}
-            >
-              <Chatbot />
-
-              <LiquidGlass
-                as="button"
-                preset="control"
-                cornerRadius={12}
-                className="relative z-50 h-11 w-11 md:hidden"
-                contentClassName="h-full w-full items-center justify-center"
-                aria-expanded={menuOpen}
-                aria-controls="mobile-menu"
-                aria-label={menuOpen ? "Close menu" : "Open menu"}
-                onClick={() => setMenuOpen((v) => !v)}
+              <a
+                href={CONTACT_MAILTO}
+                className="relative z-[3] ml-1 inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f5] px-3.5 py-2 text-sm font-semibold tracking-[-0.02em] text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] transition-colors hover:bg-white"
               >
-                <span className="sr-only">Menu</span>
-                <span className="flex w-5 flex-col gap-1.5 text-[var(--color-fg)]">
-                  <span
-                    className={`block h-0.5 w-full bg-current transition-transform ${
-                      menuOpen ? "translate-y-[4px] rotate-45" : ""
-                    }`}
-                  />
-                  <span
-                    className={`block h-0.5 w-full bg-current transition-transform ${
-                      menuOpen ? "-translate-y-[4px] -rotate-45" : ""
-                    }`}
-                  />
-                </span>
-              </LiquidGlass>
-            </div>
-          </nav>
-        </LiquidGlass>
-      </div>
+                <span className="text-black">Contact</span>
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-black" aria-hidden />
+              </a>
+            </nav>
+          </LiquidGlass>
+        </div>
+
+        <div
+          className={`relative z-10 flex items-center gap-2.5 md:gap-3 ${
+            menuOpen ? "max-md:hidden" : ""
+          }`}
+        >
+          <Chatbot />
+
+          <LiquidGlass
+            as="button"
+            preset="control"
+            cornerRadius={12}
+            padding="0"
+            className="relative z-50 h-11 w-11 md:hidden"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span className="sr-only">Menu</span>
+            <span className="flex w-5 flex-col gap-1.5 text-[var(--color-fg)]">
+              <span
+                className={`block h-0.5 w-full bg-current transition-transform ${
+                  menuOpen ? "translate-y-[4px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`block h-0.5 w-full bg-current transition-transform ${
+                  menuOpen ? "-translate-y-[4px] -rotate-45" : ""
+                }`}
+              />
+            </span>
+          </LiquidGlass>
+        </div>
+      </nav>
 
       <div
         id="mobile-menu"
