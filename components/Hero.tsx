@@ -6,6 +6,8 @@ import { CONTACT_EMAIL, CONTACT_MAILTO } from "@/lib/constants";
 import { prefersReducedMotion, bindCursorSlideTrack } from "@/lib/animations";
 import { scrollToTarget } from "@/lib/lenis";
 import NeonFog from "@/components/NeonFog";
+import FiveoMark from "@/components/FiveoMark";
+import { HERO_PLAN } from "@/lib/hero-plan";
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
@@ -14,6 +16,7 @@ export default function Hero() {
   const trackRef = useRef<HTMLDivElement>(null);
   const slideRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const planA = HERO_PLAN === "a";
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -22,18 +25,20 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       if (prefersReducedMotion()) {
         gsap.set(linesRef.current, { yPercent: 0, opacity: 1 });
-        gsap.set(mediaRef.current, { opacity: 1, scale: 1 });
+        if (!planA) gsap.set(mediaRef.current, { opacity: 1, scale: 1 });
         return;
       }
 
-      gsap.from(mediaRef.current, {
-        opacity: 0,
-        y: 28,
-        scale: 0.98,
-        duration: 1.2,
-        ease: "power3.out",
-        delay: 0.05,
-      });
+      if (!planA) {
+        gsap.from(mediaRef.current, {
+          opacity: 0,
+          y: 28,
+          scale: 0.98,
+          duration: 1.2,
+          ease: "power3.out",
+          delay: 0.05,
+        });
+      }
 
       gsap.from(linesRef.current, {
         yPercent: 110,
@@ -54,21 +59,23 @@ export default function Hero() {
     }, root);
 
     return () => ctx.revert();
-  }, []);
+  }, [planA]);
 
   useLayoutEffect(() => {
+    if (planA) return;
     const track = trackRef.current;
     const slide = slideRef.current;
     if (!track || !slide) return;
 
-    return bindCursorSlideTrack(track, slide, { restRatio: 1 });
-  }, []);
+    return bindCursorSlideTrack(track, slide, { restRatio: 0 });
+  }, [planA]);
 
   useEffect(() => {
+    if (planA) return;
     const video = videoRef.current;
     if (!video || prefersReducedMotion()) return;
     void video.play().catch(() => {});
-  }, []);
+  }, [planA]);
 
   return (
     <section
@@ -86,9 +93,19 @@ export default function Hero() {
       </div>
       <NeonFog variant="hero" />
 
-      <div className="relative z-[1] flex flex-1 flex-col gap-10 md:gap-12 lg:flex-row lg:items-center lg:gap-0">
-        <div className="flex flex-1 flex-col justify-center">
-          <h1 className="font-display max-w-[14ch] text-left text-[clamp(2.35rem,11.2vw,7.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
+      {planA ? (
+        <a
+          href="#top"
+          className="absolute left-5 top-[75px] z-[2] -translate-x-2 overflow-visible text-[var(--color-fg)] md:left-10 md:-translate-x-8 lg:left-12 lg:-translate-x-10"
+          aria-label="FIVEO"
+        >
+          <FiveoMark className="h-[22rem] w-auto overflow-visible md:h-[28rem]" />
+        </a>
+      ) : null}
+
+      {planA ? (
+        <div className="relative z-[1] flex flex-1 flex-col justify-center">
+          <h1 className="font-display ml-auto max-w-[14ch] text-right text-[clamp(2.35rem,11.2vw,7.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
             {["We build", "seamless", "identity"].map((line, i) => (
               <span key={line} className="block overflow-hidden">
                 <span
@@ -103,22 +120,17 @@ export default function Hero() {
             ))}
           </h1>
         </div>
-
-        {/* POS product — fills the right field over the glass panels */}
-        <div
-          ref={trackRef}
-          className="relative order-first w-full lg:order-none lg:ml-auto lg:w-[42%] lg:max-w-[480px]"
-        >
+      ) : (
+        <div className="relative z-[1] flex flex-1 flex-col gap-10 md:gap-12 lg:flex-row lg:items-center lg:gap-0">
+          {/* Showreel — left */}
           <div
-            ref={slideRef}
-            data-cursor-grow
-            className="ml-auto w-full max-w-[min(100%,420px)] will-change-transform lg:ml-auto lg:w-full lg:max-w-none"
+            ref={trackRef}
+            className="relative w-full lg:w-[42%] lg:max-w-[480px] lg:pt-2"
           >
-            <button
-              type="button"
-              onClick={() => scrollToTarget("#pos")}
-              className="group block w-full text-left"
-              aria-label="Watch the new POS software"
+            <div
+              ref={slideRef}
+              data-cursor-grow
+              className="mr-auto w-full max-w-[min(100%,420px)] will-change-transform lg:w-full lg:max-w-none"
             >
               <div
                 ref={mediaRef}
@@ -126,31 +138,43 @@ export default function Hero() {
               >
                 <video
                   ref={videoRef}
-                  src="/videos/web_pos.mp4"
+                  src="/videos/frontfiveo.mp4"
                   muted
                   loop
                   playsInline
                   autoPlay
                   preload="metadata"
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <p
                 data-hero-sub
-                className="mt-3 flex items-center gap-2 text-[15px] text-[var(--color-fg)]"
+                className="mt-3 text-[15px] text-[var(--color-fg)]"
               >
-                The new POS
-                <span
-                  aria-hidden
-                  className="transition-transform group-hover:translate-x-1"
-                >
-                  →
-                </span>
+                FIVEO Showreels
               </p>
-            </button>
+            </div>
+          </div>
+
+          {/* Headline — right */}
+          <div className="flex flex-1 flex-col justify-center lg:ml-auto lg:w-[41.5%] lg:flex-none">
+            <h1 className="font-display ml-auto max-w-[14ch] text-right text-[clamp(2.35rem,11.2vw,7.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
+              {["We build", "seamless", "identity"].map((line, i) => (
+                <span key={line} className="block overflow-hidden">
+                  <span
+                    ref={(el) => {
+                      if (el) linesRef.current[i] = el;
+                    }}
+                    className="block will-change-transform md:whitespace-nowrap"
+                  >
+                    {line}
+                  </span>
+                </span>
+              ))}
+            </h1>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="relative z-[1] mt-12 flex flex-col items-start gap-8 md:mt-16 md:gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
         <p

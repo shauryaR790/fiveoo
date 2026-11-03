@@ -68,6 +68,7 @@ export default function NomadWorkCanvas() {
   return (
     <div
       ref={containerRef}
+      data-nomad-work
       className="relative mt-8 h-[100svh] w-full bg-black md:mt-12"
       aria-label="Drag to explore selected work films"
     >

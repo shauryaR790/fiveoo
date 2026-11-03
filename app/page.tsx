@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import HeroAboutBand from "@/components/HeroAboutBand";
 import Works from "@/components/Works";
-import Branding from "@/components/Branding";
 import Services from "@/components/Services";
 import Pricing from "@/components/Pricing";
 import Process from "@/components/Process";
@@ -15,7 +14,6 @@ export default function Home() {
       <Navbar />
       <HeroAboutBand />
       <Works />
-      <Branding />
       <Services />
       <div className="hidden md:block">
         <Pricing />

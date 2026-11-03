@@ -1,25 +1,50 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MOBILE_NAV_LINKS, NAV_LINKS } from "@/lib/constants";
 import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import { prefersReducedMotion, isNavPinDrive } from "@/lib/animations";
-import { ArrowUpRight } from "lucide-react";
 import LiquidGlass from "@/components/ui/liquid-glass";
+import LiquidNavbar, {
+  type LiquidNavItem,
+} from "@/components/ui/liquid-glass-navbar";
 import Chatbot from "@/components/Chatbot";
 import FiveoMark from "@/components/FiveoMark";
-import { CONTACT_MAILTO } from "@/lib/constants";
+import { HERO_PLAN } from "@/lib/hero-plan";
+import { NAV_LINK_ICONS } from "@/components/nav-icons";
 
 gsap.registerPlugin(ScrollTrigger);
 
+type NavChrome = "full" | "middle" | "hidden";
+
 export default function Navbar() {
+  const planA = HERO_PLAN === "a";
   const navRef = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const middleRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const navVisibleRef = useRef(true);
-  const navTweenRef = useRef<gsap.core.Tween | null>(null);
+  const [navTone, setNavTone] = useState<"light" | "dark">("dark");
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const chromeRef = useRef<NavChrome>("full");
+  const menuOpenRef = useRef(false);
+
+  const liquidItems = useMemo<LiquidNavItem[]>(
+    () =>
+      NAV_LINKS.map((link) => {
+        const Icon = NAV_LINK_ICONS[link.href];
+        return {
+          label: link.label,
+          // buttons — Lenis navigation via onChange (avoid native hash jumps)
+          icon: Icon ? <Icon className="h-[18px] w-[18px]" /> : undefined,
+          fx: "pop" as const,
+        };
+      }),
+    [],
+  );
 
   useLayoutEffect(() => {
     const nav = navRef.current;
@@ -36,7 +61,35 @@ export default function Navbar() {
         ) || 88;
 
       const applyTheme = (theme: string | undefined) => {
-        nav.classList.toggle("nav-invert", theme === "light");
+        const light = theme === "light";
+        nav.classList.toggle("nav-invert", light);
+        setNavTone(light ? "light" : "dark");
+      };
+
+      const sectionForHref = (href: string) => {
+        const id = href.replace(/^#/, "");
+        return document.getElementById(id);
+      };
+
+      const syncActiveFromScroll = () => {
+        const probe = navHeight * 0.55;
+        const hero = document.getElementById("top");
+        if (hero) {
+          const heroBottom = hero.getBoundingClientRect().bottom;
+          if (heroBottom > navHeight + 80) {
+            setActiveIndex(-1);
+            return;
+          }
+        }
+
+        let match = -1;
+        NAV_LINKS.forEach((link, index) => {
+          const el = sectionForHref(link.href);
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= probe && rect.bottom > probe) match = index;
+        });
+        setActiveIndex(match);
       };
 
       const syncNavToScroll = () => {
@@ -50,11 +103,13 @@ export default function Navbar() {
           const rect = section.getBoundingClientRect();
           if (rect.top <= probe && rect.bottom > probe) {
             applyTheme(section.dataset.navTheme);
+            syncActiveFromScroll();
             return;
           }
         }
 
         applyTheme("dark");
+        syncActiveFromScroll();
       };
 
       gsap.utils.toArray<HTMLElement>("[data-nav-theme]").forEach((section) => {
@@ -72,6 +127,7 @@ export default function Navbar() {
       ScrollTrigger.create({
         start: 0,
         end: "max",
+        onUpdate: syncActiveFromScroll,
         onRefresh: syncNavToScroll,
       });
 
@@ -82,65 +138,102 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    menuOpenRef.current = menuOpen;
+  }, [menuOpen]);
+
+  useEffect(() => {
     const nav = navRef.current;
-    if (!nav || prefersReducedMotion()) return;
+    const logo = logoRef.current;
+    const middle = middleRef.current;
+    const right = rightRef.current;
+    if (!nav || !middle || !right) return;
 
     let lastScroll = 0;
+    const reduced = prefersReducedMotion();
 
     const getScrollY = () => getLenis()?.scroll ?? window.scrollY;
 
-    const animateNav = (visible: boolean) => {
-      if (navVisibleRef.current === visible) return;
-
-      navVisibleRef.current = visible;
-      navTweenRef.current?.kill();
-
-      const hideBy = nav.offsetHeight;
-
-      navTweenRef.current = gsap.to(nav, {
-        y: visible ? 0 : -hideBy,
-        duration: visible ? 0.55 : 0.4,
-        ease: visible ? "power3.out" : "power2.inOut",
-        overwrite: "auto",
-        onStart: () => {
-          nav.style.pointerEvents = visible ? "" : "none";
-        },
-      });
+    const isOnHero = () => {
+      const hero = document.getElementById("top");
+      if (!hero) return getScrollY() <= 40;
+      const navHeight =
+        parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue(
+            "--nav-height",
+          ),
+        ) || 88;
+      return hero.getBoundingClientRect().bottom > navHeight + 48;
     };
 
-    const updateVisibility = () => {
-      const scroll = getScrollY();
-      const lenis = getLenis();
-      const direction = lenis?.direction ?? Math.sign(scroll - lastScroll);
+    const applyChrome = (mode: NavChrome) => {
+      if (chromeRef.current === mode) return;
+      chromeRef.current = mode;
 
-      if (menuOpen || isNavPinDrive()) {
-        lastScroll = scroll;
-        animateNav(true);
+      const showLogo = mode === "full";
+      const showMiddle = mode === "full" || mode === "middle";
+      const showRight = mode === "full";
+
+      const animate = (
+        el: HTMLElement | null,
+        visible: boolean,
+        yHidden = -28,
+      ) => {
+        if (!el) return;
+        if (reduced) {
+          el.style.opacity = visible ? "1" : "0";
+          el.style.pointerEvents = visible ? "" : "none";
+          el.style.transform = visible ? "none" : `translateY(${yHidden}px)`;
+          return;
+        }
+        gsap.to(el, {
+          autoAlpha: visible ? 1 : 0,
+          y: visible ? 0 : yHidden,
+          duration: visible ? 0.45 : 0.32,
+          ease: visible ? "power3.out" : "power2.inOut",
+          overwrite: "auto",
+          onStart: () => {
+            el.style.pointerEvents = visible ? "" : "none";
+          },
+        });
+      };
+
+      animate(logo, showLogo);
+      animate(middle, showMiddle, -18);
+      animate(right, showRight);
+    };
+
+    const updateChrome = () => {
+      if (menuOpenRef.current || isNavPinDrive()) {
+        applyChrome("full");
         return;
       }
 
-      if (scroll <= 40) {
+      const scroll = getScrollY();
+      const lenis = getLenis();
+      const direction = lenis?.direction ?? Math.sign(scroll - lastScroll);
+      const onHero = isOnHero();
+
+      if (onHero || scroll <= 40) {
         lastScroll = scroll;
-        animateNav(true);
+        applyChrome("full");
         return;
       }
 
       if (direction > 0) {
-        animateNav(false);
+        applyChrome("hidden");
       } else if (direction < 0) {
-        animateNav(true);
+        applyChrome("middle");
       } else {
         const delta = scroll - lastScroll;
-        if (delta > 2) animateNav(false);
-        else if (delta < -2) animateNav(true);
+        if (delta > 2) applyChrome("hidden");
+        else if (delta < -2) applyChrome("middle");
       }
 
       lastScroll = scroll;
     };
 
-    gsap.set(nav, { y: 0 });
-    navVisibleRef.current = true;
-    nav.style.pointerEvents = "";
+    gsap.set([logo, middle, right].filter(Boolean), { autoAlpha: 1, y: 0 });
+    chromeRef.current = "full";
     lastScroll = getScrollY();
 
     let rafId = 0;
@@ -153,28 +246,25 @@ export default function Navbar() {
         return;
       }
 
-      const onLenisScroll = () => {
-        updateVisibility();
-      };
-
+      const onLenisScroll = () => updateChrome();
       lenis.on("scroll", onLenisScroll);
       lenisCleanup = () => lenis.off("scroll", onLenisScroll);
     };
 
     attachLenis();
-
-    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("scroll", updateChrome, { passive: true });
+    updateChrome();
 
     return () => {
       cancelAnimationFrame(rafId);
       lenisCleanup?.();
-      window.removeEventListener("scroll", updateVisibility);
-      navTweenRef.current?.kill();
-      gsap.set(nav, { clearProps: "transform" });
-      nav.style.pointerEvents = "";
-      navVisibleRef.current = true;
+      window.removeEventListener("scroll", updateChrome);
+      gsap.set([logo, middle, right].filter(Boolean), {
+        clearProps: "transform,opacity,visibility",
+      });
+      chromeRef.current = "full";
     };
-  }, [menuOpen]);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -193,58 +283,59 @@ export default function Navbar() {
     void navigateToSection(href);
   };
 
+  const handleLiquidChange = (index: number) => {
+    setActiveIndex(index);
+    const href = NAV_LINKS[index]?.href;
+    if (!href) return;
+    void navigateToSection(href);
+  };
+
   return (
     <header
       ref={navRef}
-      className="fixed inset-x-0 top-0 z-50 text-[var(--color-fg)] transition-colors duration-300 will-change-transform safe-top safe-x"
+      className="fixed inset-x-0 top-0 z-50 overflow-visible text-[var(--color-fg)] transition-colors duration-300 safe-top safe-x"
     >
       <nav
-        className="relative mx-auto flex h-[var(--nav-height)] items-center justify-between px-5 md:px-10 lg:px-12"
+        className="relative mx-auto flex h-[var(--nav-height)] items-center justify-between overflow-visible px-5 md:px-10 lg:px-12"
         aria-label="Primary"
       >
-        <a
-          href="#top"
-          onClick={(e) => handleNav(e, "#top")}
-          className="relative z-10 flex h-14 items-center text-[var(--color-fg)]"
-          aria-label="FIVEO"
-        >
-          <FiveoMark className="h-11 w-auto md:h-14" />
-        </a>
-
-        {/* Desktop: centered liquid-glass island */}
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 z-[5] hidden -translate-y-1/2 justify-center md:flex">
-          <LiquidGlass
-            preset="nav"
-            cornerRadius={999}
-            padding="5px 6px"
-            className="pointer-events-auto"
-          >
-            <nav
-              className="relative z-[2] flex items-center gap-0.5"
-              aria-label="Section links"
+        <div ref={logoRef} className="relative z-10">
+          {planA ? (
+            <span
+              className="invisible block h-14 w-[7.5rem] shrink-0 md:w-[9.5rem]"
+              aria-hidden
+            />
+          ) : (
+            <a
+              href="#top"
+              onClick={(e) => handleNav(e, "#top")}
+              className="relative z-10 flex h-16 items-center overflow-visible text-[var(--color-fg)] md:h-20"
+              aria-label="FIVEO"
             >
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNav(e, link.href)}
-                  className="rounded-full px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white lg:px-3.5"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <a
-                href={CONTACT_MAILTO}
-                className="relative z-[3] ml-1 inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f5] px-3.5 py-2 text-sm font-semibold tracking-[-0.02em] text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] transition-colors hover:bg-white"
-              >
-                <span className="text-black">Contact</span>
-                <ArrowUpRight className="h-4 w-4 shrink-0 text-black" aria-hidden />
-              </a>
-            </nav>
-          </LiquidGlass>
+              <FiveoMark className="h-24 w-auto md:h-28" />
+            </a>
+          )}
         </div>
 
         <div
+          ref={middleRef}
+          className="pointer-events-none absolute inset-x-0 top-1/2 z-[5] hidden -translate-y-1/2 justify-center md:flex"
+        >
+          <div className="pointer-events-auto">
+            <LiquidNavbar
+              tone={navTone}
+              active={activeIndex}
+              defaultActive={-1}
+              onChange={handleLiquidChange}
+              sound={false}
+              items={liquidItems}
+              className="max-w-[min(100vw-12rem,44rem)]"
+            />
+          </div>
+        </div>
+
+        <div
+          ref={rightRef}
           className={`relative z-10 flex items-center gap-2.5 md:gap-3 ${
             menuOpen ? "max-md:hidden" : ""
           }`}

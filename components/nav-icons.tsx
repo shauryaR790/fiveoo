@@ -54,20 +54,6 @@ export function ServicesIcon({ className }: IconProps) {
   );
 }
 
-export function CareersIcon({ className }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={iconClass(className)} aria-hidden>
-      <rect x="3.5" y="8" width="17" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
-      <path
-        d="M9 8V6.8A1.8 1.8 0 0 1 10.8 5h2.4A1.8 1.8 0 0 1 15 6.8V8"
-        stroke="currentColor"
-        strokeWidth="1.6"
-      />
-      <path d="M3.5 13h17" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-  );
-}
-
 export function PricingIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={iconClass(className)} aria-hidden>
@@ -86,6 +72,5 @@ export const NAV_LINK_ICONS: Record<string, (props: IconProps) => ReactNode> = {
   "#about": AboutIcon,
   "#works": WorksIcon,
   "#services": ServicesIcon,
-  "#careers": CareersIcon,
   "#pricing": PricingIcon,
 };

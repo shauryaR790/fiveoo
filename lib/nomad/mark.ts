@@ -11,12 +11,14 @@ const elasticOut = (t: number) => {
   return 2 ** (-10 * t) * Math.sin((t * 10 - 0.75) * ((2 * Math.PI) / 3)) + 1;
 };
 
+type MarkBox = { x: number; y: number; width: number; height: number };
+
 type MarkState = {
   wordG: SVGGElement;
   maskRect: SVGRectElement | null;
   starG: SVGGElement;
   dock: { x: number; y: number; rot: number };
-  bb: DOMRect;
+  bb: MarkBox;
 };
 
 function buildStar(g: SVGGElement, color: string) {
@@ -51,7 +53,9 @@ function placeStar(
 export async function initMark(svg: SVGSVGElement, ink = "#ffffff") {
   const color = ink === "currentColor" ? "currentColor" : ink;
   try {
-    await document.fonts.load("700 58px Georgia");
+    // Must request italic — otherwise metrics/paint miss the “f” descender.
+    await document.fonts.load(FONT);
+    await document.fonts.load('italic 700 58px Georgia');
   } catch {
     /* serif fallback */
   }
@@ -87,6 +91,36 @@ export async function initMark(svg: SVGSVGElement, ink = "#ffffff") {
   if (!ctx) return;
 
   ctx.font = FONT;
+  const metrics = ctx.measureText("fiveo");
+  // Italic glyphs often paint past getBBox(); prefer canvas ink bounds when present.
+  const inkAscent = metrics.actualBoundingBoxAscent || 0;
+  const inkDescent = metrics.actualBoundingBoxDescent || 0;
+  const inkBb = {
+    x: bb.x,
+    y: inkAscent ? 78 - inkAscent : bb.y,
+    width: bb.width,
+    height: inkAscent && inkDescent ? inkAscent + inkDescent : bb.height,
+  };
+  // Always keep the larger of SVG bbox vs canvas ink (plus flourish slack).
+  // Italic “f” sweeps down-left past getBBox — pad left + bottom for the flourish.
+  // Keep left pad tight so the word stays left-aligned with page content.
+  const flourishX = 10;
+  const flourishY = 44;
+  const unionBb = {
+    x: Math.min(bb.x, inkBb.x) - flourishX,
+    y: Math.min(bb.y, inkBb.y) - 8,
+    width:
+      Math.max(bb.x + bb.width, inkBb.x + inkBb.width) -
+      Math.min(bb.x, inkBb.x) +
+      flourishX +
+      16,
+    height:
+      Math.max(bb.y + bb.height, inkBb.y + inkBb.height) -
+      Math.min(bb.y, inkBb.y) +
+      flourishY +
+      8,
+  };
+
   const prefixW = ctx.measureText("f").width + FI_GAP + ctx.measureText("ive").width;
   const totalW = prefixW + ctx.measureText("o").width;
   const oLeft = bb.x + (bb.width - totalW) / 2 + prefixW;
@@ -101,7 +135,7 @@ export async function initMark(svg: SVGSVGElement, ink = "#ffffff") {
     maskRect,
     starG,
     dock,
-    bb,
+    bb: unionBb,
   };
 }
 
@@ -115,22 +149,25 @@ export function setMarkFinal(svg: SVGSVGElement) {
   wordG.style.filter = "none";
 
   if (maskRect) {
-    maskRect.setAttribute("x", String(bb.x - 20));
-    maskRect.setAttribute("y", String(bb.y - 20));
-    maskRect.setAttribute("height", String(bb.height + 40));
-    maskRect.setAttribute("width", String(bb.width + 40));
+    maskRect.setAttribute("x", String(bb.x - 24));
+    maskRect.setAttribute("y", String(bb.y - 24));
+    maskRect.setAttribute("height", String(bb.height + 48));
+    maskRect.setAttribute("width", String(bb.width + 48));
   }
+
+  // Static marks don’t need the wipe clip — clear it so descenders always paint.
+  wordG.removeAttribute("clip-path");
 
   placeStar(starG, dock.x, dock.y, dock.rot, 1);
   starG.style.opacity = "1";
 }
 
-export function cropMarkViewBox(svg: SVGSVGElement, padding = 2) {
+export function cropMarkViewBox(svg: SVGSVGElement, padding = 8) {
   const state = (svg as SVGSVGElement & { _markState?: MarkState })._markState;
   if (!state) return;
 
   const { bb, dock } = state;
-  const starPad = 14;
+  const starPad = 16;
   const minX = bb.x - padding;
   const minY = bb.y - starPad - padding;
   const maxX = Math.max(bb.x + bb.width, dock.x + starPad) + padding;
@@ -144,12 +181,16 @@ export function cropMarkViewBox(svg: SVGSVGElement, padding = 2) {
 
 export function playMark(
   svg: SVGSVGElement,
-  { reduced = false }: { reduced?: boolean } = {},
+  {
+    reduced = false,
+    duration: durationOverride,
+  }: { reduced?: boolean; duration?: number } = {},
 ) {
   const state = (svg as SVGSVGElement & { _markState?: MarkState })._markState;
   if (!state) return Promise.resolve();
 
-  const duration = reduced ? MARK_DURATION_REDUCED : MARK_DURATION;
+  const duration =
+    durationOverride ?? (reduced ? MARK_DURATION_REDUCED : MARK_DURATION);
   const { wordG, maskRect, starG, dock, bb } = state;
 
   if (reduced) {

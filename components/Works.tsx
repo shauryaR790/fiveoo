@@ -7,6 +7,9 @@ import Image from "next/image";
 import { WORKS, WEBSITE_WORKS, type WorkItem } from "@/lib/constants";
 import NomadWorkCanvas from "@/components/NomadWorkCanvas";
 import WorkLightbox from "@/components/WorkLightbox";
+import GlassFolder, {
+  type FolderFile,
+} from "@/components/ui/glass-folder-cards";
 import {
   prefersReducedMotion,
   isMobileViewport,
@@ -15,6 +18,106 @@ import {
 } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
+
+function workToFolderFile(work: WorkItem): FolderFile {
+  const image = work.media === "video" ? work.poster : work.src;
+  return {
+    name: work.title,
+    meta: `${work.client} · ${work.year}`,
+    image,
+    href: work.href,
+  };
+}
+
+function WorkCollectionFolders({
+  onSelectWork,
+}: {
+  onSelectWork: (work: WorkItem) => void;
+}) {
+  const brandWorks = WORKS.slice(0, 3);
+  const campaignWorks = WORKS.slice(3, 6);
+  const webWorks = WEBSITE_WORKS.slice(0, 3);
+
+  const openFrom = (pool: WorkItem[]) => (file: FolderFile) => {
+    const match = pool.find((w) => w.title === file.name);
+    // External sites use native <a href>; gallery pieces open the lightbox.
+    if (!match || match.href) return;
+    onSelectWork(match);
+  };
+
+  return (
+    <div
+      id="collection"
+      className="relative mt-14 overflow-visible border-t border-white/10 pt-10 md:mt-20 md:pt-16"
+    >
+      <div className="mb-8 flex flex-col gap-8 md:mb-10 lg:mb-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+        <h2 className="font-display text-left text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] tracking-[-0.03em] text-white">
+          Work
+          <br />
+          selection
+        </h2>
+        <p className="max-w-[34rem] font-[family-name:var(--font-card)] text-[15px] font-light leading-[1.55] tracking-[-0.02em] text-white/90 md:text-[17px] lg:max-w-[38%] lg:text-[18px]">
+          Open a folder to browse selected brand systems, websites, and campaign
+          pieces. Hover to lean the glass, click to fan the files.
+        </p>
+      </div>
+
+      <div className="relative overflow-visible pt-8 md:pt-10">
+        <div className="relative grid grid-cols-1 items-end justify-items-center gap-x-8 gap-y-6 overflow-visible md:grid-cols-2 xl:grid-cols-3 xl:gap-x-10">
+          <GlassFolder
+            label="Brand"
+            tone="dark"
+            art="ember"
+            seed={3}
+            action="more"
+            labelPlacement="top-left"
+            appearDelay={0}
+            width={320}
+            files={brandWorks.map(workToFolderFile)}
+            menu={[{ label: "Browse gallery", onSelect: () => onSelectWork(brandWorks[0]) }]}
+            onFileSelect={openFrom(brandWorks)}
+          />
+          <GlassFolder
+            label="Websites"
+            tone="dark"
+            art="glacier"
+            seed={11}
+            action="more"
+            labelPlacement="top-left"
+            appearDelay={120}
+            width={320}
+            files={webWorks.map(workToFolderFile)}
+            menu={[
+              {
+                label: "Visit first site",
+                onSelect: () => {
+                  if (webWorks[0]?.href) {
+                    window.open(webWorks[0].href, "_blank", "noopener,noreferrer");
+                  }
+                },
+              },
+            ]}
+            onFileSelect={openFrom(webWorks)}
+          />
+          <GlassFolder
+            label="Campaigns"
+            tone="dark"
+            art="dusk"
+            seed={7}
+            action="more"
+            labelPlacement="top-right"
+            appearDelay={240}
+            width={320}
+            files={campaignWorks.map(workToFolderFile)}
+            menu={[{ label: "Browse gallery", onSelect: () => onSelectWork(campaignWorks[0]) }]}
+            onFileSelect={openFrom(campaignWorks)}
+            className="md:col-span-2 xl:col-span-1"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function WorkCard({
   work,
@@ -262,6 +365,7 @@ export default function Works() {
 
     const ctx = gsap.context(() => {
       const title = pinRoot.querySelector<HTMLElement>("[data-works-title]");
+      const uncover = pinRoot.querySelector<HTMLElement>("[data-works-uncover]");
       const cards = gsap.utils.toArray<HTMLElement>("[data-work-card]", pinRoot);
       const risers = cards.flatMap((card) => [
         card.querySelector("[data-work-meta]"),
@@ -275,19 +379,20 @@ export default function Works() {
               .getPropertyValue("--color-fg")
               .trim() || "currentColor",
         });
+        gsap.set([uncover, ...risers].filter(Boolean), { clearProps: "all" });
         return;
       }
 
-      const pinDistance = `${120 + Math.max(0, WORKS.length - 6) * 18}%`;
-
       gsap.set(title, { transformOrigin: "top center" });
+      gsap.set(uncover, { autoAlpha: 0, y: 80 });
+      gsap.set(risers, { y: 120, opacity: 0 });
 
       const introScale = 2.2;
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: pinRoot,
           start: "top top",
-          end: `+=${pinDistance}`,
+          end: "+=120%",
           pin: true,
           scrub: true,
           anticipatePin: 1,
@@ -299,6 +404,7 @@ export default function Works() {
         },
       });
 
+      // Title settles at the top on black — then the section uncovers.
       tl.fromTo(
         title,
         {
@@ -309,20 +415,25 @@ export default function Works() {
             return window.innerHeight / 2 - layoutTop - scaledH / 2;
           },
         },
-        { scale: 1, y: 0, ease: "power1.inOut", duration: 0.68 },
+        { scale: 1, y: 0, ease: "power1.inOut", duration: 0.62 },
         0,
-      ).fromTo(
-        risers,
-        { y: 120, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          ease: "power2.out",
-          duration: 0.45,
-          stagger: 0.05,
-        },
-        0.42,
-      );
+      )
+        .to(
+          uncover,
+          { autoAlpha: 1, y: 0, ease: "power2.out", duration: 0.4 },
+          0.58,
+        )
+        .to(
+          risers,
+          {
+            y: 0,
+            opacity: 1,
+            ease: "power2.out",
+            duration: 0.42,
+            stagger: 0.05,
+          },
+          0.64,
+        );
 
       if (isMobileViewport()) return;
 
@@ -356,30 +467,35 @@ export default function Works() {
     <section
       id="works"
       ref={rootRef}
-      className="relative theme-surface overflow-hidden"
+      className="relative bg-black text-white"
       data-nav-theme="dark"
     >
-      <div ref={pinRef} className="relative px-3 md:px-10 lg:px-12">
+      <div
+        ref={pinRef}
+        className="relative min-h-[100svh] overflow-visible bg-black px-3 md:px-10 lg:px-12"
+      >
         <h2
           data-works-title
-          className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-[var(--color-fg)] will-change-transform"
+          className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-white will-change-transform"
         >
           Selected
           <br />
           Works
-          <br />
-          (2023-2026)
         </h2>
 
-        <div className="grid grid-cols-2 items-start gap-2 pt-8 md:grid-cols-12 md:gap-2.5 md:gap-y-8 md:pt-24">
-          {WORKS.map((work) => (
-            <WorkCard key={work.id} work={work} onImageClick={openLightbox} />
-          ))}
+        <div data-works-uncover className="relative">
+          <WorkCollectionFolders onSelectWork={openLightbox} />
+
+          <div className="grid grid-cols-2 items-start gap-2 pt-10 md:grid-cols-12 md:gap-2.5 md:gap-y-8 md:pt-16">
+            {WORKS.map((work) => (
+              <WorkCard key={work.id} work={work} onImageClick={openLightbox} />
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="relative px-3 md:px-10 lg:px-12">
-        <div className="grid grid-cols-2 items-start gap-1.5 pt-8 md:grid-cols-12 md:gap-2.5 md:pt-16 md:gap-y-8">
+      <div className="relative overflow-visible bg-black px-3 md:px-10 lg:px-12">
+        <div className="grid grid-cols-2 items-start gap-1.5 pt-6 md:grid-cols-12 md:gap-2.5 md:pt-10 md:gap-y-8">
           {WEBSITE_WORKS.map((work) => (
             <WorkCard key={work.id} work={work} columns={2} />
           ))}
@@ -390,7 +506,7 @@ export default function Works() {
         <NomadWorkCanvas />
       </div>
       <WorkLightbox work={lightboxWork} onClose={closeLightbox} />
-      <div className="h-6 md:h-10" aria-hidden />
+      <div className="h-6 bg-black md:h-10" aria-hidden />
     </section>
   );
 }

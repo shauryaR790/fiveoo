@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import FiveoMark from "@/components/FiveoMark";
 import LiquidGlass from "@/components/ui/liquid-glass";
 
@@ -24,20 +23,39 @@ const THINKING_PHRASES = [
   "Almost there...",
 ];
 
+function ChatAsterisk({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 24 24"
+      className={`block text-[var(--color-fg)] ${className}`}
+    >
+      {Array.from({ length: 6 }, (_, i) => (
+        <line
+          key={i}
+          x1="12"
+          y1="12"
+          x2="12"
+          y2="2.5"
+          stroke="currentColor"
+          strokeWidth="3.4"
+          strokeLinecap="butt"
+          transform={`rotate(${i * 60} 12 12)`}
+        />
+      ))}
+    </svg>
+  );
+}
+
 function BotAvatar({ size = "md" }: { size?: "sm" | "md" }) {
-  const dimension = size === "sm" ? "h-7 w-7" : "h-9 w-9";
+  const box = size === "sm" ? "h-7 w-7" : "h-9 w-9";
+  const mark = size === "sm" ? "h-3.5 w-3.5" : "h-[1.125rem] w-[1.125rem]";
 
   return (
     <div
-      className={`relative ${dimension} shrink-0 overflow-hidden rounded-full border border-[color-mix(in_srgb,var(--color-fg)_20%,transparent)]`}
+      className={`relative flex ${box} shrink-0 items-center justify-center overflow-hidden rounded-full border border-[color-mix(in_srgb,var(--color-fg)_20%,transparent)] bg-black/40`}
     >
-      <Image
-        src="/images/chatbot-avatar.jpg"
-        alt=""
-        fill
-        sizes={size === "sm" ? "28px" : "36px"}
-        className="object-cover"
-      />
+      <ChatAsterisk className={mark} />
     </div>
   );
 }
@@ -430,15 +448,9 @@ export default function Chatbot({
       aria-controls="fiveo-chatbot-panel"
       aria-label={open ? "Close chat" : "Open chat"}
       onClick={() => setOpen((value) => !value)}
-      className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white/10 p-0.5 transition-transform hover:scale-[1.04] active:scale-[0.98]"
+      className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white/10 transition-transform hover:scale-[1.04] active:scale-[0.98]"
     >
-      <Image
-        src="/images/chatbot-avatar.jpg"
-        alt=""
-        width={40}
-        height={40}
-        className="h-full w-full rounded-full object-cover"
-      />
+      <ChatAsterisk className="h-5 w-5" />
     </button>
   ) : (
     <LiquidGlass
@@ -446,20 +458,14 @@ export default function Chatbot({
       preset="control"
       cornerRadius={12}
       padding="3px"
-      className="relative z-50 h-11 w-11 shrink-0 md:h-14 md:w-14"
+      className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center md:h-14 md:w-14"
       data-chatbot-trigger=""
       aria-expanded={open}
       aria-controls="fiveo-chatbot-panel"
       aria-label={open ? "Close chat" : "Open chat"}
       onClick={() => setOpen((value) => !value)}
     >
-      <Image
-        src="/images/chatbot-avatar.jpg"
-        alt=""
-        width={48}
-        height={48}
-        className="h-full w-full rounded-[9px] object-cover"
-      />
+      <ChatAsterisk className="h-6 w-6 md:h-7 md:w-7" />
     </LiquidGlass>
   );
 

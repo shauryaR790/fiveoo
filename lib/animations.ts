@@ -307,7 +307,7 @@ export function refreshScrollTrigger() {
   ScrollTrigger.refresh();
 }
 
-const SCRUB_SECTION_IDS = new Set(["careers", "works", "services"]);
+const SCRUB_SECTION_IDS = new Set(["works", "services"]);
 
 const REVEAL_BLOCK_SELECTOR = [
   "[data-about-reveal]",
@@ -315,20 +315,35 @@ const REVEAL_BLOCK_SELECTOR = [
   "[data-process-reveal]",
   "[data-partner-reveal]",
   "[data-footer-reveal]",
-  "[data-branding-heading]",
-  "[data-branding-item]",
+  "[data-pos-reveal]",
   "[data-hero-sub]",
   "[data-works-title]",
   "[data-work-meta]",
+  "[data-work-frame]",
+  "[data-work-card]",
   "[data-service-card]",
+  "#collection h2",
+  "#collection p",
+  "#collection .gf-root",
+  "h1",
+  "h2",
+  "h3",
+  "p",
+  "article",
+  "figure",
+  "img",
+  "video",
+  "button",
+  "a",
+  "li",
 ].join(",");
 
 const REVEAL_PRESETS = [
-  { y: 44, x: 0, rotation: 0, scale: 1, filter: "blur(14px)", ease: "power3.out" },
-  { y: 34, x: -20, rotation: -1.4, scale: 1, filter: "blur(9px)", ease: "power2.out" },
-  { y: 38, x: 18, rotation: 1.2, scale: 1, filter: "blur(11px)", ease: "expo.out" },
-  { y: 52, x: 0, rotation: 0, scale: 0.965, filter: "blur(8px)", ease: "power4.out" },
-  { y: 28, x: 0, rotation: 0.7, scale: 1, filter: "blur(12px)", ease: "power3.out" },
+  { y: 56, x: 0, rotation: 0, scale: 1, filter: "blur(16px)", ease: "power3.out" },
+  { y: 42, x: -16, rotation: -1.1, scale: 1, filter: "blur(10px)", ease: "power2.out" },
+  { y: 48, x: 14, rotation: 1, scale: 1, filter: "blur(12px)", ease: "expo.out" },
+  { y: 64, x: 0, rotation: 0, scale: 0.97, filter: "blur(9px)", ease: "power4.out" },
+  { y: 36, x: 0, rotation: 0.55, scale: 1, filter: "blur(13px)", ease: "power3.out" },
 ] as const;
 
 function sortByDocumentOrder(elements: HTMLElement[]) {
@@ -384,45 +399,45 @@ function collectRevealTargets(section: HTMLElement) {
   return expandHeadingLines(merged);
 }
 
-function revealScrubSection(section: HTMLElement) {
-  const panel =
-    section.querySelector<HTMLElement>("[data-branding-card]") ??
-    section.querySelector<HTMLElement>("[data-works-title]")?.closest("section") ??
-    section.querySelector<HTMLElement>("[data-service-card]")?.closest("[class*='min-h']") ??
-    section;
+function collectSectionElements(section: HTMLElement) {
+  const tagged = collectRevealTargets(section);
+  if (tagged.length >= 4) return tagged.slice(0, 28);
 
-  gsap.killTweensOf(panel);
+  const fallback = sortByDocumentOrder(
+    gsap.utils.toArray<HTMLElement>(
+      section.querySelectorAll(
+        "h1, h2, h3, p, article, figure, img, video, [data-work-card], [data-service-card], .gf-root",
+      ),
+    ),
+  ).filter((el) => {
+    if (el.closest("header")) return false;
+    const style = window.getComputedStyle(el);
+    return style.display !== "none" && style.visibility !== "hidden";
+  });
 
-  return gsap.fromTo(
-    panel,
-    {
-      opacity: 0.35,
-      filter: "blur(14px)",
-      scale: 0.985,
-      transformOrigin: "50% 40%",
-    },
-    {
-      opacity: 1,
-      filter: "blur(0px)",
-      scale: 1,
-      duration: 0.95,
-      ease: "power2.out",
-      clearProps: "filter,transform,willChange",
-    },
-  );
+  const merged = sortByDocumentOrder([
+    ...new Set([...tagged, ...fallback]),
+  ]).filter((el, _, all) => !isNestedRevealBlock(el, all));
+
+  return merged.slice(0, 28);
 }
 
 export function revealNavigatedSection(section: HTMLElement) {
   if (prefersReducedMotion()) return null;
 
+  // Pinned scrub sections own their timelines — don't fight them.
   if (SCRUB_SECTION_IDS.has(section.id)) {
-    return revealScrubSection(section);
+    requestAnimationFrame(() => {
+      refreshScrollTrigger();
+      ScrollTrigger.update();
+    });
+    return null;
   }
 
-  const targets = collectRevealTargets(section);
-  if (!targets.length) {
-    return revealScrubSection(section);
-  }
+  const targets = collectSectionElements(section).filter(
+    (el) => !el.closest("[data-nomad-work]") && el.tagName !== "CANVAS",
+  );
+  if (!targets.length) return null;
 
   gsap.killTweensOf(targets);
 
@@ -430,7 +445,7 @@ export function revealNavigatedSection(section: HTMLElement) {
 
   targets.forEach((target, index) => {
     const preset = REVEAL_PRESETS[index % REVEAL_PRESETS.length];
-    const start = index * 0.055 + (index % 3) * 0.018;
+    const start = index * 0.07 + (index % 3) * 0.02;
 
     gsap.set(target, {
       y: preset.y,
@@ -452,9 +467,9 @@ export function revealNavigatedSection(section: HTMLElement) {
         scale: 1,
         opacity: 1,
         filter: "blur(0px)",
-        duration: 0.62 + (index % 4) * 0.11,
+        duration: 0.9 + (index % 4) * 0.14,
         ease: preset.ease,
-        clearProps: "willChange",
+        clearProps: "willChange,filter",
       },
       start,
     );

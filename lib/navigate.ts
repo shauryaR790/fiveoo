@@ -1,15 +1,23 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getLenis, scrollToTarget } from "@/lib/lenis";
-import { prefersReducedMotion, refreshScrollTrigger, revealNavigatedSection } from "@/lib/animations";
+import {
+  prefersReducedMotion,
+  refreshScrollTrigger,
+  revealNavigatedSection,
+} from "@/lib/animations";
+import { playSiteLoader } from "@/lib/site-loader";
 
-const OVERLAY_ID = "scroll-transition-overlay";
+const NAV_LOADER_DURATION = 2100;
+const DROP_OFFSET = 96;
 
 let isNavigating = false;
 
 export function getNavScrollOffset() {
   const navHeight =
     parseFloat(
-      getComputedStyle(document.documentElement).getPropertyValue("--nav-height"),
+      getComputedStyle(document.documentElement).getPropertyValue(
+        "--nav-height",
+      ),
     ) || 88;
 
   return -navHeight;
@@ -38,7 +46,7 @@ function jumpToScrollTop(top: number) {
   window.scrollTo({ top, left: 0, behavior: "auto" });
 
   const lenis = getLenis();
-  lenis?.scrollTo(top, { immediate: true, lock: true });
+  lenis?.scrollTo(top, { immediate: true });
 }
 
 export async function navigateToSection(
@@ -58,12 +66,13 @@ export async function navigateToSection(
 
   if (isNavigating) return;
 
+  // Measure after a refresh so pinned spacers are included.
+  refreshScrollTrigger();
   const scrollTop = resolveScrollTop(target, offset);
   if (scrollTop === null) return;
 
   isNavigating = true;
 
-  const overlay = document.getElementById(OVERLAY_ID);
   const lenis = getLenis();
   const root = document.documentElement;
 
@@ -71,35 +80,35 @@ export async function navigateToSection(
     lenis?.stop();
     root.classList.add("is-scroll-navigating");
 
-    if (overlay) {
-      overlay.classList.add("is-active");
-    }
+    const loaderDone = playSiteLoader({ duration: NAV_LOADER_DURATION });
 
-    await wait(520);
+    await wait(360);
 
-    ScrollTrigger.disable(false);
-    jumpToScrollTop(scrollTop);
-    refreshScrollTrigger();
+    // Do NOT ScrollTrigger.disable() — that breaks pinned scrub sections.
+    const approach = Math.max(0, scrollTop - DROP_OFFSET);
+    jumpToScrollTop(approach);
     ScrollTrigger.update();
 
-    await nextFrame();
-    await nextFrame();
-    await wait(180);
+    await loaderDone;
 
-    ScrollTrigger.enable();
+    root.classList.remove("is-scroll-navigating");
     await nextFrame();
-    await wait(220);
+    refreshScrollTrigger();
+    ScrollTrigger.update();
+    lenis?.start();
 
-    if (overlay) {
-      overlay.classList.remove("is-active");
-    }
+    scrollToTarget(target, { offset, immediate: false });
+    await wait(480);
 
     const section = document.querySelector(target) as HTMLElement | null;
     if (section) {
       revealNavigatedSection(section);
     }
 
-    await wait(560);
+    await wait(120);
+    refreshScrollTrigger();
+    ScrollTrigger.update();
+    await wait(400);
   } finally {
     root.classList.remove("is-scroll-navigating");
     lenis?.start();
