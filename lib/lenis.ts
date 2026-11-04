@@ -12,13 +12,14 @@ export function getLenis() {
   return lenisInstance;
 }
 
-/** Native touch scroll feels continuous on phones; Lenis hitching felt like a “gap”. */
+/** Native touch scroll on phones/tablets (Android + iOS) — Lenis fights finger scroll. */
 function shouldUseNativeScroll() {
   if (typeof window === "undefined") return false;
   return (
-    window.matchMedia("(max-width: 768px)").matches ||
+    window.matchMedia("(max-width: 1024px)").matches ||
     window.matchMedia("(hover: none)").matches ||
-    window.matchMedia("(pointer: coarse)").matches
+    window.matchMedia("(pointer: coarse)").matches ||
+    window.matchMedia("(any-pointer: coarse)").matches
   );
 }
 

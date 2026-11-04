@@ -22,6 +22,9 @@ export default function LenisProvider({
     const lenis = createLenis();
     if (lenis) {
       document.documentElement.classList.add("lenis", "lenis-smooth");
+    } else {
+      // Ensure touch-scroll CSS hooks apply even if Lenis skipped after paint.
+      document.documentElement.classList.add("native-scroll");
     }
 
     let resizeTimer: ReturnType<typeof setTimeout> | undefined;

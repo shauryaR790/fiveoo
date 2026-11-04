@@ -420,7 +420,8 @@ function PosAdShowcase() {
 
       <div
         data-pos-reveal
-        className="theme-card relative w-full overflow-hidden rounded-[20px] bg-black md:rounded-[25px]"
+        data-scroll-media
+        className="theme-card relative w-full touch-pan-y overflow-hidden rounded-[20px] bg-black md:rounded-[25px]"
       >
         <video
           ref={videoRef}
@@ -430,7 +431,7 @@ function PosAdShowcase() {
           playsInline
           preload="none"
           aria-label="FIVEO POS software product demo"
-          className="pointer-events-none block h-auto w-full max-w-none touch-pan-y object-contain [transform:translateZ(0)] [backface-visibility:hidden] md:pointer-events-auto"
+          className="pointer-events-none block h-auto w-full max-w-none touch-pan-y object-contain [transform:translateZ(0)] [backface-visibility:hidden]"
         />
       </div>
     </div>

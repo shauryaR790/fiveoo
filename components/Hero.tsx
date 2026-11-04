@@ -131,10 +131,12 @@ export default function Hero() {
             <div
               ref={slideRef}
               data-cursor-grow
-              className="mr-auto w-full max-w-none will-change-transform lg:max-w-none"
+              data-scroll-media
+              className="mr-auto w-full max-w-none touch-pan-y will-change-transform lg:max-w-none"
             >
               <div
                 ref={mediaRef}
+                data-scroll-media
                 className="relative aspect-video w-full touch-pan-y overflow-hidden rounded-[12px] bg-black/50 ring-1 ring-white/15 will-change-transform md:rounded-none"
               >
                 <video

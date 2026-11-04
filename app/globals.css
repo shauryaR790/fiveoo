@@ -170,17 +170,30 @@ html.native-scroll body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* iOS: videos/images steal vertical gestures — force pan-y so the page scrolls. */
-@media (max-width: 768px) {
+/*
+  Touch phones (Android + iOS): media steals vertical gestures.
+  Ignore hits on decorative video/images so the page always scrolls.
+*/
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
   video,
   img,
-  canvas.nomad-work-canvas {
+  canvas.nomad-work-canvas,
+  [data-scroll-media] {
     touch-action: pan-y !important;
   }
 
-  video {
-    pointer-events: none;
+  video,
+  [data-scroll-media] {
+    pointer-events: none !important;
   }
+}
+
+html.native-scroll video,
+html.native-scroll img,
+html.native-scroll canvas.nomad-work-canvas,
+html.native-scroll [data-scroll-media] {
+  pointer-events: none !important;
+  touch-action: pan-y !important;
 }
 
 body {
