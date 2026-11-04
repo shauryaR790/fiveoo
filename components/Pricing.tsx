@@ -55,13 +55,13 @@ export default function Pricing() {
     <section
       id="pricing"
       ref={rootRef}
-      className="relative theme-surface scroll-mt-[var(--nav-height)] overflow-x-clip px-5 pb-28 pt-[calc(var(--nav-height)+2rem)] md:px-10 md:pb-36 md:pt-[calc(var(--nav-height)+3rem)] lg:px-16"
+      className="relative theme-surface scroll-mt-[var(--nav-height)] overflow-x-clip px-5 pb-16 pt-[calc(var(--nav-height)+1.25rem)] md:px-10 md:pb-36 md:pt-[calc(var(--nav-height)+3rem)] lg:px-16"
       data-nav-theme="dark"
       style={{ fontFamily: "var(--font-card)" }}
     >
       <div
         data-price-reveal
-        className="relative z-[2] mb-20 flex flex-col items-start gap-12 md:mb-28 md:flex-row md:items-center md:justify-between md:gap-10 lg:mb-32"
+        className="relative z-[2] mb-10 flex flex-col items-start gap-8 md:mb-28 md:flex-row md:items-center md:justify-between md:gap-10 lg:mb-32"
       >
         <div className="flex shrink-0 items-center gap-5">
           <span
@@ -124,7 +124,7 @@ export default function Pricing() {
           <NeonFog variant="hero" className="!h-full" />
         </div>
 
-        <div className="relative z-[1] grid grid-cols-1 items-stretch gap-3 md:grid-cols-3 md:gap-4 lg:gap-5">
+        <div className="relative z-[1] grid grid-cols-1 items-stretch gap-4 md:grid-cols-3 md:gap-4 lg:gap-5">
         {PRICING_PLANS.map((plan) => {
           const content = plan[mode];
           const featuresExtra =
@@ -135,7 +135,7 @@ export default function Pricing() {
           return (
             <article
               key={plan.id}
-              className="theme-card glass-fallback relative isolate flex h-full min-h-0 flex-col rounded-[28px] px-7 py-7 md:px-8 md:py-8 lg:px-9 lg:py-9"
+              className="theme-card glass-fallback relative isolate flex h-full min-h-0 flex-col rounded-[22px] px-5 py-6 md:rounded-[28px] md:px-8 md:py-8 lg:px-9 lg:py-9"
             >
               {isPopular ? (
                 <span
@@ -168,7 +168,7 @@ export default function Pricing() {
 
                 <div className="mb-6 border-t border-[var(--color-fg)]/12 md:mb-7" />
 
-                <ul className="flex flex-col gap-5 md:gap-6">
+                <ul className="flex flex-col gap-3.5 md:gap-6">
                   {content.features.map((feature) => (
                     <FeatureRow key={feature} feature={feature} />
                   ))}
@@ -176,8 +176,8 @@ export default function Pricing() {
 
                 {featuresExtra?.length ? (
                   <>
-                    <div className="my-6 border-t border-[var(--color-fg)]/12 md:my-7" />
-                    <ul className="flex flex-col gap-5 md:gap-6">
+                    <div className="my-5 border-t border-[var(--color-fg)]/12 md:my-7" />
+                    <ul className="flex flex-col gap-3.5 md:gap-6">
                       {featuresExtra.map((feature) => (
                         <FeatureRow key={feature} feature={feature} />
                       ))}
@@ -186,10 +186,10 @@ export default function Pricing() {
                 ) : null}
               </div>
 
-              <div className="mt-auto pt-8 md:pt-9">
+              <div className="mt-auto pt-6 md:pt-9">
                 <button
                   type="button"
-                  className="price-choose-btn flex w-full items-center justify-center rounded-full bg-[#e11d2e] px-[22px] py-[18px] text-[20px] font-bold tracking-[-0.02em] text-white transition-[filter,transform] duration-300 hover:brightness-110 active:scale-[0.98] md:text-[22px]"
+                  className="price-choose-btn flex w-full items-center justify-center rounded-full bg-[#e11d2e] px-[22px] py-[15px] text-[18px] font-bold tracking-[-0.02em] text-white transition-[filter,transform] duration-300 hover:brightness-110 active:scale-[0.98] md:py-[18px] md:text-[22px]"
                   onClick={() => scrollToTarget("#top")}
                 >
                   Choose Plan

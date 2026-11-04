@@ -29,7 +29,8 @@ export interface SmoothCursorProps {
   };
 }
 
-const DESKTOP_POINTER_QUERY = "(any-hover: hover) and (any-pointer: fine)";
+/** True desktop pointer only — avoids dual cursors on touch / hybrid Macs. */
+const DESKTOP_POINTER_QUERY = "(hover: hover) and (pointer: fine)";
 
 const COLOR_SPRING = {
   stiffness: 280,
@@ -39,7 +40,7 @@ const COLOR_SPRING = {
 };
 
 function isTrackablePointer(pointerType: string) {
-  return pointerType !== "touch";
+  return pointerType === "mouse" || pointerType === "pen";
 }
 
 function parseRgb(
@@ -115,6 +116,7 @@ const DefaultCursorSVG: FC<{ theme: MotionValue<number> }> = ({ theme }) => {
       viewBox="0 0 50 54"
       fill="none"
       style={{ scale: 0.5 }}
+      aria-hidden
     >
       <g filter="url(#smooth-cursor-shadow)">
         <motion.path
@@ -169,6 +171,18 @@ const DefaultCursorSVG: FC<{ theme: MotionValue<number> }> = ({ theme }) => {
   );
 };
 
+function hideSystemCursor() {
+  document.documentElement.classList.add("has-custom-cursor");
+  document.documentElement.style.setProperty("cursor", "none", "important");
+  document.body?.style.setProperty("cursor", "none", "important");
+}
+
+function showSystemCursor() {
+  document.documentElement.classList.remove("has-custom-cursor");
+  document.documentElement.style.removeProperty("cursor");
+  document.body?.style.removeProperty("cursor");
+}
+
 export function SmoothCursor({
   cursor,
   springConfig = {
@@ -181,12 +195,19 @@ export function SmoothCursor({
   const lastMousePos = useRef<Position>({ x: 0, y: 0 });
   const velocity = useRef<Position>({ x: 0, y: 0 });
   const lastUpdateTime = useRef(Date.now());
+  const previousAngle = useRef(0);
+  const accumulatedRotation = useRef(0);
   const [isEnabled, setIsEnabled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   const cursorX = useSpring(0, springConfig);
   const cursorY = useSpring(0, springConfig);
   const cursorTheme = useSpring(0, COLOR_SPRING);
+  const rotation = useSpring(0, {
+    ...springConfig,
+    damping: 60,
+    stiffness: 300,
+  });
   const scale = useSpring(1, {
     ...springConfig,
     stiffness: 500,
@@ -202,6 +223,7 @@ export function SmoothCursor({
 
       if (!nextIsEnabled) {
         setIsVisible(false);
+        showSystemCursor();
       }
     };
 
@@ -210,6 +232,7 @@ export function SmoothCursor({
 
     return () => {
       mediaQuery.removeEventListener("change", updateEnabled);
+      showSystemCursor();
     };
   }, []);
 
@@ -219,6 +242,7 @@ export function SmoothCursor({
     }
 
     let timeout: ReturnType<typeof setTimeout> | null = null;
+    hideSystemCursor();
 
     const updateVelocity = (currentPos: Position) => {
       const currentTime = Date.now();
@@ -241,6 +265,7 @@ export function SmoothCursor({
       }
 
       setIsVisible(true);
+      hideSystemCursor();
 
       const currentPos = { x: e.clientX, y: e.clientY };
       updateVelocity(currentPos);
@@ -254,7 +279,19 @@ export function SmoothCursor({
       cursorX.set(currentPos.x);
       cursorY.set(currentPos.y);
 
-      if (speed > 0.1) {
+      // Arrow tip points up by default → +90° so it aims along movement.
+      if (speed > 0.08) {
+        const currentAngle =
+          Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI) +
+          90;
+
+        let angleDiff = currentAngle - previousAngle.current;
+        if (angleDiff > 180) angleDiff -= 360;
+        if (angleDiff < -180) angleDiff += 360;
+        accumulatedRotation.current += angleDiff;
+        rotation.set(accumulatedRotation.current);
+        previousAngle.current = currentAngle;
+
         scale.set(0.95);
 
         if (timeout !== null) {
@@ -281,20 +318,26 @@ export function SmoothCursor({
       });
     };
 
-    document.documentElement.classList.add("has-custom-cursor");
+    const onLeave = () => setIsVisible(false);
+    const onEnter = () => hideSystemCursor();
+
     window.addEventListener("pointermove", throttledPointerMove, {
       passive: true,
     });
+    document.addEventListener("mouseleave", onLeave);
+    document.addEventListener("mouseenter", onEnter);
 
     return () => {
       window.removeEventListener("pointermove", throttledPointerMove);
-      document.documentElement.classList.remove("has-custom-cursor");
+      document.removeEventListener("mouseleave", onLeave);
+      document.removeEventListener("mouseenter", onEnter);
+      showSystemCursor();
       if (rafId) cancelAnimationFrame(rafId);
       if (timeout !== null) {
         clearTimeout(timeout);
       }
     };
-  }, [cursorX, cursorY, cursorTheme, scale, isEnabled]);
+  }, [cursorX, cursorY, cursorTheme, rotation, scale, isEnabled]);
 
   if (!isEnabled) {
     return null;
@@ -309,7 +352,8 @@ export function SmoothCursor({
         left: cursorX,
         top: cursorY,
         translateX: "-50%",
-        translateY: "-12%",
+        translateY: "-50%",
+        rotate: rotation,
         scale: scale,
         zIndex: 10001,
         pointerEvents: "none",

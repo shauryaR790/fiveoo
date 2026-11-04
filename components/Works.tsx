@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -29,12 +29,25 @@ function workToFolderFile(work: WorkItem): FolderFile {
   };
 }
 
+function useFolderWidth() {
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      const mq = window.matchMedia("(max-width: 767px)");
+      mq.addEventListener("change", onStoreChange);
+      return () => mq.removeEventListener("change", onStoreChange);
+    },
+    () => (window.matchMedia("(max-width: 767px)").matches ? 280 : 320),
+    () => 320,
+  );
+}
+
 function WorkCollectionFolders({
   onSelectWork,
 }: {
   onSelectWork: (work: WorkItem) => void;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const folderWidth = useFolderWidth();
   const brandWorks = WORKS.slice(0, 3);
   const campaignWorks = WORKS.slice(3, 6);
   const webWorks = WEBSITE_WORKS.slice(0, 3);
@@ -102,12 +115,12 @@ function WorkCollectionFolders({
     <div
       id="collection"
       ref={rootRef}
-      className="relative mt-14 overflow-visible border-t border-[color-mix(in_srgb,var(--color-fg)_10%,transparent)] pt-10 md:mt-20 md:pt-16"
+      className="relative mt-10 overflow-visible border-t border-[color-mix(in_srgb,var(--color-fg)_10%,transparent)] pt-8 md:mt-20 md:pt-16"
     >
-      <div className="mb-8 flex flex-col gap-8 md:mb-10 lg:mb-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+      <div className="mb-6 flex flex-col gap-5 md:mb-10 md:gap-8 lg:mb-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
         <h2
           data-selection-heading
-          className="font-display text-left text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] tracking-[-0.03em] text-[var(--color-fg)]"
+          className="font-display text-left text-[clamp(1.85rem,9vw,5.25rem)] uppercase leading-[0.88] tracking-[-0.03em] text-[var(--color-fg)] md:text-[clamp(2rem,6.2vw,5.25rem)]"
         >
           Work
           <br />
@@ -115,7 +128,7 @@ function WorkCollectionFolders({
         </h2>
         <p
           data-selection-copy
-          className="max-w-[34rem] font-[family-name:var(--font-card)] text-[15px] font-light leading-[1.55] tracking-[-0.02em] text-[var(--color-fg)]/90 md:text-[17px] lg:max-w-[38%] lg:text-[18px]"
+          className="max-w-[34rem] font-[family-name:var(--font-card)] text-[14px] font-light leading-[1.55] tracking-[-0.02em] text-[var(--color-fg)]/90 md:text-[17px] lg:max-w-[38%] lg:text-[18px]"
         >
           Open a folder to browse selected brand systems, websites, and campaign
           pieces in one place. Hover to lean the glass, click to fan the files,
@@ -125,9 +138,9 @@ function WorkCollectionFolders({
         </p>
       </div>
 
-      <div className="relative overflow-visible pt-8 md:pt-10">
-        <div className="relative grid grid-cols-1 items-end justify-items-center gap-x-8 gap-y-6 overflow-visible md:grid-cols-2 xl:grid-cols-3 xl:gap-x-10">
-          <div data-work-folder className="will-change-transform">
+      <div className="relative overflow-visible pt-4 md:pt-10">
+        <div className="relative grid grid-cols-1 items-end justify-items-center gap-x-8 gap-y-10 overflow-visible md:grid-cols-2 md:gap-y-6 xl:grid-cols-3 xl:gap-x-10">
+          <div data-work-folder className="w-full max-w-[320px] will-change-transform">
             <GlassFolder
               label="Brand"
               tone="dark"
@@ -136,13 +149,13 @@ function WorkCollectionFolders({
               action="more"
               labelPlacement="top-left"
               appear={false}
-              width={320}
+              width={folderWidth}
               files={brandWorks.map(workToFolderFile)}
               menu={[{ label: "Browse gallery", onSelect: () => onSelectWork(brandWorks[0]) }]}
               onFileSelect={openFrom(brandWorks)}
             />
           </div>
-          <div data-work-folder className="will-change-transform">
+          <div data-work-folder className="w-full max-w-[320px] will-change-transform">
             <GlassFolder
               label="Websites"
               tone="dark"
@@ -151,7 +164,7 @@ function WorkCollectionFolders({
               action="more"
               labelPlacement="top-left"
               appear={false}
-              width={320}
+              width={folderWidth}
               files={webWorks.map(workToFolderFile)}
               menu={[
                 {
@@ -168,7 +181,7 @@ function WorkCollectionFolders({
           </div>
           <div
             data-work-folder
-            className="will-change-transform md:col-span-2 xl:col-span-1"
+            className="w-full max-w-[320px] will-change-transform md:col-span-2 xl:col-span-1"
           >
             <GlassFolder
               label="Campaigns"
@@ -178,7 +191,7 @@ function WorkCollectionFolders({
               action="more"
               labelPlacement="top-right"
               appear={false}
-              width={320}
+              width={folderWidth}
               files={campaignWorks.map(workToFolderFile)}
               menu={[{ label: "Browse gallery", onSelect: () => onSelectWork(campaignWorks[0]) }]}
               onFileSelect={openFrom(campaignWorks)}
@@ -543,11 +556,11 @@ export default function Works() {
     >
       <div
         ref={pinRef}
-        className="relative min-h-[100svh] overflow-visible bg-black px-3 md:px-10 lg:px-12"
+        className="relative min-h-0 overflow-visible bg-black px-3 pb-2 md:min-h-[100svh] md:px-10 md:pb-0 lg:px-12"
       >
         <h2
           data-works-title
-          className="font-display pt-[calc(var(--nav-height)+1.25rem)] text-center text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] text-white will-change-transform"
+          className="font-display pt-[calc(var(--nav-height)+0.85rem)] text-center text-[clamp(1.85rem,9vw,5.25rem)] uppercase leading-[0.88] text-white will-change-transform md:pt-[calc(var(--nav-height)+1.25rem)] md:text-[clamp(2rem,6.2vw,5.25rem)]"
         >
           Selected
           <br />
@@ -557,7 +570,7 @@ export default function Works() {
         <div data-works-uncover className="relative">
           <WorkCollectionFolders onSelectWork={openLightbox} />
 
-          <div className="grid grid-cols-2 items-start gap-2 pt-10 md:grid-cols-12 md:gap-2.5 md:gap-y-8 md:pt-16">
+          <div className="grid grid-cols-2 items-start gap-1.5 pt-8 md:grid-cols-12 md:gap-2.5 md:gap-y-8 md:pt-16">
             {WORKS.map((work) => (
               <WorkCard key={work.id} work={work} onImageClick={openLightbox} />
             ))}
@@ -566,7 +579,7 @@ export default function Works() {
       </div>
 
       <div className="relative overflow-visible bg-black px-3 md:px-10 lg:px-12">
-        <div className="grid grid-cols-2 items-start gap-1.5 pt-6 md:grid-cols-12 md:gap-2.5 md:pt-10 md:gap-y-8">
+        <div className="grid grid-cols-2 items-start gap-1.5 pt-5 md:grid-cols-12 md:gap-2.5 md:pt-10 md:gap-y-8">
           {WEBSITE_WORKS.map((work) => (
             <WorkCard key={work.id} work={work} columns={2} />
           ))}
@@ -577,7 +590,7 @@ export default function Works() {
         <NomadWorkCanvas />
       </div>
       <WorkLightbox work={lightboxWork} onClose={closeLightbox} />
-      <div className="h-6 bg-black md:h-10" aria-hidden />
+      <div className="h-4 bg-black md:h-10" aria-hidden />
     </section>
   );
 }

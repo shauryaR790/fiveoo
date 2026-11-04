@@ -81,7 +81,7 @@ export default function Hero() {
     <section
       id="top"
       ref={rootRef}
-      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-black px-5 pb-12 pt-[calc(var(--nav-height)+0.75rem)] text-[var(--color-fg)] md:px-10 md:pb-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
+      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-black px-5 pb-8 pt-[calc(var(--nav-height)+0.5rem)] text-[var(--color-fg)] md:px-10 md:pb-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
       data-nav-theme="dark"
     >
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
@@ -121,7 +121,7 @@ export default function Hero() {
           </h1>
         </div>
       ) : (
-        <div className="relative z-[1] flex flex-1 flex-col gap-10 md:gap-12 lg:flex-row lg:items-center lg:gap-0">
+        <div className="relative z-[1] flex flex-1 flex-col gap-6 md:gap-12 lg:flex-row lg:items-center lg:gap-0">
           {/* Showreel — left */}
           <div
             ref={trackRef}
@@ -130,11 +130,11 @@ export default function Hero() {
             <div
               ref={slideRef}
               data-cursor-grow
-              className="mr-auto w-full max-w-[min(100%,420px)] will-change-transform lg:w-full lg:max-w-none"
+              className="mr-auto w-full max-w-none will-change-transform lg:max-w-none"
             >
               <div
                 ref={mediaRef}
-                className="relative aspect-video w-full overflow-hidden rounded-none bg-black/50 ring-1 ring-white/15 will-change-transform"
+                className="relative aspect-video w-full overflow-hidden rounded-[12px] bg-black/50 ring-1 ring-white/15 will-change-transform md:rounded-none"
               >
                 <video
                   ref={videoRef}
@@ -149,7 +149,7 @@ export default function Hero() {
               </div>
               <p
                 data-hero-sub
-                className="mt-3 text-[15px] text-[var(--color-fg)]"
+                className="mt-2.5 text-[13px] text-[var(--color-fg)]/90 md:mt-3 md:text-[15px]"
               >
                 FIVEO Showreels
               </p>
@@ -158,7 +158,7 @@ export default function Hero() {
 
           {/* Headline — right */}
           <div className="flex flex-1 flex-col justify-center lg:ml-auto lg:w-[41.5%] lg:flex-none">
-            <h1 className="font-display ml-auto max-w-[14ch] text-right text-[clamp(2.35rem,11.2vw,7.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
+            <h1 className="font-display ml-auto max-w-[12ch] text-right text-[clamp(2.1rem,10.5vw,7.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.03em] md:max-w-[14ch] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
               {["We build", "seamless", "identity"].map((line, i) => (
                 <span key={line} className="block overflow-hidden">
                   <span
@@ -176,10 +176,10 @@ export default function Hero() {
         </div>
       )}
 
-      <div className="relative z-[1] mt-12 flex flex-col items-start gap-8 md:mt-16 md:gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
+      <div className="relative z-[1] mt-8 flex flex-col items-start gap-6 md:mt-16 md:gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
         <p
           data-hero-sub
-          className="max-w-[16ch] font-[family-name:var(--font-card)] text-[clamp(1.65rem,5.2vw,3.75rem)] font-light leading-[1.2] tracking-[-0.03em] md:max-w-[12.5em] md:text-[clamp(2rem,4.1vw,3.75rem)] md:leading-[1.15] lg:w-[52%]"
+          className="max-w-[22ch] font-[family-name:var(--font-card)] text-[clamp(1.35rem,5vw,3.75rem)] font-light leading-[1.22] tracking-[-0.03em] md:max-w-[12.5em] md:text-[clamp(2rem,4.1vw,3.75rem)] md:leading-[1.15] lg:w-[52%]"
         >
           <span className="md:hidden">
             Brand, product, and motion—crafted with studio precision.
@@ -192,7 +192,7 @@ export default function Hero() {
 
         <div
           data-hero-sub
-          className="flex w-full flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8 md:gap-5 lg:ml-auto lg:w-[41.5%]"
+          className="flex w-full flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-8 md:gap-5 lg:ml-auto lg:w-[41.5%]"
         >
           <button
             type="button"

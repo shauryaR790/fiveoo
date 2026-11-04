@@ -41,7 +41,6 @@ const FOOTER_WORDMARK_CSS = `
   align-self: stretch !important;
 }
 .ssf.ssf-fiveo-wordmark .ssf-stage-in {
-  /* Pull the script up so the stroke + stickers stay in view */
   margin-bottom: -4% !important;
   transform: translateY(-6%) !important;
 }
@@ -53,12 +52,16 @@ const FOOTER_WORDMARK_CSS = `
 }
 @media (max-width: 760px) {
   .ssf.ssf-fiveo-wordmark .ssf-stage {
-    width: 112% !important;
-    margin-left: -6% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 0 4px !important;
   }
   .ssf.ssf-fiveo-wordmark .ssf-stage-in {
-    margin-bottom: -2% !important;
-    transform: translateY(-4%) !important;
+    margin-bottom: 0 !important;
+    transform: translateY(-2%) !important;
+  }
+  .ssf.ssf-fiveo-wordmark .ssf-st {
+    width: max(11cqw, 42px) !important;
   }
 }
 `;
@@ -154,24 +157,24 @@ export default function Footer() {
       <NeonFog variant="footer" />
       {/* Soft dissolve at page edge - overlay, not clip, so no hard fog border */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[48%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/55 to-[var(--color-bg)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[36%] bg-gradient-to-b from-transparent via-[var(--color-bg)]/55 to-[var(--color-bg)] md:h-[48%]"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-20 bg-[var(--color-bg)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-12 bg-[var(--color-bg)] md:h-20"
         aria-hidden
       />
 
       <div className="relative z-[2] flex flex-1 flex-col">
-      <div className="relative shrink-0 overflow-hidden pt-8 md:pt-12" aria-hidden>
+      <div className="relative shrink-0 overflow-hidden pt-6 md:pt-12" aria-hidden>
         <div ref={trackRef} className="flex w-max will-change-transform">
           <BrandUnit />
           <BrandUnit />
         </div>
       </div>
 
-      <div className="relative flex flex-1 flex-col justify-center px-5 py-14 md:px-10 md:py-20 lg:px-16">
-        <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-16 lg:gap-24">
+      <div className="relative flex flex-1 flex-col justify-center px-5 py-10 md:px-10 md:py-20 lg:px-16">
+        <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-16 lg:gap-24">
           {/* Left - CTA */}
           <div data-footer-reveal>
             <p className="max-w-[18ch] font-[family-name:var(--font-card)] text-[clamp(1.55rem,4.8vw,2.65rem)] font-light leading-[1.22] tracking-[-0.03em] text-[var(--color-fg)] md:max-w-[16ch] md:leading-[1.25]">
@@ -210,9 +213,9 @@ export default function Footer() {
 
           {/* Right - Habito link columns */}
           <div data-footer-reveal>
-            <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 md:grid-cols-3 md:gap-x-10 lg:gap-x-14">
+            <div className="grid grid-cols-2 gap-x-5 gap-y-6 sm:gap-x-6 md:grid-cols-3 md:gap-x-10 md:gap-y-5 lg:gap-x-14">
               {FOOTER_LINK_COLUMNS.map((column, colIndex) => (
-                <ul key={colIndex} className="flex flex-col gap-4 md:gap-6">
+                <ul key={colIndex} className="flex flex-col gap-3.5 md:gap-6">
                   {column.map((link) => (
                     <li
                       key={link.label}
@@ -250,7 +253,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="relative mt-auto w-full overflow-x-clip pt-6 md:pt-10">
+      <div className="relative mt-auto w-full overflow-x-clip px-1 pt-4 md:px-0 md:pt-10">
         <style>{FOOTER_WORDMARK_CSS}</style>
         <StickerSlapFooter
           as="div"
@@ -270,14 +273,14 @@ export default function Footer() {
           accent="var(--color-neon-orange)"
           fontSans="var(--font-card)"
           height="auto"
-          wordmarkMaxHeight="70vw"
+          wordmarkMaxHeight="min(52vw, 280px)"
           className="ssf-fiveo-wordmark"
         />
       </div>
 
       <div
         data-footer-reveal
-        className="relative z-[2] flex shrink-0 flex-col items-start justify-between gap-5 border-t border-[var(--color-fg)]/10 px-5 py-6 text-[13px] font-light tracking-[-0.015em] text-[var(--color-fg)] md:flex-row md:items-center md:gap-4 md:px-10 md:py-6 lg:px-16"
+        className="relative z-[2] flex shrink-0 flex-col items-start justify-between gap-3 border-t border-[var(--color-fg)]/10 px-5 py-5 text-[12px] font-light tracking-[-0.015em] text-[var(--color-fg)] md:flex-row md:items-center md:gap-4 md:px-10 md:py-6 md:text-[13px] lg:px-16"
       >
         <a
           href="#"

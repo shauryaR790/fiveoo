@@ -40,7 +40,7 @@ export default function About() {
     <section
       id="about"
       ref={rootRef}
-      className="relative bg-transparent pb-14 text-[var(--color-fg)] md:pb-20"
+      className="relative bg-transparent pb-10 text-[var(--color-fg)] md:pb-20"
       data-nav-theme="dark"
     >
       <div className="relative z-[1]">
@@ -53,8 +53,8 @@ export default function About() {
         glyphClassName="h-[clamp(3.75rem,12.5vw,11.5rem)] w-[clamp(3.75rem,12.5vw,11.5rem)]"
       />
 
-      <div className="mt-24 px-5 md:mt-32 md:px-8 lg:px-12">
-        <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-12 lg:gap-16">
+      <div className="mt-14 px-5 md:mt-32 md:px-8 lg:px-12">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12 lg:gap-16">
           <div data-about-reveal className="hidden md:block lg:pt-2">
             <div ref={trackRef} className="relative w-full">
               <div

@@ -293,10 +293,23 @@ video {
   backface-visibility: hidden;
 }
 
+/* Hide system cursor whenever the site arrow is active (Safari needs body + *). */
 html.has-custom-cursor,
+html.has-custom-cursor body,
 html.has-custom-cursor *,
 html.has-custom-cursor *::before,
 html.has-custom-cursor *::after {
+  cursor: none !important;
+}
+
+html.has-custom-cursor a,
+html.has-custom-cursor button,
+html.has-custom-cursor input,
+html.has-custom-cursor textarea,
+html.has-custom-cursor select,
+html.has-custom-cursor label,
+html.has-custom-cursor [role="button"],
+html.has-custom-cursor canvas {
   cursor: none !important;
 }
 

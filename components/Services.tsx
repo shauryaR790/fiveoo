@@ -15,7 +15,10 @@ const HEADLINE_PARTS = [
   { type: "char" as const, value: "R" },
   { type: "space" as const },
   { type: "clover" as const },
-  { type: "space" as const },
+  /** Forces OUR * / SERVICES stack on mobile; hidden on md+ marquee. */
+  { type: "break" as const },
+  /** Gap between clover and SERVICES on desktop marquee only. */
+  { type: "mdSpace" as const },
   { type: "char" as const, value: "S" },
   { type: "char" as const, value: "E" },
   { type: "char" as const, value: "R" },
@@ -173,14 +176,28 @@ export default function Services() {
         >
           <div
             ref={trackRef}
-            className="font-display flex w-max items-end pl-5 pr-[6vw] text-[clamp(2.75rem,16vw,7rem)] uppercase leading-[0.82] text-[var(--color-fg)] will-change-transform md:pl-10 md:pr-[10vw] md:text-[clamp(4.5rem,21vw,28rem)] lg:pl-12"
+            className="font-display flex w-full flex-wrap items-end pl-5 pr-5 text-[clamp(2.75rem,16vw,7rem)] uppercase leading-[0.82] text-[var(--color-fg)] will-change-transform md:w-max md:flex-nowrap md:pl-10 md:pr-[10vw] md:text-[clamp(4.5rem,21vw,28rem)] lg:pl-12"
           >
             {HEADLINE_PARTS.map((part, index) => {
-              if (part.type === "space") {
+              if (part.type === "break") {
+                return (
+                  <span
+                    key={`br-${index}`}
+                    className="basis-full w-full md:hidden"
+                    aria-hidden
+                  />
+                );
+              }
+
+              if (part.type === "space" || part.type === "mdSpace") {
                 return (
                   <span
                     key={`sp-${index}`}
-                    className="w-[0.2em] shrink-0"
+                    className={
+                      part.type === "mdSpace"
+                        ? "hidden w-[0.2em] shrink-0 md:block"
+                        : "w-[0.2em] shrink-0"
+                    }
                     aria-hidden
                   />
                 );
@@ -226,23 +243,23 @@ export default function Services() {
           <h2 className="sr-only">Our Services</h2>
         </div>
 
-        <div className="relative z-[4] px-5 pb-10 pt-16 md:absolute md:inset-0 md:flex md:translate-y-[15px] md:items-center md:px-[60px] md:pb-0 md:pt-0">
-          <div className="grid w-full grid-cols-1 gap-[18px] md:grid-cols-3">
+        <div className="relative z-[4] px-5 pb-8 pt-10 md:absolute md:inset-0 md:flex md:translate-y-[15px] md:items-center md:px-[60px] md:pb-0 md:pt-0">
+          <div className="grid w-full grid-cols-1 gap-3.5 md:grid-cols-3 md:gap-[18px]">
             {SERVICE_GROUPS.map((group) => (
               <div
                 key={group.id}
                 data-service-card
-                className="theme-card glass-fallback flex min-h-0 flex-col rounded-[24px] p-6 text-[var(--color-fg)] will-change-transform sm:min-h-[52vh] md:h-[760px] md:min-h-0 md:w-full md:p-10"
+                className="theme-card glass-fallback flex min-h-0 flex-col rounded-[20px] p-5 text-[var(--color-fg)] will-change-transform md:h-[760px] md:w-full md:rounded-[24px] md:p-10"
                 style={{ fontFamily: "var(--font-card)" }}
               >
-                <h3 className="font-editorial mb-6 max-w-[360px] whitespace-pre-line text-[1.65rem] leading-[1.12] sm:text-[1.85rem] md:mb-[56px] md:text-[44px]">
+                <h3 className="font-editorial mb-5 max-w-[360px] whitespace-pre-line text-[1.45rem] leading-[1.12] md:mb-[56px] md:text-[44px]">
                   {group.title}
                 </h3>
-                <ul className="flex flex-col gap-7 md:gap-8">
+                <ul className="flex flex-col gap-4 md:gap-8">
                   {group.items.map((item) => (
-                    <li key={item} className="flex items-center gap-3.5">
+                    <li key={item} className="flex items-center gap-3">
                       <span
-                        className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-black"
+                        className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-black md:h-[26px] md:w-[26px]"
                         aria-hidden
                       >
                         <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
@@ -255,7 +272,7 @@ export default function Services() {
                           />
                         </svg>
                       </span>
-                      <span className="text-[18px] font-normal leading-[1.25] tracking-[-0.02em] sm:text-[20px] md:text-[23px]">
+                      <span className="text-[16px] font-normal leading-[1.25] tracking-[-0.02em] md:text-[23px]">
                         {item}
                       </span>
                     </li>
