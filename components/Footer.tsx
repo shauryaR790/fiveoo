@@ -13,6 +13,55 @@ import { navigateToSection } from "@/lib/navigate";
 import { getLenis } from "@/lib/lenis";
 import NeonFog from "@/components/NeonFog";
 import LiquidGlass from "@/components/ui/liquid-glass";
+import StickerSlapFooter from "@/components/ui/sticker-slap-footer";
+
+/** Full-bleed fiveo wordmark + stickers under the classic footer. */
+const FOOTER_WORDMARK_CSS = `
+.ssf.ssf-fiveo-wordmark {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  color: var(--color-fg);
+}
+.ssf.ssf-fiveo-wordmark .ssf-panel {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  flex: none !important;
+}
+.ssf.ssf-fiveo-wordmark .ssf-stage {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-self: stretch !important;
+}
+.ssf.ssf-fiveo-wordmark .ssf-stage-in {
+  /* Pull the script up so the stroke + stickers stay in view */
+  margin-bottom: -4% !important;
+  transform: translateY(-6%) !important;
+}
+.ssf.ssf-fiveo-wordmark .ssf-wm {
+  color: var(--color-fg);
+}
+.ssf.ssf-fiveo-wordmark .ssf-st {
+  width: max(7.5cqw, 58px) !important;
+}
+@media (max-width: 760px) {
+  .ssf.ssf-fiveo-wordmark .ssf-stage {
+    width: 112% !important;
+    margin-left: -6% !important;
+  }
+  .ssf.ssf-fiveo-wordmark .ssf-stage-in {
+    margin-bottom: -2% !important;
+    transform: translateY(-4%) !important;
+  }
+}
+`;
 
 function BrandUnit() {
   return (
@@ -201,9 +250,34 @@ export default function Footer() {
         </div>
       </div>
 
+      <div className="relative mt-auto w-full overflow-x-clip pt-6 md:pt-10">
+        <style>{FOOTER_WORDMARK_CSS}</style>
+        <StickerSlapFooter
+          as="div"
+          showTop={false}
+          wordmark="fiveo"
+          jobs={[]}
+          address={[]}
+          email=""
+          chatHref=""
+          socials={[]}
+          credits={[]}
+          stickers={["burst", "smiley", "heart", "daisy", "bubble", "bolt"]}
+          paper="transparent"
+          panel="transparent"
+          ink="var(--color-fg)"
+          cream="var(--color-fg)"
+          accent="var(--color-neon-orange)"
+          fontSans="var(--font-card)"
+          height="auto"
+          wordmarkMaxHeight="70vw"
+          className="ssf-fiveo-wordmark"
+        />
+      </div>
+
       <div
         data-footer-reveal
-        className="relative mt-auto flex shrink-0 flex-col items-start justify-between gap-5 border-t border-[var(--color-fg)]/10 px-5 py-6 text-[13px] font-light tracking-[-0.015em] text-[var(--color-fg)] md:flex-row md:items-center md:gap-4 md:px-10 md:py-6 lg:px-16"
+        className="relative z-[2] flex shrink-0 flex-col items-start justify-between gap-5 border-t border-[var(--color-fg)]/10 px-5 py-6 text-[13px] font-light tracking-[-0.015em] text-[var(--color-fg)] md:flex-row md:items-center md:gap-4 md:px-10 md:py-6 lg:px-16"
       >
         <a
           href="#"

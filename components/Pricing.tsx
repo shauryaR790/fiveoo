@@ -6,7 +6,7 @@ import { PRICING_PLANS } from "@/lib/constants";
 import { fadeUp } from "@/lib/animations";
 import { scrollToTarget } from "@/lib/lenis";
 import NeonFog from "@/components/NeonFog";
-import LiquidGlass from "@/components/ui/liquid-glass";
+import { ChatAsterisk } from "@/components/Chatbot";
 
 function FeatureRow({ feature }: { feature: string }) {
   return (
@@ -130,13 +130,23 @@ export default function Pricing() {
           const featuresExtra =
             "featuresExtra" in content ? content.featuresExtra : null;
 
+          const isPopular = plan.id === "business";
+
           return (
             <article
               key={plan.id}
-              className="theme-card glass-fallback relative isolate flex h-full min-h-[880px] flex-col rounded-[28px] px-7 py-8 md:min-h-[1020px] md:px-8 md:py-10 lg:min-h-[1100px] lg:px-10 lg:py-11"
+              className="theme-card glass-fallback relative isolate flex h-full min-h-0 flex-col rounded-[28px] px-7 py-7 md:px-8 md:py-8 lg:px-9 lg:py-9"
             >
+              {isPopular ? (
+                <span
+                  className="absolute -right-2 -top-2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-[#e11d2e] text-white shadow-[0_8px_20px_rgba(225,29,46,0.35)] md:-right-2.5 md:-top-2.5 md:h-12 md:w-12"
+                  aria-hidden
+                >
+                  <ChatAsterisk className="h-6 w-6 text-white md:h-7 md:w-7" />
+                </span>
+              ) : null}
               <div data-price-reveal className="flex flex-1 flex-col">
-                <div className="mb-7 flex items-center justify-between gap-3 md:mb-8">
+                <div className="mb-5 flex items-center justify-between gap-3 md:mb-6">
                   <h3 className="font-editorial text-[1.45rem] font-normal tracking-[-0.035em] md:text-[1.65rem] lg:text-[1.8rem]">
                     {plan.name}
                   </h3>
@@ -145,7 +155,7 @@ export default function Pricing() {
                   </span>
                 </div>
 
-                <p className="font-editorial mb-6 flex flex-wrap items-baseline gap-x-1 leading-none tracking-[-0.045em] md:mb-7">
+                <p className="font-editorial mb-5 flex flex-wrap items-baseline gap-x-1 leading-none tracking-[-0.045em] md:mb-6">
                   <span className="text-[clamp(2.85rem,3.8vw,3.85rem)] font-semibold">
                     {content.price}
                   </span>
@@ -156,9 +166,9 @@ export default function Pricing() {
                   ) : null}
                 </p>
 
-                <div className="mb-8 border-t border-[var(--color-fg)]/12 md:mb-9" />
+                <div className="mb-6 border-t border-[var(--color-fg)]/12 md:mb-7" />
 
-                <ul className="flex flex-col gap-7 md:gap-8">
+                <ul className="flex flex-col gap-5 md:gap-6">
                   {content.features.map((feature) => (
                     <FeatureRow key={feature} feature={feature} />
                   ))}
@@ -166,8 +176,8 @@ export default function Pricing() {
 
                 {featuresExtra?.length ? (
                   <>
-                    <div className="my-8 border-t border-[var(--color-fg)]/12 md:my-9" />
-                    <ul className="flex flex-col gap-7 md:gap-8">
+                    <div className="my-6 border-t border-[var(--color-fg)]/12 md:my-7" />
+                    <ul className="flex flex-col gap-5 md:gap-6">
                       {featuresExtra.map((feature) => (
                         <FeatureRow key={feature} feature={feature} />
                       ))}
@@ -176,18 +186,14 @@ export default function Pricing() {
                 ) : null}
               </div>
 
-              <div className="mt-auto pt-12">
-                <LiquidGlass
-                  as="button"
-                  preset="pill"
-                  overLight
-                  className="price-choose-btn w-full py-5 md:py-6"
+              <div className="mt-auto pt-8 md:pt-9">
+                <button
+                  type="button"
+                  className="price-choose-btn flex w-full items-center justify-center rounded-full bg-[#e11d2e] px-[22px] py-[18px] text-[20px] font-bold tracking-[-0.02em] text-white transition-[filter,transform] duration-300 hover:brightness-110 active:scale-[0.98] md:text-[22px]"
                   onClick={() => scrollToTarget("#top")}
                 >
-                  <span className="text-[20px] font-bold tracking-[-0.02em] text-black md:text-[22px]">
-                    Choose Plan
-                  </span>
-                </LiquidGlass>
+                  Choose Plan
+                </button>
               </div>
             </article>
           );

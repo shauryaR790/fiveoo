@@ -23,7 +23,7 @@ const THINKING_PHRASES = [
   "Almost there...",
 ];
 
-function ChatAsterisk({ className = "" }: { className?: string }) {
+export function ChatAsterisk({ className = "" }: { className?: string }) {
   return (
     <svg
       aria-hidden

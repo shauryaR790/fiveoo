@@ -312,7 +312,7 @@ export const PRICING_PLANS = [
   {
     id: "business",
     name: "Business Plan",
-    badge: "Most Popular 🔥",
+    badge: "Most Popular",
     project: {
       price: "$3.899",
       unit: "/package",

@@ -362,24 +362,11 @@ html.is-scroll-navigating #main {
 }
 
 .price-choose-btn {
-  color-scheme: light;
-  background: #ffffff !important;
-  background-image: none !important;
-  color: #000000;
-  border: 0;
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
-  text-shadow: none;
+  width: 100%;
   font-weight: 700;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-}
-
-.price-choose-btn:hover {
-  background: var(--color-neon-orange) !important;
-  background-image: none !important;
-  color: #000000;
 }
 
 /* Reusable neon bank - purple to orange bloom */

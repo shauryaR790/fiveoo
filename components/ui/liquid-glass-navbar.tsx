@@ -79,12 +79,14 @@ const NIMBUS_CSS = `
   box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -2px 6px rgba(0,162,255,.22),inset 0 0 0 1px rgba(255,255,255,.55),0 6px 16px -6px rgba(0,70,140,.45)}
 .nimbus-nav[data-gl="off"] .nimbus-drop{display:block}
 .nimbus-item{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border:0;border-radius:999px;background:none;color:var(--n-fg-soft);
-  font-family:inherit;font-weight:500;font-size:14px;line-height:1;letter-spacing:-.01em;text-decoration:none;cursor:pointer;transition:color .25s}
-.nimbus-item:hover,.nimbus-item[aria-current="page"]{color:var(--n-fg)}
+  font-family:inherit;font-weight:500;font-size:14px;line-height:1;letter-spacing:-.01em;text-decoration:none;cursor:pointer;transition:color .25s,font-weight .25s,opacity .25s}
+.nimbus-item:hover{color:var(--n-fg)}
+.nimbus-item[aria-current="page"]{color:var(--n-fg);font-weight:650;opacity:1}
+.nimbus-item[aria-current="page"] .nimbus-label{text-decoration:none}
 .nimbus-item:focus-visible{outline:2px solid #00A2FF;outline-offset:2px}
 .nv-ico{position:relative;display:inline-flex;flex:none}
-.nv-ico svg{transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
-.nimbus-item[aria-current="page"] .nv-ico svg{transform:translateY(-1px) scale(1.08)}
+.nv-ico svg{transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .25s}
+.nimbus-item[aria-current="page"] .nv-ico svg{opacity:1;transform:none}
 .nv-door{fill:transparent}
 .nv-ico[data-fx="pop"] svg{animation:nvPop .5s cubic-bezier(.3,1.6,.5,1) both}
 @keyframes nvPop{0%{transform:scale(.72)}60%{transform:scale(1.2)}100%{transform:translateY(-1px) scale(1.08)}}
@@ -110,8 +112,8 @@ const NIMBUS_CSS = `
 @keyframes nvWave{0%{transform:none}20%{transform:rotate(-15deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(4deg)}100%{transform:translateY(-1px) scale(1.08)}}
 .nimbus-nav[data-compact="true"] .nimbus-item{padding:0 13px}
 .nimbus-nav[data-compact="true"] .nimbus-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.nimbus-nav[data-idle="true"] .nimbus-water,.nimbus-nav[data-idle="true"] .nimbus-drop{opacity:0;transition:opacity .35s ease}
-.nimbus-nav:not([data-idle="true"]) .nimbus-water,.nimbus-nav:not([data-idle="true"]) .nimbus-drop{opacity:1;transition:opacity .35s ease}
+/* No active-page blob — selection is text-only. */
+.nimbus-water,.nimbus-drop{opacity:0!important;visibility:hidden;pointer-events:none}
 @media (max-width:520px){.nimbus-nav:not([data-compact="false"]) .nimbus-item{padding:0 13px}.nimbus-nav:not([data-compact="false"]) .nimbus-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
 @media (prefers-reduced-motion:reduce){.nv-ico svg,.nv-ico::before,.nv-ico::after,.nv-door{animation:none!important;transition:none}}
 `
@@ -551,7 +553,7 @@ export function LiquidNavbar({
       className={["nimbus-nav", className].filter(Boolean).join(" ")}
       data-tone={tone}
       data-gl={gl}
-      data-idle={idle ? "true" : undefined}
+      data-idle="true"
       data-compact={compact === undefined ? undefined : String(compact)}
       data-refract={refract ? "on" : "off"}
       aria-label="Main"

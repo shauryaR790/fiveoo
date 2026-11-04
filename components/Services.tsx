@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { SERVICE_GROUPS } from "@/lib/constants";
-import { prefersReducedMotion, isMobileViewport, fadeUp, setNavInvert, setNavPinDrive, refreshScrollTrigger } from "@/lib/animations";
+import { prefersReducedMotion, isMobileViewport, fadeUp, setNavInvert, refreshScrollTrigger } from "@/lib/animations";
 gsap.registerPlugin(ScrollTrigger);
 
 /** Glyphs in the scroll line - clover sits between OUR and SERVICES. */
@@ -80,7 +80,7 @@ export default function Services() {
         -Math.max(0, track.scrollWidth - window.innerWidth + 48);
 
       gsap.set(letters, { yPercent: 125 });
-      // Park cards fully below the stage until the scrubbed rise.
+      // GSAP owns card visibility — avoid CSS opacity/translate that can strand them.
       gsap.set(cards, { yPercent: 135, autoAlpha: 0 });
       if (headline) gsap.set(headline, { opacity: 1, y: 0 });
 
@@ -93,18 +93,14 @@ export default function Services() {
           scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          refreshPriority: -1,
-          onEnter: () => setNavPinDrive(true),
-          onEnterBack: () => setNavPinDrive(true),
+          refreshPriority: 0,
           onUpdate: (self) => setNavInvert(self.progress >= 0.48),
           onLeave: () => {
-            setNavPinDrive(false);
             setNavInvert(false);
+            // Ensure cards stay visible after the pin (scrub end can miss a frame).
+            gsap.set(cards, { yPercent: 0, autoAlpha: 1 });
           },
-          onLeaveBack: () => {
-            setNavPinDrive(false);
-            setNavInvert(false);
-          },
+          onLeaveBack: () => setNavInvert(false),
         },
       });
 
@@ -133,7 +129,7 @@ export default function Services() {
             duration: 0.28,
             stagger: 0.1,
           },
-          0.48,
+          0.42,
         );
 
       if (headline) {
@@ -151,8 +147,13 @@ export default function Services() {
     }, root);
 
     requestAnimationFrame(() => refreshScrollTrigger());
+    const t = window.setTimeout(() => refreshScrollTrigger(), 200);
 
-    return () => ctx.revert();
+    return () => {
+      window.clearTimeout(t);
+      setNavInvert(false);
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -231,7 +232,7 @@ export default function Services() {
               <div
                 key={group.id}
                 data-service-card
-                className="theme-card glass-fallback flex min-h-0 flex-col rounded-[24px] p-6 text-[var(--color-fg)] will-change-transform sm:min-h-[52vh] md:h-[760px] md:min-h-0 md:w-full md:translate-y-[135%] md:opacity-0 md:p-10"
+                className="theme-card glass-fallback flex min-h-0 flex-col rounded-[24px] p-6 text-[var(--color-fg)] will-change-transform sm:min-h-[52vh] md:h-[760px] md:min-h-0 md:w-full md:p-10"
                 style={{ fontFamily: "var(--font-card)" }}
               >
                 <h3 className="font-editorial mb-6 max-w-[360px] whitespace-pre-line text-[1.65rem] leading-[1.12] sm:text-[1.85rem] md:mb-[56px] md:text-[44px]">

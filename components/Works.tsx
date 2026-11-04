@@ -34,6 +34,7 @@ function WorkCollectionFolders({
 }: {
   onSelectWork: (work: WorkItem) => void;
 }) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const brandWorks = WORKS.slice(0, 3);
   const campaignWorks = WORKS.slice(3, 6);
   const webWorks = WEBSITE_WORKS.slice(0, 3);
@@ -45,74 +46,144 @@ function WorkCollectionFolders({
     onSelectWork(match);
   };
 
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const heading = root.querySelector<HTMLElement>("[data-selection-heading]");
+    const copy = root.querySelector<HTMLElement>("[data-selection-copy]");
+    const folders = gsap.utils.toArray<HTMLElement>(
+      "[data-work-folder]",
+      root,
+    );
+
+    const ctx = gsap.context(() => {
+      if (prefersReducedMotion()) {
+        gsap.set([heading, copy, ...folders].filter(Boolean), {
+          clearProps: "all",
+        });
+        return;
+      }
+
+      gsap.set([heading, copy].filter(Boolean), { y: 36, opacity: 0 });
+      gsap.set(folders, { y: 110, opacity: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: "top 78%",
+          toggleActions: "play none none none",
+          invalidateOnRefresh: true,
+        },
+        defaults: { ease: "power3.out" },
+      });
+
+      if (heading) {
+        tl.to(heading, { y: 0, opacity: 1, duration: 0.75 }, 0);
+      }
+      if (copy) {
+        tl.to(copy, { y: 0, opacity: 1, duration: 0.7 }, 0.12);
+      }
+
+      // Left → right: each folder starts when the previous is ~halfway up.
+      folders.forEach((folder, index) => {
+        tl.to(
+          folder,
+          { y: 0, opacity: 1, duration: 0.85 },
+          0.28 + index * 0.42,
+        );
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div
       id="collection"
-      className="relative mt-14 overflow-visible border-t border-white/10 pt-10 md:mt-20 md:pt-16"
+      ref={rootRef}
+      className="relative mt-14 overflow-visible border-t border-[color-mix(in_srgb,var(--color-fg)_10%,transparent)] pt-10 md:mt-20 md:pt-16"
     >
       <div className="mb-8 flex flex-col gap-8 md:mb-10 lg:mb-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
-        <h2 className="font-display text-left text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] tracking-[-0.03em] text-white">
+        <h2
+          data-selection-heading
+          className="font-display text-left text-[clamp(2rem,6.2vw,5.25rem)] uppercase leading-[0.88] tracking-[-0.03em] text-[var(--color-fg)]"
+        >
           Work
           <br />
           selection
         </h2>
-        <p className="max-w-[34rem] font-[family-name:var(--font-card)] text-[15px] font-light leading-[1.55] tracking-[-0.02em] text-white/90 md:text-[17px] lg:max-w-[38%] lg:text-[18px]">
+        <p
+          data-selection-copy
+          className="max-w-[34rem] font-[family-name:var(--font-card)] text-[15px] font-light leading-[1.55] tracking-[-0.02em] text-[var(--color-fg)]/90 md:text-[17px] lg:max-w-[38%] lg:text-[18px]"
+        >
           Open a folder to browse selected brand systems, websites, and campaign
-          pieces. Hover to lean the glass, click to fan the files.
+          pieces in one place. Hover to lean the glass, click to fan the files,
+          and jump straight into the work—each collection is curated so you can
+          move fast from first look to full project context without leaving the
+          page.
         </p>
       </div>
 
       <div className="relative overflow-visible pt-8 md:pt-10">
         <div className="relative grid grid-cols-1 items-end justify-items-center gap-x-8 gap-y-6 overflow-visible md:grid-cols-2 xl:grid-cols-3 xl:gap-x-10">
-          <GlassFolder
-            label="Brand"
-            tone="dark"
-            art="ember"
-            seed={3}
-            action="more"
-            labelPlacement="top-left"
-            appearDelay={0}
-            width={320}
-            files={brandWorks.map(workToFolderFile)}
-            menu={[{ label: "Browse gallery", onSelect: () => onSelectWork(brandWorks[0]) }]}
-            onFileSelect={openFrom(brandWorks)}
-          />
-          <GlassFolder
-            label="Websites"
-            tone="dark"
-            art="glacier"
-            seed={11}
-            action="more"
-            labelPlacement="top-left"
-            appearDelay={120}
-            width={320}
-            files={webWorks.map(workToFolderFile)}
-            menu={[
-              {
-                label: "Visit first site",
-                onSelect: () => {
-                  if (webWorks[0]?.href) {
-                    window.open(webWorks[0].href, "_blank", "noopener,noreferrer");
-                  }
+          <div data-work-folder className="will-change-transform">
+            <GlassFolder
+              label="Brand"
+              tone="dark"
+              art="ember"
+              seed={3}
+              action="more"
+              labelPlacement="top-left"
+              appear={false}
+              width={320}
+              files={brandWorks.map(workToFolderFile)}
+              menu={[{ label: "Browse gallery", onSelect: () => onSelectWork(brandWorks[0]) }]}
+              onFileSelect={openFrom(brandWorks)}
+            />
+          </div>
+          <div data-work-folder className="will-change-transform">
+            <GlassFolder
+              label="Websites"
+              tone="dark"
+              art="glacier"
+              seed={11}
+              action="more"
+              labelPlacement="top-left"
+              appear={false}
+              width={320}
+              files={webWorks.map(workToFolderFile)}
+              menu={[
+                {
+                  label: "Visit first site",
+                  onSelect: () => {
+                    if (webWorks[0]?.href) {
+                      window.open(webWorks[0].href, "_blank", "noopener,noreferrer");
+                    }
+                  },
                 },
-              },
-            ]}
-            onFileSelect={openFrom(webWorks)}
-          />
-          <GlassFolder
-            label="Campaigns"
-            tone="dark"
-            art="dusk"
-            seed={7}
-            action="more"
-            labelPlacement="top-right"
-            appearDelay={240}
-            width={320}
-            files={campaignWorks.map(workToFolderFile)}
-            menu={[{ label: "Browse gallery", onSelect: () => onSelectWork(campaignWorks[0]) }]}
-            onFileSelect={openFrom(campaignWorks)}
-            className="md:col-span-2 xl:col-span-1"
-          />
+              ]}
+              onFileSelect={openFrom(webWorks)}
+            />
+          </div>
+          <div
+            data-work-folder
+            className="will-change-transform md:col-span-2 xl:col-span-1"
+          >
+            <GlassFolder
+              label="Campaigns"
+              tone="dark"
+              art="dusk"
+              seed={7}
+              action="more"
+              labelPlacement="top-right"
+              appear={false}
+              width={320}
+              files={campaignWorks.map(workToFolderFile)}
+              menu={[{ label: "Browse gallery", onSelect: () => onSelectWork(campaignWorks[0]) }]}
+              onFileSelect={openFrom(campaignWorks)}
+            />
+          </div>
         </div>
       </div>
     </div>
