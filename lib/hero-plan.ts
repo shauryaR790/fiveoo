@@ -6,7 +6,7 @@
  */
 export type HeroPlan = "a" | "b";
 
-export const HERO_PLAN: HeroPlan = "b";
+export const HERO_PLAN = "b" as HeroPlan;
 
 export const isHeroPlanA = () => HERO_PLAN === "a";
 export const isHeroPlanB = () => HERO_PLAN === "b";

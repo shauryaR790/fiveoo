@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Inter_Tight } from "next/font/google";
+import localFont from "next/font/local";
 import LenisProvider from "@/components/providers/LenisProvider";
 import ScrollTransitionOverlay from "@/components/ScrollTransitionOverlay";
 import SiteLoader from "@/components/SiteLoader";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import "./globals.css";
 
-const interTight = Inter_Tight({
+const interTight = localFont({
+  src: "./fonts/InterTight-latin.woff2",
   variable: "--font-inter-tight",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: "100 900",
   display: "swap",
 });
 
-const inter = Inter({
+const inter = localFont({
+  src: "./fonts/Inter-latin.woff2",
   variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: "100 900",
   display: "swap",
 });
 
