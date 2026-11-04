@@ -170,6 +170,19 @@ html.native-scroll body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* iOS: videos/images steal vertical gestures — force pan-y so the page scrolls. */
+@media (max-width: 768px) {
+  video,
+  img,
+  canvas.nomad-work-canvas {
+    touch-action: pan-y !important;
+  }
+
+  video {
+    pointer-events: none;
+  }
+}
+
 body {
   position: relative;
   margin: 0;

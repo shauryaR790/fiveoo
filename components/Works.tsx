@@ -430,7 +430,7 @@ function PosAdShowcase() {
           playsInline
           preload="none"
           aria-label="FIVEO POS software product demo"
-          className="block h-auto w-full max-w-none object-contain [transform:translateZ(0)] [backface-visibility:hidden]"
+          className="pointer-events-none block h-auto w-full max-w-none touch-pan-y object-contain [transform:translateZ(0)] [backface-visibility:hidden] md:pointer-events-auto"
         />
       </div>
     </div>

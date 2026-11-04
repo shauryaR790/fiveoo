@@ -90,6 +90,7 @@ export class WorkCanvas {
     oy: number;
     moved: number;
     t: number;
+    touch?: boolean;
   } | null = null;
   private dragged = false;
 
@@ -203,6 +204,20 @@ export class WorkCanvas {
     const cv = this.cv;
 
     cv.addEventListener("pointerdown", (e) => {
+      // Touch: never capture — vertical page scroll must win on phones.
+      if (e.pointerType === "touch") {
+        this.drag = {
+          x: e.clientX,
+          y: e.clientY,
+          ox: this.tx,
+          oy: this.ty,
+          moved: 0,
+          t: performance.now(),
+          touch: true,
+        };
+        return;
+      }
+
       cv.setPointerCapture(e.pointerId);
       this.drag = {
         x: e.clientX,
@@ -217,6 +232,15 @@ export class WorkCanvas {
 
     cv.addEventListener("pointermove", (e) => {
       if (this.drag) {
+        // Ignore touch-drag so the browser can scroll the page.
+        if (this.drag.touch) {
+          this.drag.moved = Math.max(
+            this.drag.moved,
+            Math.hypot(e.clientX - this.drag.x, e.clientY - this.drag.y),
+          );
+          return;
+        }
+
         const dx = e.clientX - this.drag.x;
         const dy = e.clientY - this.drag.y;
         this.drag.moved = Math.max(this.drag.moved, Math.hypot(dx, dy));
@@ -236,6 +260,15 @@ export class WorkCanvas {
       const d = this.drag;
       this.drag = null;
       cv.classList.remove("is-drag");
+
+      if (d.touch) {
+        // Tap only — no canvas panning on touch devices.
+        if (d.moved <= 10) {
+          const card = this.cardAt(e.clientX, e.clientY);
+          if (card) this.onRoute(card.route);
+        }
+        return;
+      }
 
       const dt = Math.max(16, performance.now() - d.t);
       if (d.moved > 8) {

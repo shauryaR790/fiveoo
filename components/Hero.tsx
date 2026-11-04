@@ -91,7 +91,8 @@ export default function Hero() {
           className="absolute inset-0 h-full w-full object-cover object-left-bottom"
         />
       </div>
-      <NeonFog variant="hero" />
+      {/* Fog eats no events, but hide on phone so the “black fog gap” isn’t a dead zone visually. */}
+      <NeonFog variant="hero" className="hidden md:block" />
 
       {planA ? (
         <a
@@ -134,7 +135,7 @@ export default function Hero() {
             >
               <div
                 ref={mediaRef}
-                className="relative aspect-video w-full overflow-hidden rounded-[12px] bg-black/50 ring-1 ring-white/15 will-change-transform md:rounded-none"
+                className="relative aspect-video w-full touch-pan-y overflow-hidden rounded-[12px] bg-black/50 ring-1 ring-white/15 will-change-transform md:rounded-none"
               >
                 <video
                   ref={videoRef}
@@ -144,7 +145,9 @@ export default function Hero() {
                   playsInline
                   autoPlay
                   preload="metadata"
-                  className="h-full w-full object-cover"
+                  controls={false}
+                  disablePictureInPicture
+                  className="pointer-events-none h-full w-full touch-pan-y object-cover"
                 />
               </div>
               <p
