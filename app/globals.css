@@ -159,6 +159,17 @@ html.lenis body {
   overflow: hidden;
 }
 
+/* Mobile uses native scrolling — keep it continuous, no smooth-scroll fight. */
+html.native-scroll {
+  scroll-behavior: auto;
+  overscroll-behavior-y: none;
+}
+
+html.native-scroll body {
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   position: relative;
   margin: 0;

@@ -12,8 +12,23 @@ export function getLenis() {
   return lenisInstance;
 }
 
-export function createLenis(): Lenis {
+/** Native touch scroll feels continuous on phones; Lenis hitching felt like a “gap”. */
+function shouldUseNativeScroll() {
+  if (typeof window === "undefined") return false;
+  return (
+    window.matchMedia("(max-width: 768px)").matches ||
+    window.matchMedia("(hover: none)").matches ||
+    window.matchMedia("(pointer: coarse)").matches
+  );
+}
+
+export function createLenis(): Lenis | null {
   if (lenisInstance) return lenisInstance;
+
+  if (shouldUseNativeScroll()) {
+    document.documentElement.classList.add("native-scroll");
+    return null;
+  }
 
   const lenis = new Lenis({
     duration: 1.15,

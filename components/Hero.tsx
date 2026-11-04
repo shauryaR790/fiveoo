@@ -81,7 +81,7 @@ export default function Hero() {
     <section
       id="top"
       ref={rootRef}
-      className="relative flex min-h-[100svh] flex-col overflow-x-hidden bg-black px-5 pb-8 pt-[calc(var(--nav-height)+0.5rem)] text-[var(--color-fg)] md:px-10 md:pb-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
+      className="relative flex min-h-0 flex-col overflow-x-hidden bg-black px-5 pb-8 pt-[calc(var(--nav-height)+0.5rem)] text-[var(--color-fg)] md:min-h-[100svh] md:px-10 md:pb-10 md:pt-[calc(var(--nav-height)+1.5rem)] lg:px-12"
       data-nav-theme="dark"
     >
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
@@ -121,7 +121,7 @@ export default function Hero() {
           </h1>
         </div>
       ) : (
-        <div className="relative z-[1] flex flex-1 flex-col gap-6 md:gap-12 lg:flex-row lg:items-center lg:gap-0">
+        <div className="relative z-[1] flex flex-col gap-5 md:flex-1 md:gap-12 lg:flex-row lg:items-center lg:gap-0">
           {/* Showreel — left */}
           <div
             ref={trackRef}
@@ -156,8 +156,8 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Headline — right */}
-          <div className="flex flex-1 flex-col justify-center lg:ml-auto lg:w-[41.5%] lg:flex-none">
+          {/* Headline — right (no flex-1 on mobile: that left a dead scroll gap) */}
+          <div className="flex flex-col justify-start lg:ml-auto lg:w-[41.5%] lg:flex-none md:flex-1 md:justify-center">
             <h1 className="font-display ml-auto max-w-[12ch] text-right text-[clamp(2.1rem,10.5vw,7.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.03em] md:max-w-[14ch] md:text-[clamp(2.75rem,7.8vw,7.5rem)] md:leading-[0.88]">
               {["We build", "seamless", "identity"].map((line, i) => (
                 <span key={line} className="block overflow-hidden">
@@ -176,7 +176,7 @@ export default function Hero() {
         </div>
       )}
 
-      <div className="relative z-[1] mt-8 flex flex-col items-start gap-6 md:mt-16 md:gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
+      <div className="relative z-[1] mt-6 flex flex-col items-start gap-5 md:mt-16 md:gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
         <p
           data-hero-sub
           className="max-w-[22ch] font-[family-name:var(--font-card)] text-[clamp(1.35rem,5vw,3.75rem)] font-light leading-[1.22] tracking-[-0.03em] md:max-w-[12.5em] md:text-[clamp(2rem,4.1vw,3.75rem)] md:leading-[1.15] lg:w-[52%]"
