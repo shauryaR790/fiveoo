@@ -171,29 +171,29 @@ html.native-scroll body {
 }
 
 /*
-  Touch phones (Android + iOS): media steals vertical gestures.
-  Ignore hits on decorative video/images so the page always scrolls.
+  Touch phones (Android + iOS): decorative media steals vertical gestures.
+  Keep page scroll working - but leave the Nomad infinite canvas interactive.
 */
 @media (hover: none), (pointer: coarse), (max-width: 768px) {
   video,
   img,
-  canvas.nomad-work-canvas,
   [data-scroll-media] {
     touch-action: pan-y !important;
-  }
-
-  video,
-  [data-scroll-media] {
     pointer-events: none !important;
   }
 }
 
 html.native-scroll video,
 html.native-scroll img,
-html.native-scroll canvas.nomad-work-canvas,
 html.native-scroll [data-scroll-media] {
   pointer-events: none !important;
   touch-action: pan-y !important;
+}
+
+html.native-scroll canvas.nomad-work-canvas,
+canvas.nomad-work-canvas {
+  pointer-events: auto !important;
+  touch-action: none !important;
 }
 
 body {

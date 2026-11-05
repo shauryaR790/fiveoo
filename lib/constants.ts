@@ -221,12 +221,12 @@ export const BRANDING_FEATURES = [
 export const SERVICE_GROUPS = [
   {
     id: "graphic",
-    title: "Graphic &\nBranding Design",
+    title: "Graphic Design\nand Branding",
     items: [
       "Logo Design",
       "Brand Guidelines",
       "Brand Implementation",
-      "Stationary Design",
+      "Stationery Design",
       "Pitch Deck Design",
       "Icon Design",
       "Infographic Design",
@@ -251,7 +251,7 @@ export const SERVICE_GROUPS = [
   },
   {
     id: "uiux",
-    title: "UIUX\nDesign",
+    title: "UI and UX",
     items: [
       "Mobile App Design",
       "Website Design",
@@ -268,7 +268,7 @@ export const SERVICE_GROUPS = [
 
 const SUBSCRIPTION_FEATURES = [
   "Execute All Works",
-  "Branding, UIUX, Illustration, and Motion",
+  "Branding, UI and UX, Illustration, and Motion",
   "Unlimited Request",
   "Unlimited Revisions",
   "Pause & Cancel Anytime",
@@ -294,7 +294,7 @@ export const PRICING_PLANS = [
       features: [
         "Logo Design",
         "Visual Guidelines",
-        "Stationary/Print Design",
+        "Stationery/Print Design",
         "Social Media Design",
         "Premium Mockups",
         "Unlimited Revisions",
@@ -345,7 +345,7 @@ export const PRICING_PLANS = [
       features: [
         "Branding Design",
         "Graphic Design",
-        "UIUX Design",
+        "UI and UX Design",
         "Illustration",
         "Motion Graphic",
         "Webflow Development",
@@ -358,7 +358,7 @@ export const PRICING_PLANS = [
       features: [
         "Branding Design",
         "Graphic Design",
-        "UIUX Design",
+        "UI and UX Design",
         "Illustration",
         "Motion Graphic",
         "Webflow Development",
@@ -371,7 +371,7 @@ export const PRICING_PLANS = [
 export const PROCESS_STEPS = [
   {
     number: "01",
-    title: "Subscribe Plan",
+    title: "Subscription Plan",
     description:
       "Choose a plan that fits your business, whether you need foundational branding or full creative support. Our flexible monthly options are built to help startups grow and scale. Subscribe, and we'll get started within 24 hours.",
   },
@@ -438,7 +438,7 @@ export const TESTIMONIALS = [
     logo: "/images/partners/melanin-doctor.avif",
     feedback:
       "Working with FIVEO felt like adding a senior design team overnight: sharp systems, clear communication, and beautiful delivery.",
-    services: ["Brand Guidelines", "UIUX Design", "Social Media", "Webflow"],
+    services: ["Brand Guidelines", "UI and UX Design", "Social Media", "Webflow"],
   },
   {
     id: "05",

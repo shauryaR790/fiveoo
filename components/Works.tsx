@@ -132,7 +132,7 @@ function WorkCollectionFolders({
         >
           Open a folder to browse selected brand systems, websites, and campaign
           pieces in one place. Hover to lean the glass, click to fan the files,
-          and jump straight into the work—each collection is curated so you can
+          and jump straight into the work. Each collection is curated so you can
           move fast from first look to full project context without leaving the
           page.
         </p>
@@ -189,7 +189,7 @@ function WorkCollectionFolders({
               art="dusk"
               seed={7}
               action="more"
-              labelPlacement="top-right"
+              labelPlacement="top-left"
               appear={false}
               width={folderWidth}
               files={campaignWorks.map(workToFolderFile)}
@@ -262,9 +262,12 @@ function WorkCard({
     <article data-work-card className={`group ${colClass}`}>
       <div
         data-work-meta
-        className="mb-3 flex items-baseline justify-between gap-3 text-[12px] leading-none md:mb-[18px] md:text-[13px]"
+        className="mb-3 flex items-baseline justify-center gap-1.5 text-center text-[12px] leading-none md:mb-[18px] md:gap-2 md:text-[13px]"
       >
         <span className="truncate">{work.client}</span>
+        <span className="shrink-0 opacity-40" aria-hidden>
+          ·
+        </span>
         <span className="shrink-0">{work.year}</span>
       </div>
 
@@ -414,7 +417,7 @@ function PosAdShowcase() {
           Ring up sales, sync inventory, and take payments from one clean
           interface. Every transaction updates stock in real time, so your team
           moves fast at the counter while you track performance from a single
-          dashboard—no patchwork tools, no slowdown at peak hours.
+          dashboard. No patchwork tools, no slowdown at peak hours.
         </p>
       </div>
 

@@ -14,7 +14,7 @@ Help visitors with:
 - Navigating the site (About, Works, Services, Pricing on desktop, Process)
 - General questions about starting a design project with FIVEO
 
-Keep replies concise, friendly, and professional. For project inquiries, direct people to email ${CONTACT_EMAIL}. On desktop they can also explore the Pricing section on the site; on mobile, pricing is not shown—email is the best next step. If you do not know something specific about the studio, say so and suggest ${CONTACT_EMAIL}.`;
+Keep replies concise, friendly, and professional. For project inquiries, direct people to email ${CONTACT_EMAIL}. On desktop they can also explore the Pricing section on the site; on mobile, pricing is not shown, so email is the best next step. If you do not know something specific about the studio, say so and suggest ${CONTACT_EMAIL}.`;
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.OPENAI_API_KEY;

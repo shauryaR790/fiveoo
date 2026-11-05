@@ -425,11 +425,19 @@ function collectSectionElements(section: HTMLElement) {
 export function revealNavigatedSection(section: HTMLElement) {
   if (prefersReducedMotion()) return null;
 
-  // Pinned scrub sections own their timelines — don't fight them.
+  // Pinned scrub sections own their timelines - don't fight them.
+  // Still force Services title/cards visible after a nav jump (scrub can leave them hidden).
   if (SCRUB_SECTION_IDS.has(section.id)) {
     requestAnimationFrame(() => {
       refreshScrollTrigger();
       ScrollTrigger.update();
+      if (section.id === "services") {
+        gsap.set(section.querySelectorAll("[data-letter]"), { yPercent: 0 });
+        gsap.set(section.querySelectorAll("[data-service-card]"), {
+          yPercent: 0,
+          autoAlpha: 1,
+        });
+      }
     });
     return null;
   }

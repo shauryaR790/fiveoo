@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { SERVICE_GROUPS } from "@/lib/constants";
-import { prefersReducedMotion, isMobileViewport, fadeUp, setNavInvert, refreshScrollTrigger } from "@/lib/animations";
+import { prefersReducedMotion, setNavInvert, refreshScrollTrigger } from "@/lib/animations";
 gsap.registerPlugin(ScrollTrigger);
 
 /** Glyphs in the scroll line - clover sits between OUR and SERVICES. */
@@ -49,11 +49,26 @@ export default function Services() {
       );
       const headline = headlineRef.current;
 
-      if (prefersReducedMotion() || isMobileViewport()) {
-        gsap.set(letters, { yPercent: 0 });
-        // Keep cards in flow; fadeUp handles the entrance.
-        gsap.set(cards, { clearProps: "transform,opacity,visibility" });
-        fadeUp(cards, { trigger: stage, stagger: 0.12, y: 40 });
+      const mm = gsap.matchMedia();
+
+      // Phone: fully static - no pin, scrub, fade, or letter motion.
+      mm.add("(max-width: 768px)", () => {
+        gsap.killTweensOf([letters, cards, track, headline].filter(Boolean));
+        gsap.set(letters, { yPercent: 0, x: 0, clearProps: "transform" });
+        gsap.set(track, { x: 0, clearProps: "transform" });
+        if (headline) {
+          gsap.set(headline, {
+            opacity: 1,
+            y: 0,
+            clearProps: "opacity,transform",
+          });
+        }
+        gsap.set(cards, {
+          yPercent: 0,
+          y: 0,
+          autoAlpha: 1,
+          clearProps: "transform,opacity,visibility",
+        });
         ScrollTrigger.create({
           trigger: stage,
           start: "top top",
@@ -63,90 +78,50 @@ export default function Services() {
           onLeave: () => setNavInvert(false),
           onLeaveBack: () => setNavInvert(false),
         });
-        if (headline) {
-          gsap.to(headline, {
-            opacity: 0,
-            y: 24,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: stage,
-              start: "top 35%",
-              end: "top 10%",
-              scrub: true,
-            },
-          });
-        }
-        return;
-      }
-
-      const overshoot = () =>
-        -Math.max(0, track.scrollWidth - window.innerWidth + 48);
-
-      gsap.set(letters, { yPercent: 125 });
-      // GSAP owns card visibility — avoid CSS opacity/translate that can strand them.
-      gsap.set(cards, { yPercent: 135, autoAlpha: 0 });
-      if (headline) gsap.set(headline, { opacity: 1, y: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: stage,
-          start: "top top",
-          end: "+=340%",
-          pin: true,
-          scrub: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          refreshPriority: 0,
-          onUpdate: (self) => setNavInvert(self.progress >= 0.48),
-          onLeave: () => {
-            setNavInvert(false);
-            // Ensure cards stay visible after the pin (scrub end can miss a frame).
-            gsap.set(cards, { yPercent: 0, autoAlpha: 1 });
-          },
-          onLeaveBack: () => setNavInvert(false),
-        },
       });
 
-      tl.to(
-        letters,
-        {
-          yPercent: 0,
-          ease: "power2.out",
-          duration: 0.16,
-          stagger: { each: 0.055 },
-        },
-        0,
-      )
-        .fromTo(
-          track,
-          { x: 0 },
-          { x: overshoot, ease: "none", duration: 0.58 },
-          0.14,
-        )
-        .to(
-          cards,
-          {
-            yPercent: 0,
-            autoAlpha: 1,
-            ease: "power3.out",
-            duration: 0.28,
-            stagger: 0.1,
-          },
-          0.42,
-        );
+      mm.add("(min-width: 769px)", () => {
+        // Heading stays fully static - no letter rise, marquee slide, or fade.
+        gsap.set(letters, { yPercent: 0, clearProps: "transform" });
+        gsap.set(track, { x: 0, clearProps: "transform" });
+        if (headline) {
+          gsap.set(headline, {
+            opacity: 1,
+            y: 0,
+            clearProps: "opacity,transform",
+          });
+        }
 
-      if (headline) {
-        tl.to(
-          headline,
-          {
-            opacity: 0,
-            y: 56,
-            ease: "power3.inOut",
-            duration: 0.28,
+        if (prefersReducedMotion()) {
+          gsap.set(cards, { yPercent: 0, autoAlpha: 1 });
+          return;
+        }
+
+        gsap.set(cards, { yPercent: 135, autoAlpha: 0 });
+
+        gsap.to(cards, {
+          yPercent: 0,
+          autoAlpha: 1,
+          ease: "power3.out",
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: stage,
+            start: "top top",
+            end: "+=340%",
+            pin: true,
+            scrub: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            refreshPriority: 0,
+            onUpdate: (self) => setNavInvert(self.progress >= 0.48),
+            onLeave: () => {
+              setNavInvert(false);
+              gsap.set(cards, { yPercent: 0, autoAlpha: 1 });
+            },
+            onLeaveBack: () => setNavInvert(false),
           },
-          0.72,
-        );
-      }
+        });
+      });
     }, root);
 
     requestAnimationFrame(() => refreshScrollTrigger());
@@ -168,15 +143,15 @@ export default function Services() {
     >
       <div
         ref={stageRef}
-        className="relative min-h-[100svh] overflow-hidden bg-[var(--color-bg)] md:h-[100svh]"
+        className="relative min-h-0 overflow-x-clip overflow-y-visible bg-[var(--color-bg)] md:h-[100svh] md:min-h-[100svh] md:overflow-hidden"
       >
         <div
           ref={headlineRef}
-          className="relative z-[2] overflow-x-clip overflow-y-visible pb-6 pt-[calc(var(--nav-height)+1.25rem)] will-change-[opacity,transform] md:absolute md:inset-x-0 md:bottom-[6%] md:overflow-visible md:pb-0 md:pt-0 lg:bottom-[7%]"
+          className="relative z-[2] overflow-x-clip overflow-y-visible pb-4 pt-[calc(var(--nav-height)+1rem)] md:absolute md:inset-x-0 md:bottom-[6%] md:overflow-visible md:pb-0 md:pt-0 lg:bottom-[7%]"
         >
           <div
             ref={trackRef}
-            className="font-display flex w-full flex-wrap items-end pl-5 pr-5 text-[clamp(2.75rem,16vw,7rem)] uppercase leading-[0.82] text-[var(--color-fg)] will-change-transform md:w-max md:flex-nowrap md:pl-10 md:pr-[10vw] md:text-[clamp(4.5rem,21vw,28rem)] lg:pl-12"
+            className="font-display flex w-full flex-wrap items-end pl-5 pr-5 text-[clamp(2.75rem,16vw,7rem)] uppercase leading-[0.82] text-[var(--color-fg)] md:w-max md:flex-nowrap md:pl-10 md:pr-[10vw] md:text-[clamp(4.5rem,21vw,28rem)] lg:pl-12"
           >
             {HEADLINE_PARTS.map((part, index) => {
               if (part.type === "break") {
@@ -211,7 +186,7 @@ export default function Services() {
                   >
                     <span
                       data-letter
-                      className="relative inline-block h-[0.72em] w-[0.72em] translate-y-[-0.04em] will-change-transform"
+                      className="relative inline-block h-[0.72em] w-[0.72em] translate-y-[-0.04em]"
                     >
                       <Image
                         src="/images/leaf.avif"
@@ -230,10 +205,7 @@ export default function Services() {
                   key={`${part.value}-${index}`}
                   className="inline-block overflow-hidden"
                 >
-                  <span
-                    data-letter
-                    className="inline-block will-change-transform"
-                  >
+                  <span data-letter className="inline-block">
                     {part.value}
                   </span>
                 </span>

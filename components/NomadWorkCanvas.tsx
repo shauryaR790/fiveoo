@@ -74,7 +74,7 @@ export default function NomadWorkCanvas() {
     >
       <canvas
         ref={canvasRef}
-        className="nomad-work-canvas absolute inset-0 block h-full w-full touch-pan-y md:touch-none"
+        className="nomad-work-canvas absolute inset-0 block h-full w-full touch-none"
       />
       <p
         className={`pointer-events-none absolute bottom-[clamp(18px,3.4vh,34px)] left-1/2 m-0 -translate-x-1/2 text-[11px] font-medium uppercase tracking-[0.16em] text-white/60 transition-opacity duration-700 ${

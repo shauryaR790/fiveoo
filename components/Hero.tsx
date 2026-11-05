@@ -187,7 +187,7 @@ export default function Hero() {
           className="max-w-[22ch] font-[family-name:var(--font-card)] text-[clamp(1.35rem,5vw,3.75rem)] font-light leading-[1.22] tracking-[-0.03em] md:max-w-[12.5em] md:text-[clamp(2rem,4.1vw,3.75rem)] md:leading-[1.15] lg:w-[52%]"
         >
           <span className="md:hidden">
-            Brand, product, and motion—crafted with studio precision.
+            Brand, product, and motion, crafted with studio precision.
           </span>
           <span className="hidden md:inline">
             Pick a plan, send in your request, and your design journey starts

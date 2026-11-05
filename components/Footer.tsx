@@ -179,7 +179,7 @@ export default function Footer() {
           <div data-footer-reveal>
             <p className="max-w-[18ch] font-[family-name:var(--font-card)] text-[clamp(1.55rem,4.8vw,2.65rem)] font-light leading-[1.22] tracking-[-0.03em] text-[var(--color-fg)] md:max-w-[16ch] md:leading-[1.25]">
               <span className="md:hidden">
-                Tell us what you are building—we will reply from the studio within
+                Tell us what you are building. We will reply from the studio within
                 one business day.
               </span>
               <span className="hidden md:inline">
@@ -254,6 +254,10 @@ export default function Footer() {
       </div>
 
       <div className="relative mt-auto w-full overflow-x-clip px-1 pt-4 md:px-0 md:pt-10">
+        <div
+          className="mx-5 mb-6 h-px bg-[var(--color-fg)]/20 md:mx-10 md:mb-10 lg:mx-16"
+          aria-hidden
+        />
         <style>{FOOTER_WORDMARK_CSS}</style>
         <StickerSlapFooter
           as="div"
