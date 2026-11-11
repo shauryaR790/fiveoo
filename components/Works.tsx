@@ -15,6 +15,7 @@ import {
   isMobileViewport,
   setNavInvert,
   fadeUp,
+  refreshScrollTrigger,
 } from "@/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -293,7 +294,7 @@ function WorkCard({
                 muted
                 loop
                 playsInline
-                preload="auto"
+                preload="none"
                 aria-hidden
                 tabIndex={-1}
                 className="block h-auto w-full max-w-none [transform:translateZ(0)]"
@@ -312,7 +313,7 @@ function WorkCard({
               muted
               loop
               playsInline
-              preload="auto"
+              preload="none"
               aria-label={work.title}
               className="block h-auto w-full max-w-none [transform:translateZ(0)]"
             />
@@ -329,9 +330,10 @@ function WorkCard({
               alt={work.title}
               width={1600}
               height={2000}
-              unoptimized
               className="block h-auto w-full max-w-none"
               sizes={imageSizes}
+              loading="lazy"
+              quality={75}
             />
             <div
               data-work-overlay
@@ -392,7 +394,13 @@ function PosAdShowcase() {
 
     observer.observe(video);
 
-    return () => observer.disconnect();
+    const onMeta = () => refreshScrollTrigger();
+    video.addEventListener("loadedmetadata", onMeta);
+
+    return () => {
+      observer.disconnect();
+      video.removeEventListener("loadedmetadata", onMeta);
+    };
   }, []);
 
   return (
@@ -408,7 +416,7 @@ function PosAdShowcase() {
         >
           The new
           <br />
-          POS software
+          POS web app
         </h2>
         <p
           data-pos-reveal
@@ -428,12 +436,12 @@ function PosAdShowcase() {
       >
         <video
           ref={videoRef}
-          src="/videos/web_pos.mp4"
+          src="/videos/odoopos.mp4"
           muted
           loop
           playsInline
           preload="none"
-          aria-label="FIVEO POS software product demo"
+          aria-label="FIVEO POS web app product demo"
           className="pointer-events-none block h-auto w-full max-w-none touch-pan-y object-contain [transform:translateZ(0)] [backface-visibility:hidden]"
         />
       </div>

@@ -136,7 +136,7 @@ export class WorkCanvas {
       v.muted = true;
       v.loop = true;
       v.playsInline = true;
-      v.preload = "auto";
+      v.preload = "metadata";
       v.setAttribute("playsinline", "");
       return v;
     });

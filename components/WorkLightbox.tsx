@@ -68,10 +68,10 @@ export default function WorkLightbox({ work, onClose }: WorkLightboxProps) {
             alt={work.title}
             width={1600}
             height={2000}
-            unoptimized
             className="block h-auto max-h-[82svh] w-full object-contain"
             sizes="92vw"
             priority
+            quality={80}
           />
         </div>
 

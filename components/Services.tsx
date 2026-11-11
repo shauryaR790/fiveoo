@@ -5,7 +5,13 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { SERVICE_GROUPS } from "@/lib/constants";
-import { prefersReducedMotion, setNavInvert, refreshScrollTrigger } from "@/lib/animations";
+import {
+  prefersReducedMotion,
+  setNavInvert,
+  setNavPinDrive,
+  refreshScrollTrigger,
+} from "@/lib/animations";
+
 gsap.registerPlugin(ScrollTrigger);
 
 /** Glyphs in the scroll line - clover sits between OUR and SERVICES. */
@@ -81,29 +87,22 @@ export default function Services() {
       });
 
       mm.add("(min-width: 769px)", () => {
-        // Heading stays fully static - no letter rise, marquee slide, or fade.
-        gsap.set(letters, { yPercent: 0, clearProps: "transform" });
-        gsap.set(track, { x: 0, clearProps: "transform" });
-        if (headline) {
-          gsap.set(headline, {
-            opacity: 1,
-            y: 0,
-            clearProps: "opacity,transform",
-          });
-        }
-
         if (prefersReducedMotion()) {
+          gsap.set(letters, { yPercent: 0 });
+          gsap.set(track, { x: 0 });
           gsap.set(cards, { yPercent: 0, autoAlpha: 1 });
+          if (headline) gsap.set(headline, { opacity: 1, y: 0 });
           return;
         }
 
-        gsap.set(cards, { yPercent: 135, autoAlpha: 0 });
+        const overshoot = () =>
+          -Math.max(0, track.scrollWidth - window.innerWidth + 48);
 
-        gsap.to(cards, {
-          yPercent: 0,
-          autoAlpha: 1,
-          ease: "power3.out",
-          stagger: 0.1,
+        gsap.set(letters, { yPercent: 125 });
+        gsap.set(cards, { yPercent: 118, autoAlpha: 1 });
+        if (headline) gsap.set(headline, { opacity: 1, y: 0 });
+
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: stage,
             start: "top top",
@@ -112,20 +111,67 @@ export default function Services() {
             scrub: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            refreshPriority: 0,
+            refreshPriority: -1,
+            onEnter: () => setNavPinDrive(true),
+            onEnterBack: () => setNavPinDrive(true),
             onUpdate: (self) => setNavInvert(self.progress >= 0.48),
             onLeave: () => {
+              setNavPinDrive(false);
               setNavInvert(false);
-              gsap.set(cards, { yPercent: 0, autoAlpha: 1 });
             },
-            onLeaveBack: () => setNavInvert(false),
+            onLeaveBack: () => {
+              setNavPinDrive(false);
+              setNavInvert(false);
+            },
           },
         });
+
+        tl.to(
+          letters,
+          {
+            yPercent: 0,
+            ease: "power2.out",
+            duration: 0.16,
+            stagger: { each: 0.055 },
+          },
+          0,
+        )
+          .fromTo(
+            track,
+            { x: 0 },
+            { x: overshoot, ease: "none", duration: 0.58 },
+            0.14,
+          )
+          .to(
+            cards,
+            {
+              yPercent: 0,
+              ease: "power3.out",
+              duration: 0.28,
+              stagger: 0.1,
+            },
+            0.48,
+          );
+
+        if (headline) {
+          tl.to(
+            headline,
+            {
+              opacity: 0,
+              y: 56,
+              ease: "power3.inOut",
+              duration: 0.28,
+            },
+            0.72,
+          );
+        }
       });
     }, root);
 
-    requestAnimationFrame(() => refreshScrollTrigger());
-    const t = window.setTimeout(() => refreshScrollTrigger(), 200);
+    const refresh = () => refreshScrollTrigger();
+    requestAnimationFrame(refresh);
+    const t = window.setTimeout(refresh, 400);
+    document.fonts?.ready?.then(refresh).catch(() => {});
 
     return () => {
       window.clearTimeout(t);
