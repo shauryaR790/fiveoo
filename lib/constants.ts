@@ -493,7 +493,7 @@ export const FOOTER_LINK_COLUMNS = [
   [
     { label: "How it works", href: "#process" },
     { label: "Pricing", href: "#pricing" },
-    { label: "Privacy Policy", href: "#" },
+    { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms & Condition", href: "#" },
   ],
   [
